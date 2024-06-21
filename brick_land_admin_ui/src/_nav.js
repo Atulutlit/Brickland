@@ -133,12 +133,7 @@ const _nav = [
         component: CNavItem,
         name: 'Career List',
         to: '/CareerList',
-      },
-      {
-        component: CNavItem,
-        name: 'Candidate List',
-        to: '/candidateList',
-      },
+      }
     ], 
   },
   {

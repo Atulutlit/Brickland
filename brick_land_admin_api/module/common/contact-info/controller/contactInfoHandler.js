@@ -74,6 +74,7 @@ const addContactInfo = async function (req, res) {
 
 const contactInfoDetail = async (req, res) => {
     try {
+        console.log("contac information detail")
         const detailData = await contactInfoModel.find({});
         if (detailData) {
             return res.json({

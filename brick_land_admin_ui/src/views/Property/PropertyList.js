@@ -67,7 +67,7 @@ const PropertyList = () => {
   }
 
   const confirmDelete = async () => {
-    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/product/delete/${selectedProperty._id}`
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/property/delete/${selectedProperty._id}`
     const authKey = localStorage.getItem('token')
 
     try {
@@ -90,7 +90,7 @@ const PropertyList = () => {
   }
 
   const handleEditSubmit = async () => {
-    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/product/update/${selectedProperty._id}`
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/property/update/${selectedProperty._id}`
     const authKey = localStorage.getItem('token')
 
     // Construct the payload with only the desired fields

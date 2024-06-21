@@ -74,6 +74,23 @@ const bannerAdd = async (req,res)=>{
     
   }
 }
+
+const bannerUpdate = async (req,res)=>{
+  try {
+    console.log(req.body,'request body')
+    const response=await bannerModel.create(req.body);
+    console.log(response,'response');
+    return res.json({
+      meta: { msg: "Banner Added Successfully.", status: true },
+      data: response,
+    });
+  } catch (error) {
+    return res.json({
+      meta: { msg: error.message, status: false },
+    })
+    
+  }
+}
 const bannerDetail = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -101,9 +118,40 @@ const bannerDetail = async (req, res) => {
     });
   }
 };
+const bannerDelete = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ObjectId
+    if (!Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        meta: { msg: "Invalid ID format.", status: false },
+      });
+    }
+
+    const result = await bannerModel.deleteOne({ _id: new Types.ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        meta: { msg: "Document not found.", status: false },
+      });
+    }
+
+    return res.json({
+      meta: { msg: "Successfully deleted.", status: true },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      meta: { msg: "Internal server error.", status: false },
+    });
+  }
+};
 
 module.exports = {
   bannerList,
   bannerDetail,
-  bannerAdd
+  bannerAdd,
+  bannerDelete,
+  bannerUpdate
 };

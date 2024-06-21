@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import {
   CCard, CCardHeader, CCardBody, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell,
-  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck, CFormSwitch
+  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck, CFormSwitch,CFormLabel,CInputGroup
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Team = () => {
   const [team,setTeam]=useState([])
@@ -15,31 +17,33 @@ const Team = () => {
   const [name,setName]=useState("");
   const [position,setPosition]=useState("");
   const [image,setImage]=useState("");
+  const [imageUrl, setImageUrl] = useState('')
   const [message,setMessage]=useState("");
 
-  useEffect(() => {
-    const fetchTeam = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/team/list`;
-      console.log(endpoint,'url')
-      const authKey = localStorage.getItem('token');
-      console.log(endpoint,authKey,'auth key and fetch team');
-      try {
-        const response = await axios.get(endpoint, {
-          headers: { authkey: authKey }
-        });
-        console.log(response,'response fetch team')
+  const fetchTeam = async () => {
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/team/list`;
+    console.log(endpoint,'url')
+    const authKey = localStorage.getItem('token');
+    console.log(endpoint,authKey,'auth key and fetch team');
+    try {
+      const response = await axios.get(endpoint, {
+        headers: { authkey: authKey }
+      });
+      console.log(response,'response fetch team')
 
-        if (response.data.meta.status) {
-          setTeam(response.data.data);
-        } else {
-          alert(response.data.meta.msg);
-        }
-      } catch (error) {
-        console.error('Error fetching team:', error);
-        alert('Failed to fetch team.');
+      if (response.data.meta.status) {
+        setTeam(response.data.data);
+        console.log(response.data.data);
+      } else {
+        toast(response.data.meta.msg);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching team:', error);
+      toast('Failed to fetch team.');
+    }
+  };
 
+  useEffect(() => {
     fetchTeam();
   }, []);
 
@@ -48,6 +52,7 @@ const Team = () => {
     setSelectedTeam(team);
     setConfirmDeleteVisible(true);
   };
+  
 
   const confirmDelete = async () => {
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/team/delete/${selectedTeam._id}`;
@@ -60,41 +65,71 @@ const Team = () => {
       });
 
       if (response.data.meta.status) {
-        alert("Banner deleted successfully.");
+        toast.success("Team Member deleted successfully.");
         setTeam(prevteam => prevteam.filter(b => b?._id !== selectedTeam._id));
       } else {
-        alert(response.data.meta.msg);
+        toast.error(response.data.meta.msg);
       }
       setConfirmDeleteVisible(false);
     } catch (error) {
-      console.error('Error deleting banner:', error);
-      alert('Failed to delete banner.');
+      console.error('Error deleting Team Member:', error);
+      toast.error('Failed to delete Team Member.');
     }
   };
+
 
   const AddTeamMember=async()=>{
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/team/add`;
     const authKey = localStorage.getItem('token');
-    const data={"name":name,"position":position,"image":image,"message":message}
-console.log(data,"data")
+    const data={"name":name,"position":position,"image":imageUrl,"message":message}
+    console.log(data,'data',imageUrl,image);
     try {
       const response = await axios.post(endpoint, {
         headers: { authkey: authKey },
         data: data
-      });atu
+      });
 
       if (response.data.meta.status) {
-        setTeam(prevteam => prevteam.filter(b => b._id !== selectedTeam._id));
+         setTeam([...team,data]);
+         toast.success('Team Member Added Successfully')
       } else {
-        alert(response.data.meta.msg);
+        toast.error(response.data.meta.msg);
       }
       setModalVisible(false);
     } catch (error) {
-      console.error('Error deleting banner:', error);
-      alert('Failed to delete banner.');
+      console.error('Error deleting team member:', error);
+      toast('Failed to add team member.');
     }
   }
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/upload/image`
+    const authKey = localStorage.getItem('token')
+    const formData = new FormData()
+    formData.append('image', file)
+
+    try {
+      const response = await axios.post(endpoint, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authkey: authKey,
+        },
+      })
+
+      setImageUrl(response.data.data)
+      toast(response.data.meta.msg) // Alert message from the response
+    } catch (error) {
+      console.error('Error uploading the image:', error)
+      alert('Failed to upload the image.')
+    }
+  }
+
   return (
+    <>
+    <ToastContainer/>
     <CCard>
       <CCardHeader>Team List</CCardHeader>
       <CCardBody>
@@ -130,7 +165,7 @@ console.log(data,"data")
           </CTableBody>
         </CTable>
 
-        <div className='' style={{"backgroundColor":"blue" ,"color":"white","cursor":"pointer"}} onClick={()=>{setModalVisible(true);}}>Add Team Member</div>
+        <div className='' style={{"backgroundColor":"blue" ,"color":"white","cursor":"pointer",padding:"5px",width:"200px",borderRadius:"10px",align:"center"}} onClick={()=>{setModalVisible(true);}}>Add Team Member</div>
 
         {/* Confirmation Modal for Deletion */}
         <CModal visible={confirmDeleteVisible} onClose={() => setConfirmDeleteVisible(false)}>
@@ -161,13 +196,14 @@ console.log(data,"data")
               <CFormInput type="text" value={position} onChange={(e)=>{setPosition(e.target.value);}} name="position" />
             </div>
             <div>
-              {/* <label>Image</label> */}
-              {/* <CFormInput type="file"  name="bannerImg" /> */}
-
+            <CFormLabel htmlFor="imageUpload">Upload Image</CFormLabel>
+      <CInputGroup className="mb-3">
+        <CFormInput type="file" id="imageUpload" onChange={handleImageUpload} />
+      </CInputGroup>
             </div>
             <div>
               <label>Message</label>
-              <CFormInput type="text" value={message} onChange={(e)=>{setMessage(e.target.value);}} name="bannerImg" />
+              <CFormInput type="text" value={message} onChange={(e)=>{setMessage(e.target.value);}} name="Team MemberImg" />
             </div>
           </CModalBody>
           <CModalFooter>
@@ -177,6 +213,7 @@ console.log(data,"data")
         </CModal>
       </CCardBody>
     </CCard>
+    </>
   );
 };
 

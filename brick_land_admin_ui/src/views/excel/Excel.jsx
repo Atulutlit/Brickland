@@ -59,7 +59,7 @@ const Excel = (props) => {
 
   return (
     <div className='w-full'>
-      <button className="" onClick={generateExcel1}>Download Excel</button>
+      <button className="" style={{background:"blue",color:"white",border:"2px",borderRadius:"5px",marginTop:"10px"}} onClick={generateExcel1}>Download Excel</button>
     </div>
   );
 };

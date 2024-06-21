@@ -7,7 +7,16 @@ const propertyModel = mongoose.model(
       propertyId: { type: String, index: true, unique: true, required: true },
       url: { type: String, required: true },
       propertyName: { type: String, required: true },
-      propertyImg: { type: String, required: true },
+      propertyImg: {
+        type: [String],
+        required: true,
+        validate: {
+          validator: function(value) {
+            return value.length > 0; // Array must have at least one element
+          },
+          message: 'propertyImg must have at least one string.'
+        }
+      },
       propertyType: { type: String, required: true },
       description: { type: String, required: true },
       shortDescription: { type: String, required: true },

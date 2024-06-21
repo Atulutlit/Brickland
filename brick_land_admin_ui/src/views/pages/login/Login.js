@@ -93,7 +93,7 @@ const Login = () => {
               <CCard className="text-white bg-white py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <img src="https://i.imgur.com/dUHHT5P.png" style={{ width: '100%' }}></img>
+                    <img src="https://firebasestorage.googleapis.com/v0/b/brickland-76c23.appspot.com/o/Brickland-Consulting-Logo.png?alt=media&token=f56d0e29-d696-4727-8ef9-abe9a657fb92" style={{ width: '100%' }}></img>
                   </div>
                 </CCardBody>
               </CCard>

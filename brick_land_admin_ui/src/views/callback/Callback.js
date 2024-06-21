@@ -17,11 +17,15 @@ import {
   CModalFooter,
   CFormInput,
   CFormCheck,
+  CFormSelect
+
 } from '@coreui/react'
 import axios from 'axios'
 import { cilPencil, cilTrash } from '@coreui/icons'
 import { TESTIMONIALS_LIST,TESTIMONIALS_DELETE,TESTIMONIALS_UPDATE } from '../../constant/Constant'
 import Excel from '../excel/Excel'
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Callback = () => {
   const [modalVisible, setModalVisible] = useState(false)
@@ -36,28 +40,29 @@ const Callback = () => {
   })
   const [callback,setCallback]=useState([])
   const [selectedCallback,setSelectedCallback] = useState(null)
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/callback/list`
-      const authKey = localStorage.getItem('token')
+  const fetchCallback = async () => {
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/callback/list`
+    const authKey = localStorage.getItem('token')
 
-      try {
-        const response = await axios.get(endpoint, {
-          headers: { authkey: authKey },
-        })
-        console.log(response,'response');
-        if (response.data.meta.status) {
-          setCallback(response.data.response)
-        } else {
-          alert(response.data.meta.msg)
-        }
-      } catch (error) {
-        console.error('Error fetching testimonials:', error)
-        alert('Failed to fetch testimonials.')
+    try {
+      const response = await axios.get(endpoint, {
+        headers: { authkey: authKey },
+      })
+      console.log(response,'response');
+      if (response.data.meta.status) {
+        setCallback(response.data.response)
+      } else {
+        toast.error(response.data.meta.msg);
       }
+    } catch (error) {
+      console.error('Error fetching testimonials:', error)
+      toast.error('Failed to fetch Callback');
     }
+  }
 
-    fetchTestimonials()
+  useEffect(() => {
+    
+    fetchCallback()
   }, [])
 
   const handleEditClick = (item) => {
@@ -89,17 +94,17 @@ const Callback = () => {
       })
 
       if (response.data.meta.status) {
-        alert('Callback deleted successfully.')
-        setCallback((prevTestimonials) =>
-          prevTestimonials.filter((t) => t._id !== selectedCallback._id),
-        )
+        toast.success('Callback Deleted Successfully!!');
+        fetchCallback();
       } else {
-        alert(response.data.meta.msg)
+        toast.error(response.data.meta.msg);
       }
+
       setConfirmDeleteVisible(false)
     } catch (error) {
       console.error('Error deleting callback:', error)
-      alert('Failed to delete callback.')
+      // alert('Failed to delete callback.')
+      toast.error('Failed to Delete Callback');
     }
   }
 
@@ -113,7 +118,10 @@ const Callback = () => {
   const updateCallback = async () => {
     const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/callback/status`
     const authKey = localStorage.getItem('token')
-  
+    console.log({
+      _id:selectedCallback?._id,
+      status:editData?.status
+    },'edit detail');
     try {
       await axios.put(
         endpointDetails,
@@ -124,23 +132,18 @@ const Callback = () => {
         { headers: { authkey: authKey } },
       )
 
-      alert('callback updated successfully.')
+      toast('Callback Updated Successfully');
       setModalVisible(false)
-      setCallback((prevCallback) =>
-        prevCallback.map((item) =>
-          item._id === selectedCallback._id
-            ? { ...callback, ...editData }
-            : callback,
-        ),
-      )
+      fetchCallback();
     } catch (error) {
       console.error('Error updating callback:', error)
-      alert('Failed to update callback.')
+      toast('Failed to update callback');
     }
   }
 
   return (
     <>
+    <ToastContainer/>
     <CCard>
       <CCardHeader>Callback List</CCardHeader>
       <CCardBody>
@@ -207,8 +210,8 @@ const Callback = () => {
               <CFormInput
                 type="text"
                 value={editData.name}
-                onChange={handleInputChange}
                 name="name"
+                disabled={true}
               />
             </div>
             <div>
@@ -222,12 +225,14 @@ const Callback = () => {
             </div>
             <div>
               <label>Status</label>
-              <CFormInput
-                type="text"
-                value={editData.status}
-                onChange={handleInputChange}
-                name="status"
-              />
+              <CFormSelect
+                  value={editData.status}
+                  onChange={handleInputChange}
+                  name="status"
+                >
+                  <option value="RESOLVED">RESOLVED</option>
+                  <option value="PENDING">PENDING</option>
+                </CFormSelect>
             </div>  
           </CModalBody>
           <CModalFooter>
@@ -241,7 +246,7 @@ const Callback = () => {
         </CModal>
       </CCardBody>
     </CCard>
-    <div className=''><Excel client={callback}/></div>
+    <div className='float-right'><Excel client={callback}/></div>
     </>
   )
 }

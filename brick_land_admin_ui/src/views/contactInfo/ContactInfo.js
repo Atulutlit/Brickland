@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { CButton, CCol, CForm, CFormLabel, CFormInput, CFormTextarea, CInputGroup } from '@coreui/react';
 import axios from 'axios';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ContactInfo = () => {
   // State to hold form inputs
@@ -63,26 +65,38 @@ const ContactInfo = () => {
       });
 
       // Handle response here, for example:
-      console.log(response.data);
-      alert(response.data.meta.msg); // Alert message from the response
+      console.log(response.data.meta.msg);
+      toast(response.data.meta.msg);
+      // alert(response.data.meta.msg); // Alert message from the response
     } catch (error) {
       console.error('Error submitting the contact Info:', error);
-      alert('Failed to submit the contact Info.');
+      // alert('Failed to submit the contact Info.');
+      toast('Failed to submit the code');
     }
   }; 
-  const [contactDetail,setContactDetail]=useState({})
 
   const fetchContactDetail=async()=>{
-    e.preventDefault(); // Prevent default form submission behavior
 
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/contact/details`;
     const authKey = localStorage.getItem('token'); // Retrieve token from local storage
     try {
-      const response = await axios.post(endpoint, {
+      const response = await axios.get(endpoint, {
         headers: { authkey: authKey }
       });
-      console.log(response.data);
-      alert(response.data.meta.msg); // Alert message from the response
+      console.log(response.data,'contact detail');
+      if(response?.data?.data){
+      const detail=response?.data?.data;
+      setEmail(detail?.email);
+      setAddress(detail?.address);
+      setContactInformation(detail?.contactInformation);
+      setCountryCode(detail?.countryCode);
+      setFacebookLink(detail?.facebookLink);
+      setInstagramLink(detail?.instagramLink);
+      setLinkedInLink(detail?.linkedInLink);
+      setMobile(detail?.mobile);
+      setTwitterLink(detail?.twitterLink);
+      setWebsite(detail?.website);
+      }
     } catch (error) {
       console.error('Error submitting the contact Info:', error);
       alert('Failed to submit the contact Info.');
@@ -92,6 +106,7 @@ const ContactInfo = () => {
  fetchContactDetail();
  },[])
   return (
+    <>
     <CForm onSubmit={handleSubmit}>
       <div className="mb-3">
         <CFormLabel htmlFor="blogTitleInput">Contact Information</CFormLabel>
@@ -143,7 +158,7 @@ const ContactInfo = () => {
       <div className="mb-3">
         <CFormLabel htmlFor="authorImgInput">Instagram Link</CFormLabel>
         <CInputGroup className="mb-3">
-          <CFormInput type="text" id="instagram Link" placeholder="Enter Instagram Link" onChange={(e) => setInstagramLink(e.target.value)} />
+          <CFormInput type="text" id="instagram Link" placeholder="Enter Instagram Link" value={instagramLink} onChange={(e) => setInstagramLink(e.target.value)} />
         </CInputGroup>
       </div>
       <div className="mb-3">
@@ -158,6 +173,7 @@ const ContactInfo = () => {
         </CButton>
       </CCol>
     </CForm>
+    </>
   );
 };
 

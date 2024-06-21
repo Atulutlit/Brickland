@@ -38,7 +38,7 @@ const Product = () => {
   
   const [features,setFeatures]=useState([])
   const [featureValue,setFeatureValue]=useState("")
-  const [isBestSeller,setIsBestSeller]=useState("")
+  const [isBestSeller,setIsBestSeller]=useState(false)
   const [bedroom, setBedroom] = useState('')
   const [bathroom, setBathrooms] = useState('')
   const [kitchen,setKitchen]=useState(0);
@@ -48,6 +48,7 @@ const Product = () => {
   const [accomdation,setAccomadation]=useState('Single Family');
   const [status,setStatus]=useState('ACTIVE');
   const [state,setState]=useState("APPROVED");  
+  const [area,setArea]=useState("");
   
 
   const handleProductImgChange = async (e) => {
@@ -91,8 +92,8 @@ const Product = () => {
       propertyId,
       url,
       propertyName,
-      propertyImg,type,categories,category,description,shortDescription,price,specialPrice,
-      features,isBestSeller,bedroom,bathroom,kitchen,parking,address,isFurnished,accomdation,status,state
+      propertyImg,propertyType:type,categories,category,description,shortDescription,price,specialPrice,
+      features,isBestSeller,bedrooms:bedroom,bathrooms:bathroom,kitchen,parking,address,isFurnished,accommodation:accomdation,status,state,area:"sfkjskf",url:"hh.com"
     }
 console.log(productData,"productData")
     try {

@@ -21,6 +21,8 @@ import {
 import axios from 'axios'
 import { cilPencil, cilTrash } from '@coreui/icons'
 import { TESTIMONIALS_LIST,TESTIMONIALS_DELETE,TESTIMONIALS_UPDATE } from '../../constant/Constant'
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TestimonialList = () => {
   const [testimonials, setTestimonials] = useState([])
@@ -47,11 +49,11 @@ const TestimonialList = () => {
         if (response.data.meta.status) {
           setTestimonials(response.data.data)
         } else {
-          alert(response.data.meta.msg)
+          toast(response.data.meta.msg)
         }
       } catch (error) {
         console.error('Error fetching testimonials:', error)
-        alert('Failed to fetch testimonials.')
+        toast('Failed to fetch testimonials.')
       }
     }
 
@@ -85,17 +87,17 @@ const TestimonialList = () => {
       })
 
       if (response.data.meta.status) {
-        alert('Testimonial deleted successfully.')
+        toast.success('Testimonial deleted successfully.')
         setTestimonials((prevTestimonials) =>
           prevTestimonials.filter((t) => t._id !== selectedTestimonial._id),
         )
       } else {
-        alert(response.data.meta.msg)
+        toast.error(response.data.meta.msg)
       }
       setConfirmDeleteVisible(false)
     } catch (error) {
       console.error('Error deleting testimonial:', error)
-      alert('Failed to delete testimonial.')
+      toast.error('Failed to delete testimonial.')
     }
   }
 
@@ -131,7 +133,7 @@ const TestimonialList = () => {
         { headers: { authkey: authKey } },
       )
 
-      alert('Testimonial updated successfully.')
+      toast.success('Testimonial updated successfully.')
       setModalVisible(false)
       setTestimonials((prevTestimonials) =>
         prevTestimonials.map((testimonial) =>
@@ -142,11 +144,13 @@ const TestimonialList = () => {
       )
     } catch (error) {
       console.error('Error updating testimonial:', error)
-      alert('Failed to update testimonial.')
+      toast('Failed to update testimonial.')
     }
   }
 
   return (
+    <>
+    <ToastContainer/>
     <CCard>
       <CCardHeader>Testimonial List</CCardHeader>
       <CCardBody>
@@ -156,7 +160,7 @@ const TestimonialList = () => {
               <CTableHeaderCell>#</CTableHeaderCell>
               <CTableHeaderCell>Title</CTableHeaderCell>
               <CTableHeaderCell>Description</CTableHeaderCell>
-              <CTableHeaderCell>Image</CTableHeaderCell>
+              <CTableHeaderCell>YouTube</CTableHeaderCell>
               <CTableHeaderCell>Status</CTableHeaderCell>
               <CTableHeaderCell>Actions</CTableHeaderCell>
             </CTableRow>
@@ -168,11 +172,7 @@ const TestimonialList = () => {
                 <CTableDataCell>{testimonial.title}</CTableDataCell>
                 <CTableDataCell>{testimonial.description}</CTableDataCell>
                 <CTableDataCell>
-                  <img
-                    src={testimonial.testimonialImg}
-                    alt={testimonial.title}
-                    style={{ width: '100px', height: 'auto' }}
-                  />
+                  <a href={testimonial.testimonialImg}>Link</a>
                 </CTableDataCell>
                 <CTableDataCell>{testimonial.status}</CTableDataCell>
                 <CTableDataCell>
@@ -231,7 +231,7 @@ const TestimonialList = () => {
               />
             </div>
             <div>
-              <label>Image URL</label>
+              <label>YouTube URL</label>
               <CFormInput
                 type="text"
                 value={editData.testimonialImg}
@@ -270,6 +270,7 @@ const TestimonialList = () => {
         </CModal>
       </CCardBody>
     </CCard>
+    </>
   )
 }
 

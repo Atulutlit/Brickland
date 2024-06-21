@@ -21,6 +21,8 @@ import {
 import axios from 'axios'
 import { cilPencil, cilTrash } from '@coreui/icons'
 import { TESTIMONIALS_LIST,TESTIMONIALS_DELETE,TESTIMONIALS_UPDATE } from '../../constant/Constant'
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const FaqList = () => {
   const [faq, setFaq] = useState([])
@@ -33,28 +35,28 @@ const FaqList = () => {
     testimonialImg: '',
     status: '',
   })
+  
+  const fetchTestimonials = async () => {
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/faq/list`
+    const authKey = localStorage.getItem('token')
+
+    try {
+      const response = await axios.get(endpoint, {
+        headers: { authkey: authKey },
+      })
+      console.log(response,"response faq");
+      if (response.data.meta.status) {
+        setFaq(response.data.data)
+      } else {
+        toast.error(response.data.meta.msg)
+      }
+    } catch (error) {
+      console.error('Error fetching faq:', error)
+      toast.error('Failed to fetch testimonials.')
+    }
+  }
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/faq/list`
-      const authKey = localStorage.getItem('token')
-
-      try {
-        const response = await axios.get(endpoint, {
-          headers: { authkey: authKey },
-        })
-        console.log(response,"response faq");
-        if (response.data.meta.status) {
-          setFaq(response.data.data)
-        } else {
-          alert(response.data.meta.msg)
-        }
-      } catch (error) {
-        console.error('Error fetching faq:', error)
-        alert('Failed to fetch testimonials.')
-      }
-    }
-
     fetchTestimonials()
   }, [])
 
@@ -82,17 +84,17 @@ const FaqList = () => {
       })
 
       if (response.data.meta.status) {
-        alert('faq deleted successfully.')
+        toast.success('faq deleted successfully.')
         setFaq((prevFaq) =>
           prevFaq.filter((t) => t._id !== selectedFaq._id),
         )
       } else {
-        alert(response.data.meta.msg)
+        toast.error(response.data.meta.msg)
       }
       setConfirmDeleteVisible(false)
     } catch (error) {
       console.error('Error deleting faq:', error)
-      alert('Failed to delete faq.')
+      toast.error('Failed to delete faq.')
     }
   }
 
@@ -104,7 +106,8 @@ const FaqList = () => {
   }
 
   const updateFaq = async () => {
-    const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/faq/update/${faq._id}`
+    console.log(editData,'data')
+    const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/faq/update/${selectedFaq._id}`
     const authKey = localStorage.getItem('token')
 
     try {
@@ -117,7 +120,7 @@ const FaqList = () => {
         { headers: { authkey: authKey } },
       )
 
-      alert('Faq updated successfully.')
+      toast.success('Faq updated successfully.')
       setModalVisible(false)
       setFaq((prevFaq) =>
         prevFaq.map((faq) =>
@@ -128,11 +131,13 @@ const FaqList = () => {
       )
     } catch (error) {
       console.error('Error updating faq:', error)
-      alert('Failed to update faq.')
+      toast.error('Failed to update faq.')
     }
   }
 
   return (
+    <>
+    <ToastContainer/>
     <CCard>
       <CCardHeader>Faq List</CCardHeader>
       <CCardBody>
@@ -219,6 +224,7 @@ const FaqList = () => {
         </CModal>
       </CCardBody>
     </CCard>
+    </>
   )
 }
 

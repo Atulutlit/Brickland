@@ -9,6 +9,8 @@ import {
   CInputGroup,
 } from '@coreui/react'
 import axios from 'axios'
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { UPLOAD_IMAGE, } from '../../constant/Constant'
 
 const Banner = () => {
@@ -36,10 +38,10 @@ const Banner = () => {
       })
 
       setImageUrl(response.data.data)
-      alert(response.data.meta.msg) // Alert message from the response
+      toast(response.data.meta.msg) // toast message from the response
     } catch (error) {
       console.error('Error uploading the image:', error)
-      alert('Failed to upload the image.')
+      toast('Failed to upload the image.')
     }
   }
 
@@ -56,6 +58,7 @@ const Banner = () => {
           title,
           description,
           bannerImg: imageUrl,
+          headline
         },
         {
           headers: {
@@ -65,10 +68,10 @@ const Banner = () => {
       )
 
       console.log(response.data)
-      alert(response.data.meta.msg)
+      toast(response.data.meta.msg)
     } catch (error) {
       console.error('Error submitting the banner:', error)
-      alert('Failed to submit the banner.')
+      toast.error('Failed to submit the banner.')
     }
   }
 
@@ -79,7 +82,7 @@ const Banner = () => {
         <CFormInput
           type="text"
           id="titleInput"
-          placeholder="Banner Name"
+          placeholder="Title Name"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -90,7 +93,7 @@ const Banner = () => {
           type="text"
           id="titleInput"
           placeholder="Headline"
-          value={title}
+          value={headline}
           onChange={(e) => setHeadline(e.target.value)}
         />
       </div>

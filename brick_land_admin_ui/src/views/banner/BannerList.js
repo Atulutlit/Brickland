@@ -6,13 +6,16 @@ import {
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { UPLOAD_IMAGE, } from '../../constant/Constant'
 
 const BannerList = () => {
   const [banners, setBanners] = useState([]);
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
-  const [editData, setEditData] = useState({ title: '', description: '', bannerImg: '', status: '' });
+  const [editData, setEditData] = useState({ title: '', description: '', bannerImg: '', status: '',headline:'' });
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -29,11 +32,11 @@ const BannerList = () => {
         if (response.data.meta.status) {
           setBanners(response.data.data);
         } else {
-          alert(response.data.meta.msg);
+          toast(response.data.meta.msg);
         }
       } catch (error) {
         console.error('Error fetching banners:', error);
-        alert('Failed to fetch banners.');
+        toast('Failed to fetch banners.');
       }
     };
 
@@ -67,13 +70,13 @@ const BannerList = () => {
         setBanners(banners.map(banner =>
           banner._id === bannerId ? { ...banner, status: newStatus } : banner
         ));
-        alert('Banner status updated successfully.');
+        toast('Banner status updated successfully.');
       } else {
-        alert(response.data.meta.msg);
+        toast(response.data.meta.msg);
       }
     } catch (error) {
       console.error('Error updating banner status:', error);
-      alert('Failed to update banner status.');
+      toast('Failed to update banner status.');
     }
   };
 
@@ -93,15 +96,15 @@ const BannerList = () => {
       });
 
       if (response.data.meta.status) {
-        alert("Banner deleted successfully.");
+        toast("Banner deleted successfully.");
         setBanners(prevBanners => prevBanners.filter(b => b._id !== selectedBanner._id));
       } else {
-        alert(response.data.meta.msg);
+        toast(response.data.meta.msg);
       }
       setConfirmDeleteVisible(false);
     } catch (error) {
       console.error('Error deleting banner:', error);
-      alert('Failed to delete banner.');
+      toast('Failed to delete banner.');
     }
   };
 
@@ -129,15 +132,17 @@ const BannerList = () => {
         status: editData.status
       }, { headers: { authkey: authKey } });
 
-      alert("Banner updated successfully.");
+      toast("Banner updated successfully.");
       setModalVisible(false);
     } catch (error) {
       console.error('Error updating banner:', error);
-      alert('Failed to update banner.');
+      toast('Failed to update banner.');
     }
   };
 
   return (
+    <>
+    <ToastContainer/>
     <CCard>
       <CCardHeader>Banner List</CCardHeader>
       <CCardBody>
@@ -146,6 +151,7 @@ const BannerList = () => {
             <CTableRow>
               <CTableHeaderCell>#</CTableHeaderCell>
               <CTableHeaderCell>Title</CTableHeaderCell>
+              <CTableHeaderCell>Headline</CTableHeaderCell>
               <CTableHeaderCell>Description</CTableHeaderCell>
               <CTableHeaderCell>Image</CTableHeaderCell>
               <CTableHeaderCell>Status</CTableHeaderCell>
@@ -156,10 +162,11 @@ const BannerList = () => {
             {banners.map((banner, index) => (
               <CTableRow key={banner._id}>
                 <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                <CTableDataCell>{banner.title}</CTableDataCell>
-                <CTableDataCell>{banner.description}</CTableDataCell>
+                <CTableDataCell>{banner?.title}</CTableDataCell>
+                <CTableDataCell>{banner?.headline}</CTableDataCell>
+                <CTableDataCell>{banner?.description}</CTableDataCell>
                 <CTableDataCell>
-                  <img src={banner.bannerImg} alt={banner.title} style={{ width: '100px', height: 'auto' }} />
+                  <img src={banner?.bannerImg} alt={banner.title} style={{ width: '100px', height: 'auto' }} />
                 </CTableDataCell>
                 <CTableDataCell className="text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <CFormSwitch
@@ -210,6 +217,10 @@ const BannerList = () => {
               <CFormInput type="text" value={editData.title} onChange={handleInputChange} name="title" />
             </div>
             <div>
+              <label>Headline</label>
+              <CFormInput type="text" value={editData.headline} onChange={handleInputChange} name="headline" />
+            </div>
+            <div>
               <label>Description</label>
               <CFormInput type="text" value={editData.description} onChange={handleInputChange} name="description" />
             </div>
@@ -244,6 +255,7 @@ const BannerList = () => {
         </CModal>
       </CCardBody>
     </CCard>
+    </>
   );
 };
 

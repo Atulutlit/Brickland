@@ -7,6 +7,7 @@ const bannerModel = mongoose.model(
       title: String,
       description: String,
       bannerImg: { type: String },
+      headline:String,
 
       type: {
         type: String,

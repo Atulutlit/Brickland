@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { CButton, CCol, CForm, CFormLabel, CFormInput, CFormTextarea, CInputGroup } from '@coreui/react';
 import axios from 'axios';
 import { TESTIMONIALS_CREATE,UPLOAD_IMAGE } from '../../constant/Constant';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Faq = () => {
   // State to hold question and answer
   const [question,setQuestion]=useState("");
   const [answer,setAnswer]=useState("");
   // Handle form submission
+  
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
 
@@ -27,15 +30,17 @@ const Faq = () => {
       console.log(response.data);
       setQuestion("");
       setAnswer("");
-      alert(response.data.meta.msg); // Alert message from the response
+      toast.success(response.data.meta.msg);
     } catch (error) {
       console.error('Error submitting the testimonial:', error);
-      alert('Failed to submit the testimonial.');
+      toast.error('Failed to submit the testimonial.');
     }
   };
 
-
+  
   return (
+    <>
+    <ToastContainer/>
     <CForm onSubmit={handleSubmit}>
       <div className="mb-3">
         <CFormLabel htmlFor="titleInput">Question</CFormLabel>
@@ -54,6 +59,7 @@ const Faq = () => {
         </CButton>
       </CCol>
     </CForm>
+    </>
   );
 };
 

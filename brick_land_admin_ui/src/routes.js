@@ -30,6 +30,7 @@ const EventCategoryList = React.lazy(()=> import('./views/eventCategory/EventCat
 const BlogCategory = React.lazy(()=>import('./views/blogCategory/BlogCategory.js'));
 const BlogCategoryList = React.lazy(()=> import('./views/blogCategory/BlogCategoryList.js'));
 const Career = React.lazy(()=> import('./views/career/AddCareer.jsx'))
+const CareerList = React.lazy(()=> import('./views/career/CareerList.jsx'))
 const Team = React.lazy(()=> import('./views/Team/Team.jsx'))
 const routes = [
   // { path: '/user', name: 'User', element: User },
@@ -61,7 +62,8 @@ const routes = [
   // { path: '/eventCategoryList', name: 'Dashboard', element: EventCategoryList },
   // { path: '/blogCategory', name: 'Dashboard', element: BlogCategory },
   // { path: '/blogCategoryList', name: 'Dashboard', element: BlogCategoryList },
-  { path: '/career', name: 'Dashboard', element: Career }, 
+  { path: '/addCareer', name: 'Dashboard', element: Career }, 
+  { path: '/careerList', name: 'Dashboard', element: CareerList},
   { path: '/team', name: 'Dashboard', element: Team }, 
 
 
