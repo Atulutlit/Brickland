@@ -1,11 +1,21 @@
 import React, { useEffect,useState } from 'react'
+import { CAREER } from '../../constant/Constant';
+import axios from 'axios';
 
 const Career = () => {
   const [career,setCareer]=useState([    { "company": "Brickland Real Estate", "work": "Work From Home", "role": "Software Engineer", "jobtype": "Full Time", "test": "Test Required", "need": "Urgent", "salary": "25000-30000" },
   { "company": "Brickland Real Estate", "work": "Work From Home", "role": "Software Engineer", "jobtype": "Full Time", "test": "Test Required", "need": "Urgent", "salary": "25000-30000" },]);
-  const fetchCareer=()=>{
-       
-  }
+  const fetchCareer = async () => {
+    try {
+      const url = CAREER;
+      const response=await axios.get(url);
+      console.log(response,'response');
+      setCareer(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch testimonial:", error);
+    }
+  };
 
   useEffect(()=>{
     fetchCareer();
@@ -20,10 +30,12 @@ const Career = () => {
         {career.map((item, key) => {
                         return (
                             <div className='shadow-lg rounded p-4 cursor-pointer'>
-                                <div className="flex flex-row font-semibold text-xl"><p>{item.company}</p></div>
-                                <div className="flex flex-row font-semibold"><p>{item.work}</p></div>
-                                <div className="flex flex-row font-medium"><p>{item.salary}</p></div>
-                                <div className='text-l font-medium'>{item.role}</div>
+                                <div className="flex flex-row font-semibold text-xl"><p>Role: {item?.role}</p></div>
+                                <div className="flex flex-row font-semibold"><p>Salary:{item.salary}</p></div>
+                                <div className="flex flex-row font-medium"><p>Location:{item.location}</p></div>
+                                <div className='text-l font-medium'>WorkType:{item.type}</div>
+                                <div className='text-l font-medium'>Description:{item.description}</div>
+
                                 <div className="flex flex-row gap-4">
                                     <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">{item.jobtype}</div>
                                     <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">{item.test}</div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { CButton, CCol, CForm, CFormLabel, CFormInput, CFormTextarea, CInputGroup } from '@coreui/react';
 import axios from 'axios';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Blog = () => {
   // State to hold form inputs
@@ -21,7 +23,7 @@ const Blog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
 
-    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/category/add`;
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/add`;
     const authKey = localStorage.getItem('token'); // Retrieve token from local storage
 
     try {
@@ -46,10 +48,10 @@ const Blog = () => {
 
       // Handle response here, for example:
       console.log(response.data);
-      alert(response.data.meta.msg); // Alert message from the response
+      toast(response.data.meta.msg); // toast message from the response
     } catch (error) {
       console.error('Error submitting the blog post:', error);
-      alert('Failed to submit the blog post.');
+      toast('Failed to submit the blog post.');
     }
   };
 
@@ -73,13 +75,13 @@ const Blog = () => {
 
       if (response.data.meta.status) {
         setImage(response.data.data);
-        alert(response.data.meta.msg);
+        toast(response.data.meta.msg);
       } else {
-        alert('Failed to upload image: ' + response.data.meta.msg);
+        toast('Failed to upload image: ' + response.data.meta.msg);
       }
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Failed to upload image.');
+      toast('Failed to upload image.');
     }
   };
 
@@ -96,6 +98,8 @@ const Blog = () => {
   };
 
   return (
+    <>
+    <ToastContainer/>
     <CForm onSubmit={handleSubmit}>
       <div className="mb-3">
         <CFormLabel htmlFor="blogTitleInput">Blog Title</CFormLabel>
@@ -174,6 +178,7 @@ const Blog = () => {
         </CButton>
       </CCol>
     </CForm>
+    </>
   );
 };
 

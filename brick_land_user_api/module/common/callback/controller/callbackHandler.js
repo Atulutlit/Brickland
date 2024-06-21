@@ -5,10 +5,9 @@ const { callbackModel } = require("../model/callbackModel");
 const addCallback = async function (req, res) {
   try {
     // const { _id } = req.decoded;
-    const { firstName, lastName, email, mobile, comment, city } = req.body;
+    const { name, email, mobile, comment, city } = req.body;
     const addCallback = {
-      firstName,
-      lastName,
+      name,
       email,
       mobile,
       city,

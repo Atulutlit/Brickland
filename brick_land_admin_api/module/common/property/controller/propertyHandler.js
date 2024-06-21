@@ -132,9 +132,42 @@ const deleteProperty = async (req, res) => {
   }
 };
 
+const updateProperty = async (req, res) => {
+  try {
+    const data = req.body;
+    const id = req.params;
+    console.log(data,'data')
+   
+
+    const updateStatus = await propertyModel.updateOne(
+      { _id: new Types.ObjectId(id) },
+      {
+        $set: data,
+      }
+    );
+    if (updateStatus.modifiedCount > 0) {
+      return res.json({
+        meta: {
+          msg: `property updated successfully.`,
+          status: true,
+        },
+      });
+    } else {
+      return res.json({
+        meta: { msg: "something went wrong", status: false },
+      });
+    }
+  } catch (error) {
+    return res.json({
+      meta: { msg: error.message, status: false },
+    });
+  }
+};
+
 module.exports = {
   propertyList,
   propertyDetail,
   addProperty,
-  deleteProperty
+  deleteProperty,
+  updateProperty
 };

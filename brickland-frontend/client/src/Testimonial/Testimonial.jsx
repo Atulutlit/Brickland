@@ -1,5 +1,9 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import team from './../assets/team.jpg'
+import axios from 'axios';
+import { FAQ, GET_TESTIMONIAL } from '../constant/Constant';
+import { Accordion, Card } from 'react-bootstrap';
+
 
 const Testimonial = () => {
   const testimonials = [
@@ -50,6 +54,38 @@ const Testimonial = () => {
     },
 
   ];
+
+  const [testimonial,setTestimonial]=useState([])
+  const [faq,setFaq]=useState([]);
+
+  const fetchFaq = async () => {
+    try {
+      const url = FAQ;
+      const response=await axios.get(url);
+      console.log(response,'response');
+      setFaq(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch FAQ:", error);
+    }
+  };
+
+  const fetchTestimonial = async () => {
+    try {
+      const url = GET_TESTIMONIAL;
+      const response=await axios.get(url);
+      console.log(response,'response');
+      setTestimonial(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch testimonial:", error);
+    }
+  };
+
+  useEffect(()=>{
+    fetchFaq();
+    fetchTestimonial();
+  },[])
   return (
     <div>
       <section className="space-ptb clearfix">
@@ -122,14 +158,14 @@ const Testimonial = () => {
             </div>
           </div>
           <div className="row">
-            {testimonials.map((testimonial, index) => (
+            {testimonial && testimonial.map((item, index) => (
               <div className="col-lg-4 col-md-6 col-sm-12 mt-4" key={index}>
                 <div className="blog-post">
                   <div className="blog-post-image">
                     <iframe
                       width="100%"
                       height="220"
-                      src={testimonial.src}
+                      src={item.testimonialImg}
                       title={testimonial.title}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -147,6 +183,22 @@ const Testimonial = () => {
           </div>
         </div>
       </section>
+
+{/* Frequently asked question */}
+<div className="container my-5">
+      <h2 className="text-center mb-4">Frequently Asked Questions</h2>
+     {
+      faq && faq.map((item,key)=>{
+        return(
+          <div className='grid grid-cols-1 border-[1px] rounded'>
+            <div className=''>Question-1.{item.question}</div>
+            <div className=''>Answer:{item.answer}</div>
+            </div>
+        )
+      })
+     }
+    </div>
+      
 
     </div>
   )

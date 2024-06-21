@@ -1,9 +1,24 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import "swiper/css/bundle";
 import { blogItem } from "../../assets/items";
 import { Link } from "react-router-dom";
 
 export default function Blog() {
+  
+  const [blog,setBlog]=useState([])
+  const fetchBlog = async () => {
+    try {
+      const response = await fetch(`https://brickland-backend-4.onrender.com/api/data/`);
+      const data = await response.json();
+      setBlog(data.slice(0, 6));
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+    }
+  };
+  useEffect(()=>{
+   fetchBlog();
+  },[])
+  
     return (
     <div className="blog-area ptb-120">
       <div className="container">

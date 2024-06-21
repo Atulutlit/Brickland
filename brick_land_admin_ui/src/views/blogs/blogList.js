@@ -6,6 +6,8 @@ import {
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
@@ -16,7 +18,7 @@ const BlogList = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/category/list`;
+      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/list`;
       const authKey = localStorage.getItem('token');
 
       try {
@@ -27,11 +29,11 @@ const BlogList = () => {
         if (response.data.meta.status) {
           setBlogs(response.data.data);
         } else {
-          alert(response.data.meta.msg);
+          toast(response.data.meta.msg);
         }
       } catch (error) {
         console.error('Error fetching categories:', error);
-        alert('Failed to fetch categories.');
+        toast('Failed to fetch categories.');
       }
     };
 
@@ -55,7 +57,7 @@ const BlogList = () => {
   };
 
   const confirmDelete = async () => {
-    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/category/delete/${selectedBlog._id}`;
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/delete/${selectedBlog._id}`;
     const authKey = localStorage.getItem('token');
 
     try {
@@ -65,15 +67,15 @@ const BlogList = () => {
       });
 
       if (response.data.meta.status) {
-        alert("Blog deleted successfully.");
+        toast("Blog deleted successfully.");
         setCategories(prevCategories => prevCategories.filter(c => c._id !== selectedBlog._id));
       } else {
-        alert(response.data.meta.msg);
+        toast(response.data.meta.msg);
       }
       setConfirmDeleteVisible(false);
     } catch (error) {
       console.error('Error deleting blog:', error);
-      alert('Failed to delete blog.');
+      toast('Failed to delete blog.');
     }
   };
 
@@ -101,15 +103,17 @@ const BlogList = () => {
         status: editData.status
       }, { headers: { authkey: authKey } });
 
-      alert("Blog updated successfully.");
+      toast("Blog updated successfully.");
       setModalVisible(false);
     } catch (error) {
       console.error('Error updating Blog:', error);
-      alert('Failed to update Blog.');
+      toast('Failed to update Blog.');
     }
   };
 
   return (
+    <>
+    <ToastContainer/>
     <CCard>
       <CCardHeader>Blogs List</CCardHeader>
       <CCardBody>
@@ -210,6 +214,7 @@ const BlogList = () => {
         </CModal>
       </CCardBody>
     </CCard>
+    </>
   );
 };
 

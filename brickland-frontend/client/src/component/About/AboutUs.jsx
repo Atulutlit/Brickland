@@ -1,14 +1,12 @@
-import {
-  Box,
-  Container,
-  Grid,
-} from "@mui/material";
-import React from "react";
+import { Box, Container,Grid,} from "@mui/material";
+import axios from "axios";
+import React ,{useState,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import team from './../../assets/team.jpg'
 import { IoLocation } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
+import { BANNER, GET_TEAM_MEMBER, GET_TESTIMONIAL } from "../../constant/Constant";
 
 const AboutUs = () => {
   const navigate = useNavigate();
@@ -29,6 +27,51 @@ const AboutUs = () => {
     details: "Debjyoti Mal, made an investment in a Project but his money got stuck because neither the construction was beginning nor were responding properly."
   }
   ]
+  const [testimonial,setTestimonial]=useState([]);
+  const [teamMember,setTeamMember]=useState([]);
+  const [banner,setBanner]=useState([]);
+
+  const fetchTestimonial = async () => {
+    try {
+      const url = GET_TESTIMONIAL;
+      const response=await axios.get(url);
+      console.log(response,'response');
+      setTestimonial(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch testimonial:", error);
+    }
+  };
+
+  const fetchTeamMember = async () => {
+    try {
+      const url = GET_TEAM_MEMBER;
+      const response=await axios.get(url);
+      console.log(response,'response fskfjks');
+      setTeamMember(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch Team Member:", error);
+    }
+  };
+
+  const fetchBanner = async () => {
+    try {
+      const url = BANNER;
+      const response=await axios.get(url);
+      console.log(response,'response fskfjks');
+      setBanner(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch Team Member:", error);
+    }
+  };
+
+  useEffect(()=>{
+    fetchTeamMember();
+    fetchTestimonial();
+    fetchBanner();
+  },[])
   return (
     <>
       <Box

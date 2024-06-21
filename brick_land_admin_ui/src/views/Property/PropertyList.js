@@ -23,6 +23,8 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilTrash, cilPencil } from '@coreui/icons'
 import { PRODUCT_LIST, BLOG_CATEGORY_LIST, PRODUCT_DELETE, PRODUCT_UPDATE, PRODUCT_STATUS } from '../../constant/Constant'
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PropertyList = () => {
   const [products, setProducts] = useState([])
@@ -31,7 +33,6 @@ const PropertyList = () => {
   const [selectedProperty, setSelectedProperty] = useState(null)
   const [categories, setCategories] = useState([])
 
-  // 
   const [property, setProperty] = useState([]);
 
   useEffect(() => {
@@ -46,11 +47,11 @@ const PropertyList = () => {
         if (response.data.meta.status) {
           setProperty(response.data.data)
         } else {
-          alert(response.data.meta.msg)
+          toast.error(response.data.meta.msg)
         }
       } catch (error) {
         console.error('Error fetching products:', error)
-        alert('Failed to fetch products.')
+        toast.error('Failed to fetch products.')
       }
     }
     fetchProperty()
@@ -77,15 +78,15 @@ const PropertyList = () => {
       })
 
       if (response.data.meta.status) {
-        alert('Product deleted successfully.')
+        toast.success('Product deleted successfully.')
         setProducts(products.filter((p) => p._id !== selectedProperty._id))
       } else {
-        alert(response.data.meta.msg)
+        toast.error(response.data.meta.msg)
       }
       setConfirmDeleteVisible(false)
     } catch (error) {
       console.error('Error deleting product:', error)
-      alert('Failed to delete product.')
+      toast.error('Failed to delete product.')
     }
   }
 
@@ -119,7 +120,7 @@ const PropertyList = () => {
       })
 
       if (response.data.meta.status) {
-        alert('Product updated successfully.')
+        toast.success('Product updated successfully.')
         setProducts((prevProducts) =>
           prevProducts.map((product) =>
             product._id === selectedProperty._id ? selectedProperty : product
@@ -127,11 +128,11 @@ const PropertyList = () => {
         )
         setEditModalVisible(false)
       } else {
-        alert(response.data.meta.msg)
+        toast.error(response.data.meta.msg)
       }
     } catch (error) {
       console.error('Error updating product:', error)
-      alert('Failed to update product.')
+      toast.error('Failed to update product.')
     }
   }
 
@@ -143,35 +144,11 @@ const PropertyList = () => {
     }))
   }
 
-  const handleStatusChange = async (productId, currentStatus) => {
-    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/product/status`
-    const authKey = localStorage.getItem('token')
-    const newStatus = currentStatus === 'ACTIVE' ? 'DEACTIVE' : 'ACTIVE'
-
-    try {
-      const response = await axios.put(endpoint, {
-        _id: productId,
-        status: newStatus
-      }, {
-        headers: { authkey: authKey }
-      })
-
-      if (response.data.meta.status) {
-        setProducts(products.map(product =>
-          product._id === productId ? { ...product, status: newStatus } : product
-        ))
-        alert('Product status updated successfully.')
-      } else {
-        alert(response.data.meta.msg)
-      }
-    } catch (error) {
-      console.error('Error updating product status:', error)
-      alert('Failed to update product status.')
-    }
-  }
-
+ 
   return (
+    <>
     <CCard>
+      <ToastContainer/>
       <CCardHeader>Properties List</CCardHeader>
       <CCardBody className='overflow-x-scroll'>
         <CTable bordered className="text-center overflow-x-screen">
@@ -391,6 +368,7 @@ const PropertyList = () => {
         </CModal>
       </CCardBody>
     </CCard>
+    </>
   )
 }
 

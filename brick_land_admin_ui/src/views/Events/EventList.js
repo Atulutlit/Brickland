@@ -6,6 +6,8 @@ import {
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EventList = () => {
   const [categories, setCategories] = useState([]);
@@ -28,11 +30,11 @@ const EventList = () => {
         if (response.data.meta.status) {
           setEvents(response.data.data);
         } else {
-          alert(response.data.meta.msg);
+          toast.error(response.data.meta.msg);
         }
       } catch (error) {
         console.error('Error fetching categories:', error);
-        alert('Failed to fetch categories.');
+        toast.error('Failed to fetch categories.');
       }
     };
 
@@ -56,25 +58,24 @@ const EventList = () => {
   };
 
   const confirmDelete = async () => {
-    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/category/delete/${selectedCategory._id}`;
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/delete/${selectedCategory._id}`;
     const authKey = localStorage.getItem('token');
 
     try {
       const response = await axios.delete(endpoint, {
         headers: { authkey: authKey },
-        data: { _id: selectedCategory._id, status: selectedCategory.status }
       });
 
       if (response.data.meta.status) {
-        alert("Category deleted successfully.");
+        toast.success("Category deleted successfully.");
         setCategories(prevCategories => prevCategories.filter(c => c._id !== selectedCategory._id));
       } else {
-        alert(response.data.meta.msg);
+        toast.error(response.data.meta.msg);
       }
       setConfirmDeleteVisible(false);
     } catch (error) {
       console.error('Error deleting category:', error);
-      alert('Failed to delete category.');
+      toast.error('Failed to delete category.');
     }
   };
 
@@ -102,11 +103,11 @@ const EventList = () => {
         status: editData.status
       }, { headers: { authkey: authKey } });
 
-      alert("Category updated successfully.");
+      toast.success("Category updated successfully.");
       setModalVisible(false);
     } catch (error) {
       console.error('Error updating category:', error);
-      alert('Failed to update category.');
+      toast.error('Failed to update category.');
     }
   };
 

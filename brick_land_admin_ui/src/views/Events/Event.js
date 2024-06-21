@@ -1,42 +1,21 @@
 import React, { useState,useEffect } from 'react';
-import { CButton, CCol, CForm, CFormLabel, CFormInput, CFormTextarea, CInputGroup } from '@coreui/react';
+import { CButton, CCol, CForm, CFormLabel, CFormInput, CFormTextarea, CInputGroup, CFormSelect } from '@coreui/react';
 import axios from 'axios';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Event = () => {
   // State to hold 
-  const [eventCategories,setEventCategories]=useState(['DELHI_NCR','NOIDA','GURUGRAM'])
+  const [eventLocations,setEventCategories]=useState(['DELHI_NCR','NOIDA','GURUGRAM'])
   const [categoryId,setCategoryId]=useState("")
   const [title,setTitle]=useState("")
   const [description,setDescription]=useState("")
-  const [location,setLocation]=useState("");
-  const [link,setLink]=useState("");
+  const [location,setLocation]=useState("-1");
+  const [link,setLink]=useState([]);
   const [eventDate,setEventDate]=useState("")
-  
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/category/list`;
-      const authKey = localStorage.getItem('token');
+  const [youTubeLink,setYouTubeLink]=useState([]);
 
-      try {
-        const response = await axios.get(endpoint, {
-          headers: { authkey: authKey }
-        });
-
-        if (response.data.meta.status) {
-          console.log(response.data.data,'response data data');
-          setEventCategories(response.data.data);
-          setCategoryId(response.data.data[0]._id);
-        } else {
-          alert(response.data.meta.msg);
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        alert('Failed to fetch categories.');
-      }
-    };
-
-    fetchCategories();
-  }, []);
   
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -47,72 +26,23 @@ const Event = () => {
 
     try {
       const response = await axios.post(endpoint, {
-        categoryId,
-        title,
-        description,
-        location,
-        link,
-        eventDate
+        title,description,location,link:youTubeLink,eventDate
       }, {
-        headers: {
-          authkey: authKey // Pass the token in request header
-        }
+        headers: { authkey: authKey } //pass the token
       });
 
       // Handle response here, for example:
       console.log(response.data);
-      alert(response.data.meta.msg); // Alert message from the response
+      toast(response.data.meta.msg); // toast message from the response
     } catch (error) {
       console.error('Error submitting the category:', error);
-      alert('Failed to submit the category.');
+      toast('Failed to submit the category.');
     }
   };
 
-  // // Handle image upload
-  // const handleImageUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-
-  //   const endpoint = `${import.meta.env.VITE_ADMIN_URL}/upload/image`;
-  //   const authKey = localStorage.getItem('token');
-  //   const formData = new FormData();
-  //   formData.append('image', file);
-
-  //   try {
-  //     const response = await axios.post(endpoint, formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //         authkey: authKey,
-  //       },
-  //     });
-
-  //     if (response.data.meta.status) {
-  //       setCategoryImg(response.data.data);
-  //       alert(response.data.meta.msg);
-  //     } else {
-  //       alert('Failed to upload image: ' + response.data.meta.msg);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error uploading image:', error);
-  //     alert('Failed to upload image.');
-  //   }
-  // };
 
   return (
     <CForm onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <CFormLabel htmlFor="categoryId">Category Id</CFormLabel>
-        {/* <CFormInput type="select" id="categoryId" placeholder="Enter category Id"
-          >
-            {
-              eventCategories.map((item,key)=>{
-                return(
-                  <option value={item}>{item}</option>
-                )
-              })
-            }
-        </CFormInput> */}
-      </div>
       <div className="mb-3">
         <CFormLabel htmlFor="title">Title</CFormLabel>
         <CFormInput type="text" id="title" placeholder="Enter Title"
@@ -126,13 +56,32 @@ const Event = () => {
       <div className="mb-3">
         <CFormLabel htmlFor="location">Location</CFormLabel>
         <CInputGroup className="mb-3">
-        <CFormInput type="text" id="location" placeholder="Enter location name"
-          value={location} onChange={(e) => setLocation(e.target.value)} />        </CInputGroup>
+        <CFormSelect
+        id="location-select"
+        value={location}
+        onChange={(e) => {console.log(e.target.value); setLocation(e.target.value);}}
+        aria-label="Select a location"
+      > 
+      <option value={-1}>Select Location</option>
+        {eventLocations.map((loc,id) => (
+          <option key={id} value={loc}>
+            {loc}
+          </option>
+        ))}
+      </CFormSelect>       </CInputGroup>
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="typeInput">Link</CFormLabel>
+        {
+          youTubeLink.map((item,key)=>{
+            return(
+              <a href={item} target='_blank'>Link</a>
+            )
+          })
+        }
         <CFormInput type="text" id="typeInput" placeholder="Enter Link"
           value={link} onChange={(e) => setLink(e.target.value)} />
+        <div className='' onClick={()=>{setYouTubeLink([...youTubeLink,link]);setLink("");}}>Add</div>
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="typeInput">Event Date</CFormLabel>

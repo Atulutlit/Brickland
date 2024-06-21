@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ContactUs.css";
+import { ADD_CALLBACK , GET_CONTACT_INFO } from "../../constant/Constant";
 const ContactForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -11,25 +12,33 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = 'http://localhost:3311/api/user/callback/add'
-      await axios.post(url, {
-        name,
-        email,
-        city,
-        mobile,
-        message,
-      });
+      const url = ADD_CALLBACK;
+      await axios.post(url, { name,email,city,mobile,comment:message,});
       alert("Message sent successfully!");
-      setName("");
-      setEmail("");
-      setCity("");
-      setMobile("");
-      setMessage("");
+      setName("");setEmail("");setCity("");setMobile("");setMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
       alert("Failed to send message. Please try again later.");
     }
   };
+
+  const [contactInfo,setContactInfo]=useState(null);
+
+  const fetchContactInfo = async (e) => {
+    try {
+      const url = GET_CONTACT_INFO;
+      const response=await axios.get(url);
+      console.log(response,'response');
+      setContactInfo(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch contactInformation:", error);
+    }
+  };
+
+  useEffect(()=>{
+    fetchContactInfo();
+  },[])
 
   return (
     <>
@@ -52,7 +61,7 @@ const ContactForm = () => {
             <div className="info">
               <h4>Our Location</h4>
               <span>
-                 511, Floor P5, Urbtech NPX Tower, Sector 153, Noida 201310</span>
+                 {contactInfo?.address}</span>
             </div>
           </div>
           <div className="box">
@@ -62,7 +71,7 @@ const ContactForm = () => {
             <div className="info">
               <h4>Phone Number</h4>
               <span>
-                <a href="tel:8869003900">+91 88 6900 3900</a>
+                <a href="tel:8869003900">+{contactInfo?.countryCode}&nbsp;{contactInfo?.contactInformation}</a>
               </span>
               <span>
                 <a href="tel:8869003900">+91 88 6900 3900</a>
@@ -77,7 +86,7 @@ const ContactForm = () => {
               <h4>Our Email</h4>
               <span>
                 <a href="mailto:info@bricklandindia.com">
-                  info@bricklandindia.com
+                  {contactInfo?.email}
                 </a>
               </span>
               <span>

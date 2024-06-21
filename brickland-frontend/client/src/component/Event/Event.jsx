@@ -1,4 +1,6 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import { EVENT_LIST } from '../../constant/Constant';
+import axios from 'axios';
 
 const Event = () => {
     const blogPosts = [
@@ -113,6 +115,22 @@ const Event = () => {
           ]
         }
       ];
+      const [eventList,setEventList]=useState([])
+      const fetchEvent = async () => {
+        try {
+          const url = EVENT_LIST;
+          const response=await axios.get(url);
+          console.log(response,'response');
+          setEventList(response.data.data);
+          console.log(response.data.data)
+        } catch (error) {
+          console.error("Error fetch testimonial:", error);
+        }
+      };
+    
+      useEffect(()=>{
+        fetchEvent();
+      },[])
       
   return (
     <div>
