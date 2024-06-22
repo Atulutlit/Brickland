@@ -68,7 +68,7 @@ const EventList = () => {
 
       if (response.data.meta.status) {
         toast.success("Category deleted successfully.");
-        setCategories(prevCategories => prevCategories.filter(c => c._id !== selectedCategory._id));
+        setEvents(prevCategories => prevCategories.filter(c => c._id !== selectedCategory._id));
       } else {
         toast.error(response.data.meta.msg);
       }

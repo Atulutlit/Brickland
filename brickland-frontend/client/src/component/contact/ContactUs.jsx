@@ -74,7 +74,7 @@ const ContactForm = () => {
                 <a href="tel:8869003900">+{contactInfo?.countryCode}&nbsp;{contactInfo?.contactInformation}</a>
               </span>
               <span>
-                <a href="tel:8869003900">+91 88 6900 3900</a>
+                <a href="tel:8869003900">+91 {contactInfo?.mobile}</a>
               </span>
             </div>
           </div>

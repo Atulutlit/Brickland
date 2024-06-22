@@ -81,12 +81,11 @@ const Team = () => {
   const AddTeamMember=async()=>{
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/team/add`;
     const authKey = localStorage.getItem('token');
-    const data={"name":name,"position":position,"image":imageUrl,"message":message}
+    const data={name,position,img:imageUrl,message}
     console.log(data,'data',imageUrl,image);
     try {
-      const response = await axios.post(endpoint, {
+      const response = await axios.post(endpoint,data, {
         headers: { authkey: authKey },
-        data: data
       });
 
       if (response.data.meta.status) {

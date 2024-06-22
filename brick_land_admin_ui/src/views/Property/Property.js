@@ -93,7 +93,7 @@ const Product = () => {
       url,
       propertyName,
       propertyImg,propertyType:type,categories,category,description,shortDescription,price,specialPrice,
-      features,isBestSeller,bedrooms:bedroom,bathrooms:bathroom,kitchen,parking,address,isFurnished,accommodation:accomdation,status,state,area:"sfkjskf",url:"hh.com"
+      features,isBestSeller,bedrooms:bedroom,bathrooms:bathroom,kitchen,parking,address,isFurnished,accommodation:accomdation,status,state,area:"sfkjskf"
     }
 console.log(productData,"productData")
     try {
@@ -321,20 +321,28 @@ console.log(productData,"productData")
       <div className="mb-3">
         <CFormLabel htmlFor="priceInput">Features</CFormLabel>
         <div className='grid grid-cols-5'>
-        {
-          features.map((item,key)=>{
-            return(
-             <div className='flex flex-row border-2'>
-              <div className=''>{item}</div>
-              <div className='' style={{fontSize:28,color:"red"}} onClick={()=>{setFeatures((prev)=>{
-                const inputdata=[...prev];
-                inputdata.splice(key,1);
-                return inputdata;
-              })}}>Delete</div>
-             </div>
-            )
-          })
-        }
+        <div className="container my-4">
+      <div className="row g-5">
+        {features.map((item, key) => (
+          <div key={key} className="col-md-4">
+            <div className="card border-0 shadow-sm h-100">
+              <div className="card-body">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="text-body">{item}</div>
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => handleDelete(key)}
+                  >
+                    <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
          <CFormInput
           type="text"
           id="bedroomInput"

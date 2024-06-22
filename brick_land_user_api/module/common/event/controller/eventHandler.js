@@ -1,16 +1,10 @@
 "use strict";
 const { Types } = require("mongoose");
 const { eventModel } = require("../model/eventModel");
-const {
-  eventCategoryModel,
-} = require("../../../modules/event-category/model/categoryModel");
 
 const addEvent = async function (req, res) {
   try {
-    console.log("Hello world!!!")
-    console.log(req.body,'req.body')
-    const {title, description, location, link, eventDate } =
-      req.body;
+    const {title, description, location, link, eventDate } = req.body;
       
     const findEvent = await eventModel.findOne({ title });
     if (findEvent) {

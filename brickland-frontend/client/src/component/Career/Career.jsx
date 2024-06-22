@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from 'react'
 import { CAREER } from '../../constant/Constant';
 import axios from 'axios';
+import {Link} from 'react-router-dom'
 
 const Career = () => {
   const [career,setCareer]=useState([    { "company": "Brickland Real Estate", "work": "Work From Home", "role": "Software Engineer", "jobtype": "Full Time", "test": "Test Required", "need": "Urgent", "salary": "25000-30000" },
@@ -37,10 +38,10 @@ const Career = () => {
                                 <div className='text-l font-medium'>Description:{item.description}</div>
 
                                 <div className="flex flex-row gap-4">
-                                    <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">{item.jobtype}</div>
-                                    <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">{item.test}</div>
+                                    <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">English</div>
+                                    <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">Hindi</div>
                                 </div>
-                                <div className='font-semibold'>Please Fill this form</div>
+                                <div className='font-semibold'>Please Fill this form <Link to={item.link} className='underline'>Link</Link></div>
                             </div>
                         )
                     })}

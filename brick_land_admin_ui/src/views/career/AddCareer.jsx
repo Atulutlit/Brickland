@@ -32,7 +32,7 @@ const Career = () => {
     event.preventDefault();
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/career/add`;
     const authKey = localStorage.getItem('token');
-    const data={"role":role,"description":description,"salary":salary,"type":workType,"status":true,"location":location}
+    const data={"role":role,"description":description,"salary":salary,"type":workType,"status":true,"location":location,"link":link}
     console.log(data,'data')
     try {
       const response = await axios.post(endpoint, {

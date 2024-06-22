@@ -20,7 +20,7 @@ const Event = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
-
+    console.log(youTubeLink,'you tube link', link ,'detail')
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/add`;
     const authKey = localStorage.getItem('token'); // Retrieve token from local storage
 
@@ -42,6 +42,8 @@ const Event = () => {
 
 
   return (
+    <>
+    <ToastContainer/>
     <CForm onSubmit={handleSubmit}>
       <div className="mb-3">
         <CFormLabel htmlFor="title">Title</CFormLabel>
@@ -72,16 +74,29 @@ const Event = () => {
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="typeInput">Link</CFormLabel>
-        {
-          youTubeLink.map((item,key)=>{
-            return(
-              <a href={item} target='_blank'>Link</a>
-            )
-          })
-        }
+        <div className="container my-5">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+        {youTubeLink.map((item, key) => (
+          <div key={key} className="col">
+            <a
+              href={item}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-decoration-none"
+            >
+              <div className="card h-100 border-0 shadow-sm p-3 d-flex flex-column align-items-center justify-content-center bg-primary text-white">
+                <h4 className="mb-2">Video {key + 1}</h4>
+                <p className="card-text">Click to watch</p>
+              </div>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+
         <CFormInput type="text" id="typeInput" placeholder="Enter Link"
           value={link} onChange={(e) => setLink(e.target.value)} />
-        <div className='' onClick={()=>{setYouTubeLink([...youTubeLink,link]);setLink("");}}>Add</div>
+        <CButton color="primary" className='py-2 mt-2' onClick={()=>{setYouTubeLink([...youTubeLink,link]);setLink("");}}>Add</CButton>
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="typeInput">Event Date</CFormLabel>
@@ -94,6 +109,7 @@ const Event = () => {
         </CButton>
       </CCol>
     </CForm>
+    </>
   );
 };
 

@@ -22,6 +22,7 @@ import {
   cilNoteAdd,
   cilContact,
   cilBookmark,
+  cilVideo
   
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
@@ -39,11 +40,17 @@ const _nav = [
     name: `BrickLand`,
   },
   // {
-  //   component: CNavItem,
-  //   name: 'Users',
-  //   to: '/user',
-  //   icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-    
+  //   component: CNavGroup,
+  //   name: 'Banner Video',
+  //   to: '/video',
+  //   icon: <CIcon icon={cilVideo} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'Banner',
+  //       to: '/video',
+  //     }
+  //   ], 
   // },
   {
     component: CNavGroup,

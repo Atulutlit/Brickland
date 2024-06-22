@@ -1,43 +1,93 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { Link } from "react-router-dom";
+import {PROPERTY_LIST} from './../../constant/Constant'
+
 const City = () => {
   const [properties, setProperties] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [filteredProperties, setFilteredProperties] = useState([]);
+
+  // Pagination
+  const [pageSize, setPageSize] = useState(25);
+  const [NumberBox, setNumberBox] = useState([1, 2]);
+  const [indexNumber, setIndexNumber] = useState(0);
+  const [activeColor, setActiveColor] = useState(0);
+
   useEffect(() => {
     fetchProperties();
   }, []);
 
   const fetchProperties = async () => {
     try {
-      const response = await fetch(`https://brickland-backend-4.onrender.com/api/data`);
+      const url = PROPERTY_LIST;
+      const response = await fetch(url);
       const data = await response.json();
-      setProperties(data);
-      setFilteredProperties(data.slice(0, 6));
+      console.log(data,'data');
+      setProperties(data.data);
+      setFilteredProperties(data.data);
     } catch (error) {
-      console.error("Error fetching property data:", error);
+      console.error('Error fetching properties:', error);
     }
   };
+
+  // minimum function
+  const min = (a, b) => {
+    if (a < b) return a;
+    else return b;
+  }
+
+  // all logic of pagination
+  useEffect(() => {
+    setNumberBox(Array(parseInt(properties.length / pageSize + 1)).fill(1))
+    let data = properties.slice(parseInt(indexNumber) * parseInt(pageSize), min(parseInt(properties.length), (parseInt(indexNumber) + 1) * parseInt(pageSize)));
+    setData(data);
+  }, [JSON.stringify(properties), indexNumber])
 
   const handleSearchInput = (event) => {
     setSearchInput(event.target.value);
   };
 
-  const searchProperties = () => {
-    const searchQuery = searchInput.trim().toLowerCase();
-    const filtered = properties.filter(
-      (property) =>
-        property.name.toLowerCase().includes(searchQuery) ||
-        property.address.toLowerCase().includes(searchQuery) ||
-        property.type.toLowerCase().includes(searchQuery)
-    );
-    setFilteredProperties(filtered);
+  // Debounce function
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
   };
-
-  useEffect(() => {
-    searchProperties();
-  }, [searchInput]);
+  
+  // Search component
+  const [searchText,setSearchText]=useState("");
+  const [data,setData]=useState("");
+  
+    useEffect(() => {
+      const handleSearch = () => {
+        if (!searchText) {
+          properties.length>0 && setData(properties);
+        } else {
+          const lowerCaseQuery = searchText.toLowerCase();
+          const filteredItems = properties.filter(item =>
+            Object.keys(item).some(key =>
+              item[key] && item[key].toString().toLowerCase().includes(lowerCaseQuery)
+            )
+          );
+          setData(filteredItems);
+        }
+      };
+  
+      const debouncedSearch = debounce(handleSearch, 300);
+      debouncedSearch();
+  
+      // Cleanup function to cancel the timeout if the component unmounts or query changes
+      return () => {
+        if (debouncedSearch.timeoutId) {
+          clearTimeout(debouncedSearch.timeoutId);
+        }
+      };
+    }, []);
 
   return (
     <div>
@@ -121,6 +171,46 @@ const City = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      <div className="container my-5" >
+        <div className="row align-items-center">
+          {/* Left part */}
+          <div className="col-md-4 d-flex flex-row align-items-center">
+            <div className="fw-bold ms-3" style={{ fontSize: '16px', padding: "10px" }}>Page&nbsp;Size</div>
+            <select className="form-select ms-3" value={pageSize} onChange={(e) => { setPageSize(e.target.value); }} style={{ height: '2rem', width: 'auto' }}>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={75}>75</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
+
+
+          {/* Bottom part */}
+          <div className="col-md-4 d-flex justify-content-end align-items-center mt-3 mt-md-0">
+            <div className="d-flex flex-row gap-2">
+              <div className="rounded-circle border border-2 bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
+                <i className="fas fa-arrow-left"></i>
+              </div>
+              {NumberBox.map((item, key) => (
+                <div
+                  key={key}
+                  className={`rounded-circle border text-center d-flex align-items-center justify-content-center ${activeColor === key ? 'bg-white border-primary' : 'bg-light border-light'} cursor-pointer`}
+                  style={{ width: '32px', height: '32px', fontFamily: 'Ubuntu', fontWeight: 700, fontSize: '16px', color: '#2D5BFF' }}
+                  onClick={() => { setIndexNumber(key); setActiveColor(key); }}
+                >
+                  {key + 1}
+                </div>
+              ))}
+              <div className="rounded-circle border border-2 bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
+                <i className="fas fa-arrow-right"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };

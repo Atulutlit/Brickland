@@ -84,8 +84,8 @@ export default function Property() {
               <Link className='text-sm text-blue-800 hover:underline' to={'/search?offer=true'}>Show more offers</Link>
             </div>
             <div className='flex flex-wrap gap-4'>
-              {properties.map((property) => (
-                <Link key={property.id} to={`/listing/${property._id}`}>
+              {properties && properties.map((property) => (
+                <Link key={property?.id} to={`/listing/${property?._id}`}>
                    <PropertyCard listing={property} />
                 </Link>
               ))}

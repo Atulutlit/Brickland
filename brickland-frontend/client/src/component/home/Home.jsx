@@ -12,7 +12,7 @@ import mission from './../../assets/mission.jpg'
 import { IoLocation } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
-
+import { PROPERTY_LIST } from "../../constant/Constant";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,9 +24,12 @@ const Home = () => {
 
   const fetchProperties = async () => {
     try {
-      const response = await fetch(`https://brickland-backend-4.onrender.com/api/data/`);
+      // const url = `https://brickland-backend-4.onrender.com/api/data/`;
+      const url = PROPERTY_LIST;
+      const response = await fetch(url);
       const data = await response.json();
-      setProperties(data.slice(0, 6));
+      console.log(data,'data');
+      setProperties(data.data);
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -113,124 +116,7 @@ const Home = () => {
           </Container>
         </Box>
       </Box>
-      {/* <Container>
-        <Box py={5} sx={{ textAlign: "center" }}>
-          <Typography sx={{fontFamily:"poppins"}} variant="h4">Featured Properties</Typography>
-        </Box>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Card sx={styles.card}>
-              <CardContent sx={styles.content}>
-                <Typography variant="h5" component="h2" fontWeight={"bold"}>
-                  M3M The Line 72
-                </Typography>
-                <Typography variant="body2" component="p">
-                  ₹28000/mo4 Bed, 3 Beth, Flats. Area 1448-2537 sqft
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={12} md={3} lg={3}>
-            <Box
-              sx={{ textAlign: "center", borderRadius: 3, overflow: "hidden" }}
-            >
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/brickland-76c23.appspot.com/o/2.png?alt=media&token=2bc6fbc2-a9e4-4fe2-8351-7dc03397feeb"
-                alt=""
-                style={{ width: "100%", height: "auto", borderRadius: 5 }}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={12} md={3} lg={3}>
-            <Box
-              sx={{ textAlign: "center", borderRadius: 3, overflow: "hidden" }}
-            >
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/brickland-76c23.appspot.com/o/3.png?alt=media&token=fa132532-4670-42d5-bb45-bdfe367609c1"
-                alt=""
-                style={{ width: "100%", height: "auto", borderRadius: 5 }}
-              />
-            </Box>
-          </Grid>
-        </Grid>
-      </Container> */}
-      {/* <div className="city-area pt-120 pb-95">
-        <h1 className="display-4 text-center mb-5 font-bold">Our Values</h1>
-        <div className="container">
-          <div
-            className="row justify-content-center align-items-center"
-
-          >
-            <div
-              className="col-lg-6 col-md-12"  >
-              <div className="city-item">
-                <a href="#">
-                  <img src="../property-details-large.jpg" alt="image" />
-                </a>
-                <h2 className="prop-title  p-5 ">
-                  <h3>Our Mission</h3>
-                  <p>Our mission is to transform aspirations into reality by offering exceptional real estate solutions that build thriving communities and enhance lives</p>
-
-                </h2>
-
-              </div>
-            </div>
-            <div
-              className="col-lg-6 col-md-12"
-
-            >
-              <div className="row justify-content-center">
-                <div className="col-lg-6 col-md-6">
-                  <div className="city-item">
-                    <a href="#">
-                      <img src="./property-details-large.jpg" alt="image" />
-                    </a>
-                    <h2 className="prop-title  p-3 smaller-font">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                    </h2>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="city-item">
-                    <a href="#">
-                      <img src="./property-details-large.jpg" alt="image" />
-                    </a>
-                    <h2 className="prop-title  p-3 smaller-font">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                    </h2>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="city-item">
-                    <a href="#">
-                      <img src="./property-details-large.jpg" alt="image" />
-                    </a>
-                    <h2 className="prop-title  p-3 smaller-font">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                    </h2>
-                  </div>
-
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="city-item">
-                    <a href="#">
-                      <img src="./property-details-large.jpg" alt="image" />
-                    </a>
-                    <h2 className="prop-title  p-3 smaller-font">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, itaque!
-                    </h2>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+    
       {/* Our Mission and Value */}
       <div className="grid grid-cols-2">
         <div className="flex flex-col">
@@ -260,7 +146,7 @@ const Home = () => {
         </div>
 
 
-      {/* Exclusive Project Section   */}
+      {/* --------------Exclusive Project Section-------------------   */}
       {properties && properties.length > 0 && (
         <div className='row'>
           <div className='my-3 mx-3'>
@@ -297,7 +183,7 @@ const Home = () => {
 
       {/* seee more property */}
       <div className="flex text-center justify-center my-5">
-        <button className="rounded-pill text-lg default-btn text-black text-center w-64 px-4 py-2" onClick={() => { navigate('/search'); }}>See More Property</button>
+        <Link to='/search'><button className="rounded-pill text-lg default-btn text-black text-center w-64 px-4 py-2">See More Property</button></Link>
       </div>
 
       {/* new section  end  */}

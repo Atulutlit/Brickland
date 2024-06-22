@@ -55,6 +55,29 @@ const Testimonial = () => {
 
   ];
 
+    // Replace with actual paths to avatars or avatar data
+    const avatars = [
+      { name: 'Mukesh Kumar', title: 'CEO', color: 'blue' },
+      { name: 'Krishna Reddy', title: 'Director', color: 'green' },
+      { name: 'Pritam Banerjee', title: 'Co-Founder', color: 'red' },
+    ];
+  
+    const reviews = [
+      {
+        text: "Working with this real estate agency was a great experience. Their team was knowledgeable and professional, and helped us find our dream home quickly and easily.",
+        author: "Mukesh Kumar, CEO",
+      },
+      {
+        text: "I was impressed with this agency's marketing strategy when we were selling our home. They really went above and beyond to showcase my home and attract potential buyers.",
+        author: "Krishna Reddy, Director",
+      },
+      {
+        text: "I've been working with this agency for several years now for property management services, and they've been fantastic. They handle everything really well.",
+        author: "Pritam Banerjee, Co-Founder",
+      }
+    ];
+  
+
   const [testimonial,setTestimonial]=useState([])
   const [faq,setFaq]=useState([]);
 
@@ -93,64 +116,34 @@ const Testimonial = () => {
           <div className="row justify-content-center">
             <div className="col-lg-12">
               {/* Our Review */}
-              <div className="text-center text-2xl mt-5">
-                <h2 className=" mb-5 font-bold text-4xl">Customer Review and Feedback</h2>
-              </div>
-              <div className="col-lg-12">
+              <div className="container mx-auto my-10 px-4">
+                <div className="text-center text-2xl mt-5">
+                  <h2 className="mb-5 font-bold text-4xl">Customer Review and Feedback</h2>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  <div className="justify-center">
-                    <img
+                  {
+                    reviews.map((review, index) => (
+                      <div key={index} className="flex flex-col items-center">
+                          <img
                       className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10"
                       src={team}
                       alt="Client 1"
                     />
-                    <div className="z-10 bg-white p-8 rounded-lg shadow-md">
-                      <p className="text-lg text-gray-700 mb-4">
-                        "Working with this real estate agency was a great
-                        experience. Their team was knowledgeable and professional,
-                        and helped us find our dream home quickly and easily."
-                      </p>
-                      <p className="text-gray-500">Mukesh Kumar, CEO</p>
-                    </div>
-                  </div>
-                  <div className=" justify-center">
-                    <img
-                      className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10"
-                      src={team}
-                      alt="Client 1"
-                    />
-                    <div className="z-10 bg-white p-8 rounded-lg shadow-md">
-                      <p className="text-lg text-gray-700 mb-4">
-                        "I was impressed with this agency's marketing strategy when
-                        we were selling our home. They really went above and beyond
-                        to showcase my home and attract potential buyers."
-                      </p>
-                      <p className="text-gray-500">Krishna Reddy, Director</p>
-                    </div>
-                  </div>
-                  <div className="justify-center">
-                    <img
-                      className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10"
-                      src={team}
-                      alt="Client 1"
-                    />
-                    <div className="z-10 bg-white p-8 rounded-lg shadow-md">
-                      <p className="text-lg text-gray-700 mb-4">
-                        "I've been working with this agency for several years now
-                        for property management services, and they've been
-                        fantastic. They handle everything really well."
-                      </p>
-                      <p className="text-gray-500">
-                        Pritam Banerjee, Co-Founder
-                      </p>
-                    </div>
-                  </div>
+                        <div className="z-10 bg-white p-6 rounded-lg shadow-md mt-4 w-full">
+                          <p className="text-lg text-gray-700 mb-4">
+                            "{review.text}"
+                          </p>
+                          <p className="text-gray-500 font-semibold">{review.author}</p>
+                        </div>
+                      </div>
+                    ))
+                  }
                 </div>
               </div>
               {/* Our Review End */}
-              <div className="section-title text-center">
+              <div className=" text-center text-2xl font-semibold">
                 <h2>
-                  <span className="line"></span>
+                  <span className="line text-2xl font-semibol"></span>
                   Customer's Testimonials
                   <span className="line"></span>
                 </h2>
@@ -166,7 +159,7 @@ const Testimonial = () => {
                       width="100%"
                       height="220"
                       src={item.testimonialImg}
-                      title={testimonial.title}
+                      title={item.title}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -174,7 +167,7 @@ const Testimonial = () => {
                   </div>
                   <div className="testimo">
                     <div className="testimo-details">
-                      {testimonial.details}
+                      {item.description}
                     </div>
                   </div>
                 </div>
@@ -185,18 +178,24 @@ const Testimonial = () => {
       </section>
 
 {/* Frequently asked question */}
-<div className="container my-5">
-      <h2 className="text-center mb-4">Frequently Asked Questions</h2>
-     {
-      faq && faq.map((item,key)=>{
-        return(
-          <div className='grid grid-cols-1 border-[1px] rounded'>
-            <div className=''>Question-1.{item.question}</div>
-            <div className=''>Answer:{item.answer}</div>
+<div className="container mx-auto my-5 px-4">
+      <h2 className="text-3xl text-center mb-8 font-semibold">Frequently Asked Questions</h2>
+      <div className="space-y-4">
+        {
+          faq && faq.map((item, key) => (
+            <div key={key} className="p-6 border border-gray-200 rounded-lg bg-white shadow hover:shadow-lg transition-shadow">
+              <div className="text-lg font-medium mb-2 flex items-center">
+                <span className="mr-2 text-blue-500">&#x1F4AC;</span> {/* Speech bubble icon */}
+                <span>Question {key + 1}: {item.question}</span>
+              </div>
+              <div className="text-base text-gray-700 flex items-center">
+                <span className="mr-2 text-green-500">&#x2705;</span> {/* Check mark icon */}
+                <span>Answer: {item.answer}</span>
+              </div>
             </div>
-        )
-      })
-     }
+          ))
+        }
+      </div>
     </div>
       
 

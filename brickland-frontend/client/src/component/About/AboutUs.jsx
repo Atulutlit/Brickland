@@ -1,6 +1,6 @@
-import { Box, Container,Grid,} from "@mui/material";
+import { Box, Container, Grid, } from "@mui/material";
 import axios from "axios";
-import React ,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import team from './../../assets/team.jpg'
 import { IoLocation } from "react-icons/io5";
@@ -27,15 +27,15 @@ const AboutUs = () => {
     details: "Debjyoti Mal, made an investment in a Project but his money got stuck because neither the construction was beginning nor were responding properly."
   }
   ]
-  const [testimonial,setTestimonial]=useState([]);
-  const [teamMember,setTeamMember]=useState([]);
-  const [banner,setBanner]=useState([]);
+  const [testimonial, setTestimonial] = useState([]);
+  const [teamMember, setTeamMember] = useState([]);
+  const [banner, setBanner] = useState([]);
 
   const fetchTestimonial = async () => {
     try {
       const url = GET_TESTIMONIAL;
-      const response=await axios.get(url);
-      console.log(response,'response');
+      const response = await axios.get(url);
+      console.log(response, 'fetch testimonial');
       setTestimonial(response.data.data);
       console.log(response.data.data)
     } catch (error) {
@@ -46,8 +46,8 @@ const AboutUs = () => {
   const fetchTeamMember = async () => {
     try {
       const url = GET_TEAM_MEMBER;
-      const response=await axios.get(url);
-      console.log(response,'response fskfjks');
+      const response = await axios.get(url);
+      console.log(response, 'fetch team member');
       setTeamMember(response.data.data);
       console.log(response.data.data)
     } catch (error) {
@@ -58,8 +58,8 @@ const AboutUs = () => {
   const fetchBanner = async () => {
     try {
       const url = BANNER;
-      const response=await axios.get(url);
-      console.log(response,'response fskfjks');
+      const response = await axios.get(url);
+      console.log(response, 'fetch banner');
       setBanner(response.data.data);
       console.log(response.data.data)
     } catch (error) {
@@ -67,11 +67,11 @@ const AboutUs = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchTeamMember();
     fetchTestimonial();
     fetchBanner();
-  },[])
+  }, [])
   return (
     <>
       <Box
@@ -178,29 +178,19 @@ const AboutUs = () => {
                 className="col-lg-7 col-md-12"
 
               >
-                <div className="sell-image" />
+                <div className="sell-image"><img src={banner.length > 0 && banner[0].bannerImg} className="" /></div>
               </div>
               <div
                 className="col-lg-5 col-md-12"
 
               >
                 <div className="sell-content">
-                  <span className="sub">Unlocking Dreams, Opening Doors</span>
-                  <h2>Navigating Your Home Odyssey Your Sanctuary</h2>
+                  <span className="sub">{banner.length > 0 && banner[0].title}</span>
+                  {/* <h2>Navigating Your Home Odyssey Your Sanctuary</h2> */}
+                  <h2>{banner.length > 0 && banner[0].headline}</h2>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et mauris
-                    eget ornare venenatis, in. Pharetra iaculis consectetur augue
-                    venenatis enim adipiscing risus sit scelerisque. Id metus viverra
-                    tellus.
+                    {banner.length > 0 && banner[0].description}
                   </p>
-                  {/* <div className="inner">
-            <h3>Sell Your Property</h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et mauris
-              eget ornare.
-            </p>
-          
-          </div> */}
                 </div>
               </div>
             </div>
@@ -221,29 +211,23 @@ const AboutUs = () => {
 
               >
                 <div className="rent-content">
-                  <span className="sub">Beyond Brick and Mortar</span>
+                  {/* <span className="sub">Beyond Brick and Mortar</span>
                   <h2>Where Vision Meets Realty Crafting Your Perfect Home</h2>
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et mauris
                     eget ornare venenatis, in. Pharetra iaculis consectetur augue
                     venenatis enim adipiscing risus sit scelerisque. Id metus viverra
                     tellus.
+                  </p> */}
+                  <span className="sub">{banner.length > 1 && banner[1]?.title}</span>
+                  <h2>{banner.length > 1 && banner[1]?.headline}</h2>
+                  <p>
+                    {banner.length > 1 && banner[1]?.description}
                   </p>
-                  {/* <div className="inner">
-            <h3>Rent A Home</h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et mauris
-              eget ornare.
-            </p>
-            
-          </div> */}
                 </div>
               </div>
-              <div
-                className="col-lg-7 col-md-12"
-
-              >
-                <div className="rent-image" />
+              <div className="col-lg-7 col-md-12">
+                <div className="rent-image"><img src={banner.length > 0 && banner[1].bannerImg} /></div>
 
               </div>
             </div>
@@ -258,53 +242,19 @@ const AboutUs = () => {
         </div>
         <div className="col-lg-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="justify-center">
-              <img
-                className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10"
-                src={team}
-                alt="Client 1"
-              />
-              <div className="z-10 bg-white p-8 rounded-lg shadow-md">
-                <p className="text-lg text-gray-700 mb-4">
-                  "Working with this real estate agency was a great
-                  experience. Their team was knowledgeable and professional,
-                  and helped us find our dream home quickly and easily."
-                </p>
-                <p className="text-gray-500">Mukesh Kumar, CEO</p>
-              </div>
-            </div>
-            <div className=" justify-center">
-              <img
-                className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10"
-                src={team}
-                alt="Client 1"
-              />
-              <div className="z-10 bg-white p-8 rounded-lg shadow-md">
-                <p className="text-lg text-gray-700 mb-4">
-                  "I was impressed with this agency's marketing strategy when
-                  we were selling our home. They really went above and beyond
-                  to showcase my home and attract potential buyers."
-                </p>
-                <p className="text-gray-500">Krishna Reddy, Director</p>
-              </div>
-            </div>
-            <div className="justify-center">
-              <img
-                className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10"
-                src={team}
-                alt="Client 1"
-              />
-              <div className="z-10 bg-white p-8 rounded-lg shadow-md">
-                <p className="text-lg text-gray-700 mb-4">
-                  "I've been working with this agency for several years now
-                  for property management services, and they've been
-                  fantastic. They handle everything really well."
-                </p>
-                <p className="text-gray-500">
-                  Pritam Banerjee, Co-Founder
-                </p>
-              </div>
-            </div>
+            {teamMember && teamMember.map((item, key) => {
+              return (
+                <div className="justify-center">
+                  <img className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10" src={item.img} alt="Client 1" />
+                  <div className="z-10 bg-white p-8 rounded-lg shadow-md">
+                    <p className="text-lg text-gray-700 mb-4">
+                      {item?.message}
+                    </p>
+                    <p className="text-gray-500">{item.name},&nbsp;{item?.position}</p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
 
@@ -321,15 +271,15 @@ const AboutUs = () => {
               </p>
             </div>
             <div className="row">
-              {testimonials.map((testimonial, index) => (
+              {testimonial && testimonial.map((item, index) => (
                 <div className="col-lg-4 col-md-6 col-sm-12 mt-4" key={index}>
                   <div className="blog-post">
                     <div className="blog-post-image">
                       <iframe
                         width="100%"
                         height="220"
-                        src={testimonial.src}
-                        title={testimonial.title}
+                        src={item.testimonialImg}
+                        title={item.title}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -337,7 +287,7 @@ const AboutUs = () => {
                     </div>
                     <div className="testimo">
                       <div className="testimo-details">
-                        {testimonial.details}
+                        {item.description}
                       </div>
                     </div>
                   </div>
@@ -415,7 +365,7 @@ const AboutUs = () => {
         </div>
       </div>
       {/* last section */}
-      <div className="flex text-center justify-center text-2xl m-5">Discover <IoLocation style={{ color: 'green', fontSize: '30px', margin: '2px' }}/>a place<FaHome style={{ color: 'gray', fontSize: '30px', margin: '2px' }}/> you'll <FaHeart style={{ color: 'red', fontSize: '30px', margin: '2px' }}/>love to live</div>
+      <div className="flex text-center justify-center text-2xl m-5">Discover <IoLocation style={{ color: 'green', fontSize: '30px', margin: '2px' }} />a place<FaHome style={{ color: 'gray', fontSize: '30px', margin: '2px' }} /> you'll <FaHeart style={{ color: 'red', fontSize: '30px', margin: '2px' }} />love to live</div>
 
     </>
   );

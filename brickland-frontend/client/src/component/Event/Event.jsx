@@ -146,13 +146,13 @@ const Event = () => {
     </div>
     <div className="row">
       <div className="col-lg-8">
-      {blogPosts.map((post, index) => (
+      {eventList.map((post, index) => (
     <div className="blog-post mt-5" key={index}>
       <div className="blog-post-image">
         <iframe
           width={"100%"}
           height={429}
-          src={post.videoSrc}
+          src={post?.link?.length>0 && post?.link[0]}
           title={post.title}
           frameBorder={0}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -162,11 +162,11 @@ const Event = () => {
       <div className="blog-post-content">
         <div className="blog-post-details">
           <div className="blog-post-title">
-            <h5>{post.title}</h5>
+            <h5>{post?.title}</h5>
           </div>
           <div className="blog-post-description">
             <p className="mb-0" />
-            <p>{post.description}</p>
+            <p>{post?.description}</p>
             {/* You can add more paragraphs here if needed */}
             <p />
           </div>

@@ -7,7 +7,7 @@ const navigation = [
   { name: "Home", current: false, path: "/" },
   { name: "About", current: false, path: "/aboutus" },
   { name: "Property", current: false, path: "/search" },
-  { name: "Wishlist", current: false, path: "/wishlist" },
+  // { name: "Wishlist", current: false, path: "/wishlist" },
   { name: "Event", current: false, path: "/event" },
   { name: "Blogs", current: false, path: "/blog" },
   { name: "career", current: false, path: "/career" },
