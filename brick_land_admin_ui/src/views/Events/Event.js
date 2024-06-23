@@ -20,7 +20,6 @@ const Event = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
-    console.log(youTubeLink,'you tube link', link ,'detail')
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/add`;
     const authKey = localStorage.getItem('token'); // Retrieve token from local storage
 
@@ -35,8 +34,13 @@ const Event = () => {
       console.log(response.data);
       toast(response.data.meta.msg); // toast message from the response
     } catch (error) {
-      console.error('Error submitting the category:', error);
-      toast('Failed to submit the category.');
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('failed to create the event',error);
+        toast('Failed to create the event.');
+      }
+     
     }
   };
 

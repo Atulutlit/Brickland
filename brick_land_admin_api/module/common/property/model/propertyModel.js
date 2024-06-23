@@ -17,6 +17,7 @@ const propertyModel = mongoose.model(
           message: 'propertyImg must have at least one string.'
         }
       },
+      category: { type: String , required: true},
       propertyType: { type: String, required: true },
       description: { type: String, required: true },
       shortDescription: { type: String, required: true },

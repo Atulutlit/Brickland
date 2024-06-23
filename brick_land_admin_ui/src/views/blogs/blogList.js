@@ -8,6 +8,8 @@ import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
 import { toast,ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BLOG_LIST } from '../../constant/Constant';
+import { useNavigate } from 'react-router-dom';
 
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
@@ -15,30 +17,35 @@ const BlogList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [editData, setEditData] = useState({ blogName: '', description: '', blogImg: '', status: '' });
+  const [selectedCategory,setSelectedCategory]=useState(false)
+  const navigate = useNavigate();
+  const fetchBlogList=async()=>{
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/list`;
+    const authKey = localStorage.getItem('token');
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/list`;
-      const authKey = localStorage.getItem('token');
-
-      try {
-        const response = await axios.get(endpoint, {
-          headers: { authkey: authKey }
-        });
-
-        if (response.data.meta.status) {
-          setBlogs(response.data.data);
-        } else {
-          toast(response.data.meta.msg);
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        toast('Failed to fetch categories.');
+    try {
+      const response = await axios.get(endpoint, {
+        headers: { authkey: authKey },
+      });
+      console.log(response,'data')
+      if (response.data.meta.status) {
+        setBlogs(response.data.data);
+      } else {
+        toast(response.data.meta.msg);
       }
-    };
-
-    fetchCategories();
-  }, []);
+    } catch (error) {
+      if(error?.response?.status===401)
+      {
+        navigate("/");
+      }else{
+        console.log(error);
+        toast('Failed to fetch blog.');
+      }
+    }
+  }
+  useEffect(()=>{
+    fetchBlogList();
+  },[])
 
   const handleEditClick = (blogs) => {
     setSelectedBlog(blogs);
@@ -52,12 +59,14 @@ const BlogList = () => {
   };
 
   const handleDeleteClick = (blogs) => {
-    setSelectedCategory(blogs);
+    setSelectedBlog(blogs);
     setConfirmDeleteVisible(true);
   };
 
   const confirmDelete = async () => {
-    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/delete/${selectedBlog._id}`;
+    console.log(selectedBlog,"kullu")
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/blog/delete/${selectedBlog}`;
+    console.log(endpoint,"endpoint")
     const authKey = localStorage.getItem('token');
 
     try {
@@ -65,17 +74,22 @@ const BlogList = () => {
         headers: { authkey: authKey },
         data: { _id: selectedBlog._id, status: selectedBlog.status }
       });
-
+      console.log(response,'response');
       if (response.data.meta.status) {
         toast("Blog deleted successfully.");
-        setCategories(prevCategories => prevCategories.filter(c => c._id !== selectedBlog._id));
+        setBlogs(prevCategories => prevCategories.filter(c => c._id !== selectedBlog._id));
       } else {
         toast(response.data.meta.msg);
       }
       setConfirmDeleteVisible(false);
     } catch (error) {
-      console.error('Error deleting blog:', error);
-      toast('Failed to delete blog.');
+      if(error?.response?.status===401)
+      {
+        navigate("/");
+      }else{
+        console.log(error);
+        toast('Failed to delete blog.');
+      }
     }
   };
 
@@ -134,6 +148,7 @@ const BlogList = () => {
                 <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                 <CTableDataCell>{blogs.blogName}</CTableDataCell>
                 <CTableDataCell>{blogs.description}</CTableDataCell>
+                {/* <CTableDataCell>{blogs._id}</CTableDataCell> */}
                 <CTableDataCell>
                   <img
                     src={blogs.blogImg}
@@ -146,7 +161,7 @@ const BlogList = () => {
                   <CButton color="light" className='mx-3' onClick={() => handleEditClick(blogs)}>
                     <CIcon icon={cilPencil} />
                   </CButton>
-                  <CButton color="danger" onClick={() => handleDeleteClick(blogs)}>
+                  <CButton color="danger" onClick={() => handleDeleteClick(blogs._id)}>
                     <CIcon icon={cilTrash} className='text-white' />
                   </CButton>
                 </CTableDataCell>
@@ -164,7 +179,7 @@ const BlogList = () => {
             Are you sure you want to delete this Blog?
           </CModalBody>
           <CModalFooter>
-            <CButton color="danger" className='text-white' onClick={confirmDelete}>Delete</CButton>
+            <CButton color="danger" className='text-white' onClick={()=>confirmDelete(blogs._id)}>Delete</CButton>
             <CButton color="secondary" onClick={() => setConfirmDeleteVisible(false)}>Cancel</CButton>
           </CModalFooter>
         </CModal>

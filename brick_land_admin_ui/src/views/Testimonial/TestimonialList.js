@@ -29,12 +29,7 @@ const TestimonialList = () => {
   const [selectedTestimonial, setSelectedTestimonial] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false)
-  const [editData, setEditData] = useState({
-    title: '',
-    description: '',
-    testimonialImg: '',
-    status: '',
-  })
+  const [editData, setEditData] = useState({ title: '', description: '', testimonialImg: '', status: '',})
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -96,8 +91,12 @@ const TestimonialList = () => {
       }
       setConfirmDeleteVisible(false)
     } catch (error) {
-      console.error('Error deleting testimonial:', error)
-      toast.error('Failed to delete testimonial.')
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to delete testimonial:', error);
+        toast.error('Failed to delete testimonial.');
+      }
     }
   }
 
@@ -143,8 +142,12 @@ const TestimonialList = () => {
         ),
       )
     } catch (error) {
-      console.error('Error updating testimonial:', error)
-      toast('Failed to update testimonial.')
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to update testimonial:', error);
+        toast.error('Failed to update testimonial.');
+      }
     }
   }
 

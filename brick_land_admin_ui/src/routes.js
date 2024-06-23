@@ -25,10 +25,6 @@ const StaticPage = React.lazy(()=> import('./views/staticPage/staticPage.js'));
 const StaticPageList = React.lazy(()=> import('./views/staticPage/staticPageList.js'));
 const Event = React.lazy(()=>import('./views/Events/Event.js'));
 const EventList = React.lazy(()=>import('./views/Events/EventList.js'));
-const EventCategory = React.lazy(()=> import('./views/eventCategory/EventCategory.js'));
-const EventCategoryList = React.lazy(()=> import('./views/eventCategory/EventCategoryList.js'));
-const BlogCategory = React.lazy(()=>import('./views/blogCategory/BlogCategory.js'));
-const BlogCategoryList = React.lazy(()=> import('./views/blogCategory/BlogCategoryList.js'));
 const Career = React.lazy(()=> import('./views/career/AddCareer.jsx'))
 const CareerList = React.lazy(()=> import('./views/career/CareerList.jsx'));
 const Team = React.lazy(()=> import('./views/Team/Team.jsx'));
@@ -60,10 +56,6 @@ const routes = [
   { path: '/contactInfo', name: 'contactInfo', element: ContactInfo },
   { path: '/event', name: 'Dashboard', element: Event },
   { path: '/eventList', name: 'Dashboard', element: EventList }, 
-  // { path: '/eventCategory', name: 'Dashboard', element: EventCategory },
-  // { path: '/eventCategoryList', name: 'Dashboard', element: EventCategoryList },
-  // { path: '/blogCategory', name: 'Dashboard', element: BlogCategory },
-  // { path: '/blogCategoryList', name: 'Dashboard', element: BlogCategoryList },
   { path: '/addCareer', name: 'Dashboard', element: Career }, 
   { path: '/careerList', name: 'Dashboard', element: CareerList},
   { path: '/team', name: 'Dashboard', element: Team }, 

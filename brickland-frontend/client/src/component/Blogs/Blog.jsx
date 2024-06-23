@@ -2,15 +2,18 @@ import React,{useState,useEffect} from "react";
 import "swiper/css/bundle";
 import { blogItem } from "../../assets/items";
 import { Link } from "react-router-dom";
+import { BLOG_LIST } from "../../constant/Constant";
 
 export default function Blog() {
   
   const [blog,setBlog]=useState([])
   const fetchBlog = async () => {
     try {
-      const response = await fetch(`https://brickland-backend-4.onrender.com/api/data/`);
+      const url = BLOG_LIST;
+      // const url = 'https://brickland-backend-4.onrender.com/api/data/'
+      const response = await fetch(url);
       const data = await response.json();
-      setBlog(data.slice(0, 6));
+      console.log(data,'data')
     } catch (error) {
       console.error('Error fetching properties:', error);
     }

@@ -17,6 +17,7 @@ export const BANNER = BASE_URL + '/api/user/banner/list';
 
 // property
 export const PROPERTY_LIST = BASE_URL + '/api/user/property/list';
+export const PROPERTY_DETAIL = BASE_URL + '/api/user/property/details';
 
 
 // Home Page

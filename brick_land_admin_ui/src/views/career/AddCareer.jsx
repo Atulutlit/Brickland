@@ -48,8 +48,14 @@ const Career = () => {
       }
       setConfirmDeleteVisible(false);
     } catch (error) {
-      console.error('Error at Add Career:', error);
-      toast.error('Failed to Add Career.');
+      if(error?.response?.status===401)
+      {
+        navigate("/");
+      }else{
+        console.error('Error at Add Career:', error);
+        toast.error('Failed to Add Career.');
+      }
+      
     }
   }
 
@@ -118,7 +124,7 @@ const Career = () => {
         />
       </div>
       <div className="mb-3">
-        <CFormLabel htmlFor="titleInput">Status</CFormLabel>
+        <CFormLabel htmlFor="titleInput">Location</CFormLabel>
         <CFormInput
           type="text"
           id="titleInput"

@@ -35,6 +35,6 @@ baseRouter.use("/property",propertyRoutes);
 // event page
 baseRouter.use("/event",eventRoutes);
 // blog page
-baseRouter.use("/blogs",blogRoutes);
+baseRouter.use("/blog",blogRoutes);
 
 module.exports = { baseRouter, basePath };

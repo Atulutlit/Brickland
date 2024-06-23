@@ -22,8 +22,8 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilTrash, cilPencil } from '@coreui/icons'
-import { PRODUCT_LIST, BLOG_CATEGORY_LIST, PRODUCT_DELETE, PRODUCT_UPDATE, PRODUCT_STATUS } from '../../constant/Constant'
-import { toast,ToastContainer } from 'react-toastify';
+import { PRODUCT_LIST, PRODUCT_DELETE, PRODUCT_UPDATE, PRODUCT_STATUS } from '../../constant/Constant'
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const PropertyList = () => {
@@ -78,15 +78,19 @@ const PropertyList = () => {
       })
 
       if (response.data.meta.status) {
-        toast.success('Product deleted successfully.')
+        toast.success('Property deleted successfully.')
         setProducts(products.filter((p) => p._id !== selectedProperty._id))
       } else {
         toast.error(response.data.meta.msg)
       }
       setConfirmDeleteVisible(false)
     } catch (error) {
-      console.error('Error deleting product:', error)
-      toast.error('Failed to delete product.')
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to delete property:', error);
+        toast.error('Failed to delete property.');
+      }
     }
   }
 
@@ -120,7 +124,7 @@ const PropertyList = () => {
       })
 
       if (response.data.meta.status) {
-        toast.success('Product updated successfully.')
+        toast.success('Property updated successfully.')
         setProducts((prevProducts) =>
           prevProducts.map((product) =>
             product._id === selectedProperty._id ? selectedProperty : product
@@ -131,8 +135,12 @@ const PropertyList = () => {
         toast.error(response.data.meta.msg)
       }
     } catch (error) {
-      console.error('Error updating product:', error)
-      toast.error('Failed to update product.')
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to update property:', error);
+        toast.error('Failed to update property.');
+      }
     }
   }
 
@@ -144,167 +152,142 @@ const PropertyList = () => {
     }))
   }
 
- 
+
   return (
     <>
-    <CCard>
-      <ToastContainer/>
-      <CCardHeader>Properties List</CCardHeader>
-      <CCardBody className='overflow-x-scroll'>
-        <CTable bordered className="text-center overflow-x-screen">
-          <CTableHead>
-            <CTableRow>
-              <CTableHeaderCell>#</CTableHeaderCell>
-              <CTableHeaderCell>Id</CTableHeaderCell>
-              <CTableHeaderCell>Name</CTableHeaderCell>
-              <CTableHeaderCell>Category</CTableHeaderCell>
-              <CTableHeaderCell>Type</CTableHeaderCell>
-              <CTableHeaderCell>Status</CTableHeaderCell>
-              <CTableHeaderCell>Accomadation</CTableHeaderCell>
-              <CTableHeaderCell>State</CTableHeaderCell>
-              <CTableHeaderCell>Furnished</CTableHeaderCell>
-              <CTableHeaderCell>isBestSeller</CTableHeaderCell>
-              <CTableHeaderCell>Description</CTableHeaderCell>
-              <CTableHeaderCell>Notes</CTableHeaderCell>
-              <CTableHeaderCell>Address</CTableHeaderCell>
-              <CTableHeaderCell>Images</CTableHeaderCell>
-              <CTableHeaderCell>Reg-Price</CTableHeaderCell>
-              <CTableHeaderCell>Dis-Price</CTableHeaderCell>
-              <CTableHeaderCell>Parking</CTableHeaderCell>
-              <CTableHeaderCell>Kitchen</CTableHeaderCell>
-              <CTableHeaderCell>Bathrooms</CTableHeaderCell>
-              <CTableHeaderCell>Bedrooms</CTableHeaderCell>
-              <CTableHeaderCell>Actions</CTableHeaderCell>
-              <CTableHeaderCell>Features</CTableHeaderCell>
-            </CTableRow>
-          </CTableHead>
-          <CTableBody>
-            {property.map((item, index) => (
-              <CTableRow key={item?._id} >
-                <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                <CTableDataCell>{item?.propertyId}</CTableDataCell>
-                <CTableDataCell>{item?.propertyName}</CTableDataCell>
-                <CTableDataCell>{item?.Category}</CTableDataCell>
-                <CTableDataCell>{item?.propertyType}</CTableDataCell>
-                <CTableDataCell>{item?.status}</CTableDataCell>
-                <CTableDataCell>{item?.accomdation}</CTableDataCell>
-                <CTableDataCell>{item?.state}</CTableDataCell>
-                <CTableDataCell>{`₹${item.isFurnished}`}</CTableDataCell>
-                <CTableDataCell>{`₹${item.isBestSeller}`}</CTableDataCell>
-
-                <CTableDataCell>{item?.description}</CTableDataCell>
-                <CTableDataCell>{item?.shortDescription}</CTableDataCell>
-                <CTableDataCell>{item?.address}</CTableDataCell>
-                <CTableDataCell>{item?.propertyImg}</CTableDataCell>
-
-                {/* <CTableDataCell> */}
-                {/* {product.productImg.map((img, i) => (
-                    <img
-                      key={i}
-                      src={img}
-                      alt={`product-img-${i}`}
-                      style={{ width: '50px', height: '50px', margin: '2px' }}
-                    />
-                  ))} */}
-                {/* </CTableDataCell> */}
-                <CTableDataCell>{`₹${item.price}`}</CTableDataCell>
-                <CTableDataCell>{`₹${item.specialPrice}`}</CTableDataCell>
-
-                <CTableDataCell>{item.parking}</CTableDataCell>
-                <CTableDataCell>{item.kitchen}</CTableDataCell>
-                <CTableDataCell>{item.bathrooms}</CTableDataCell>
-                <CTableDataCell>{item.bedrooms}</CTableDataCell>
-
-
-                <CTableDataCell>{`₹${JSON.stringify(item.features)}`}</CTableDataCell>
-
-                <CTableDataCell>
-                  {/* <CFormSwitch
-                    id={`statusSwitch-${product._id}`}
-                    color="info"
-                    labelOn="ACTIVE"
-                    labelOff="DEACTIVE"
-                    checked={product.status === 'ACTIVE'}
-                    onChange={() => handleStatusChange(product._id, product.status)}
-                  /> */}
-                </CTableDataCell>
-                <CTableDataCell>
-                  <CButton color="light" className="mx-3" onClick={() => handleEditClick(item)}>
-                    <CIcon icon={cilPencil} />
-                  </CButton>
-                  <CButton color="danger" onClick={() => handleDeleteClick(item)}>
-                    <CIcon icon={cilTrash} className="text-white" />
-                  </CButton>
-                </CTableDataCell>
+      <ToastContainer />
+      <CCard>
+        <ToastContainer />
+        <CCardHeader>Properties List</CCardHeader>
+        <CCardBody className='overflow-x-scroll'>
+          <CTable bordered className="text-center overflow-x-screen">
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell>#</CTableHeaderCell>
+                <CTableHeaderCell>Id</CTableHeaderCell>
+                <CTableHeaderCell>Name</CTableHeaderCell>
+                <CTableHeaderCell>Category</CTableHeaderCell>
+                <CTableHeaderCell>Type</CTableHeaderCell>
+                <CTableHeaderCell>Status</CTableHeaderCell>
+                <CTableHeaderCell>Accomadation</CTableHeaderCell>
+                <CTableHeaderCell>State</CTableHeaderCell>
+                <CTableHeaderCell>Furnished</CTableHeaderCell>
+                <CTableHeaderCell>isBestSeller</CTableHeaderCell>
+                <CTableHeaderCell>Description</CTableHeaderCell>
+                <CTableHeaderCell>Notes</CTableHeaderCell>
+                <CTableHeaderCell>Address</CTableHeaderCell>
+                <CTableHeaderCell>Images</CTableHeaderCell>
+                <CTableHeaderCell>Regular_Price</CTableHeaderCell>
+                <CTableHeaderCell>Discount_Price</CTableHeaderCell>
+                <CTableHeaderCell>Parking</CTableHeaderCell>
+                <CTableHeaderCell>Kitchen</CTableHeaderCell>
+                <CTableHeaderCell>Bathrooms</CTableHeaderCell>
+                <CTableHeaderCell>Bedrooms</CTableHeaderCell>
+                <CTableHeaderCell>Features</CTableHeaderCell>
+                <CTableHeaderCell>Action</CTableHeaderCell>
               </CTableRow>
-            ))}
-          </CTableBody>
-        </CTable>
-        <CModal visible={confirmDeleteVisible} onClose={() => setConfirmDeleteVisible(false)}>
-          <CModalHeader onClose={() => setConfirmDeleteVisible(false)}>
-            Confirm Deletion
-          </CModalHeader>
-          <CModalBody>Are you sure you want to delete this property?</CModalBody>
-          <CModalFooter>
-            <CButton color="danger" onClick={confirmDelete}>
-              Delete
-            </CButton>
-            <CButton color="secondary" onClick={() => setConfirmDeleteVisible(false)}>
-              Cancel
-            </CButton>
-          </CModalFooter>
-        </CModal>
-        <CModal visible={editModalVisible} onClose={() => setEditModalVisible(false)}>
-          <CModalHeader onClose={() => setEditModalVisible(false)}>Edit Product</CModalHeader>
-          <CModalBody>
-            {selectedProperty && (
-              <>
-                <div>
-                  <label>Property Name</label>
-                  <CFormInput
-                    type="text"
-                    value={selectedProperty.productName}
-                    onChange={handleInputChange}
-                    name="productName"
-                  />
-                </div>
-                <div>
-                  <label>Description</label>
-                  <CFormInput
-                    type="text"
-                    value={selectedProperty.description}
-                    onChange={handleInputChange}
-                    name="description"
-                  />
-                </div>
-                <div>
-                  <label>Address</label>
-                  <CFormInput
-                    name="address"
-                    value={selectedProperty.address}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label>Bathrooms</label>
-                  <CFormInput
-                    type="text"
-                    value={selectedProperty.bathrooms}
-                    onChange={handleInputChange}
-                    name="bathrooms"
-                  />
+            </CTableHead>
+            <CTableBody>
+              {property.map((item, index) => (
+                <CTableRow key={item?._id} >
+                  <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
+                  <CTableDataCell>{item?.propertyId}</CTableDataCell>
+                  <CTableDataCell>{item?.propertyName}</CTableDataCell>
+                  <CTableDataCell>{item?.Category}</CTableDataCell>
+                  <CTableDataCell>{item?.propertyType}</CTableDataCell>
+                  <CTableDataCell>{item?.status}</CTableDataCell>
+                  <CTableDataCell>{item?.accomdation}</CTableDataCell>
+                  <CTableDataCell>{item?.state}</CTableDataCell>
+                  <CTableDataCell>{`${item.isFurnished}`}</CTableDataCell>
+                  <CTableDataCell>{`${item.isBestSeller}`}</CTableDataCell>
+                  <CTableDataCell>{item?.description}</CTableDataCell>
+                  <CTableDataCell>{item?.shortDescription}</CTableDataCell>
+                  <CTableDataCell>{item?.address}</CTableDataCell>
+                  <CTableDataCell>{item?.propertyImg}</CTableDataCell>
+                  <CTableDataCell>{`₹${item.price}`}</CTableDataCell>
+                  <CTableDataCell>{`₹${item.specialPrice}`}</CTableDataCell>
+                  <CTableDataCell>{item.parking}</CTableDataCell>
+                  <CTableDataCell>{item.kitchen}</CTableDataCell>
+                  <CTableDataCell>{item.bathrooms}</CTableDataCell>
+                  <CTableDataCell>{item.bedrooms}</CTableDataCell>
+                  <CTableDataCell>{`${JSON.stringify(item.features)}`}</CTableDataCell>
+                  <CTableDataCell>
+                    <CButton color="light" className="mx-3" onClick={() => handleEditClick(item)}>
+                      <CIcon icon={cilPencil} />
+                    </CButton>
+                    <CButton color="danger" onClick={() => handleDeleteClick(item)}>
+                      <CIcon icon={cilTrash} className="text-white" />
+                    </CButton>
+                  </CTableDataCell>
+                </CTableRow>
+              ))}
+            </CTableBody>
+          </CTable>
+          <CModal visible={confirmDeleteVisible} onClose={() => setConfirmDeleteVisible(false)}>
+            <CModalHeader onClose={() => setConfirmDeleteVisible(false)}>
+              Confirm Deletion
+            </CModalHeader>
+            <CModalBody>Are you sure you want to delete this property?</CModalBody>
+            <CModalFooter>
+              <CButton color="danger" onClick={confirmDelete}>
+                Delete
+              </CButton>
+              <CButton color="secondary" onClick={() => setConfirmDeleteVisible(false)}>
+                Cancel
+              </CButton>
+            </CModalFooter>
+          </CModal>
+          <CModal visible={editModalVisible} onClose={() => setEditModalVisible(false)}>
+            <CModalHeader onClose={() => setEditModalVisible(false)}>Edit Product</CModalHeader>
+            <CModalBody>
+              {selectedProperty && (
+                <>
                   <div>
-                    <label>Bedrooms</label>
+                    <label>Property Name</label>
                     <CFormInput
                       type="text"
-                      value={selectedProperty.bedrooms}
+                      value={selectedProperty.productName}
                       onChange={handleInputChange}
-                      name="bedrooms"
+                      name="productName"
                     />
                   </div>
                   <div>
-                    <label>Property Images (comma separated)</label>
-                    {/* <CFormInput
+                    <label>Description</label>
+                    <CFormInput
+                      type="text"
+                      value={selectedProperty.description}
+                      onChange={handleInputChange}
+                      name="description"
+                    />
+                  </div>
+                  <div>
+                    <label>Address</label>
+                    <CFormInput
+                      name="address"
+                      value={selectedProperty.address}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Bathrooms</label>
+                    <CFormInput
+                      type="text"
+                      value={selectedProperty.bathrooms}
+                      onChange={handleInputChange}
+                      name="bathrooms"
+                    />
+                    <div>
+                      <label>Bedrooms</label>
+                      <CFormInput
+                        type="text"
+                        value={selectedProperty.bedrooms}
+                        onChange={handleInputChange}
+                        name="bedrooms"
+                      />
+                    </div>
+                    <div>
+                      <label>Property Images (comma separated)</label>
+                      {/* <CFormInput
                     type="text"
                     value={selectedProperty.productImg.join(', ')}
                     onChange={(e) =>
@@ -315,59 +298,59 @@ const PropertyList = () => {
                     }
                     name="productImg"
                   /> */}
+                    </div>
+                    <div>
+                      <label>Price</label>
+                      <CFormInput
+                        type="number"
+                        value={selectedProperty.price}
+                        onChange={handleInputChange}
+                        name="price"
+                      />
+                    </div>
+                    <div>
+                      <label>Discounted Price</label>
+                      <CFormInput
+                        type="number"
+                        value={selectedProperty.specialPrice}
+                        onChange={handleInputChange}
+                        name="specialPrice"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Price</label>
-                    <CFormInput
-                      type="number"
-                      value={selectedProperty.price}
-                      onChange={handleInputChange}
-                      name="price"
-                    />
-                  </div>
-                  <div>
-                    <label>Discounted Price</label>
-                    <CFormInput
-                      type="number"
-                      value={selectedProperty.specialPrice}
-                      onChange={handleInputChange}
-                      name="specialPrice"
-                    />
-                  </div>
-                </div>
 
-                <div>
-                  <CFormCheck
-                    id="isFurnished"
-                    label="Furnished"
-                    name="isFurnished"
-                    checked={selectedProperty.isFurnished}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <CFormCheck
-                    id="Parking"
-                    label="Parking"
-                    name="Parking"
-                    checked={selectedProperty.parking}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </>
-            )}
-          </CModalBody>
-          <CModalFooter>
-            <CButton color="primary" onClick={handleEditSubmit}>
-              Save Changes
-            </CButton>
-            <CButton color="secondary" onClick={() => setEditModalVisible(false)}>
-              Cancel
-            </CButton>
-          </CModalFooter>
-        </CModal>
-      </CCardBody>
-    </CCard>
+                  <div>
+                    <CFormCheck
+                      id="isFurnished"
+                      label="Furnished"
+                      name="isFurnished"
+                      checked={selectedProperty.isFurnished}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div>
+                    <CFormCheck
+                      id="Parking"
+                      label="Parking"
+                      name="Parking"
+                      checked={selectedProperty.parking}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </>
+              )}
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="primary" onClick={handleEditSubmit}>
+                Save Changes
+              </CButton>
+              <CButton color="secondary" onClick={() => setEditModalVisible(false)}>
+                Cancel
+              </CButton>
+            </CModalFooter>
+          </CModal>
+        </CCardBody>
+      </CCard>
     </>
   )
 }

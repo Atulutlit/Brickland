@@ -13,6 +13,8 @@ import {
 } from '@coreui/react'
 import axios from 'axios'
 import { PRODUCT_CREATE,UPLOAD_IMAGES } from '../../constant/Constant' 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Product = () => {
   // {"_id":{"$oid":"6662986c3db589eb7f6f27d2"},"propertyId":"PROP-1717737580981",
@@ -75,11 +77,14 @@ const Product = () => {
           alert('Failed to upload image: ' + response.data.meta.msg)
         }
       } catch (error) {
-        console.error('Error uploading image:', error)
-        alert('Failed to upload image.')
+        if (error?.response?.status === 401) {
+          navigate("/");
+        } else {
+          console.error('Failed to upload image:', error);
+          toast.error('Failed to upload image.');
+        }
       }
     }
-
     setPropertyImg(imageUrls)
   }
 
@@ -89,29 +94,29 @@ const Product = () => {
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/property/add`
     const authKey = localStorage.getItem('token')
     const productData = {
-      propertyId,
-      url,
-      propertyName,
+      propertyId,url,propertyName,
       propertyImg,propertyType:type,categories,category,description,shortDescription,price,specialPrice,
       features,isBestSeller,bedrooms:bedroom,bathrooms:bathroom,kitchen,parking,address,isFurnished,accommodation:accomdation,status,state,area:"sfkjskf"
     }
-console.log(productData,"productData")
     try {
       const response = await axios.post(endpoint, productData, {
-        headers: {
-          authkey: authKey,
-        },
+        headers: { authkey: authKey,},
       })
-
       console.log(response.data,'successfully saved data')
-      alert(response.data.meta.msg)
+      toast(response.data.meta.msg)
     } catch (error) {
-      console.error('Error submitting the product:', error)
-      alert('Failed to submit the product.')
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to create the property:', error);
+        toast.error('Failed to create the property.');
+      }
     }
   }
 
   return (
+    <>
+    <ToastContainer/>
     <CForm onSubmit={handleSubmit}>
       <div className="mb-3">
         <CFormLabel htmlFor="productIdInput">Property Id</CFormLabel>
@@ -361,6 +366,7 @@ console.log(productData,"productData")
         </CButton>
       </CCol>
     </CForm>
+    </>
   )
 }
 

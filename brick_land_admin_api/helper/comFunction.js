@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const jwtToken = async function (body) {
-  const token = jwt.sign(body, process.env.jwtSecretKey, { expiresIn: "1y" });
+  const token = jwt.sign(body, process.env.jwtSecretKey, { expiresIn: "30d" });
   return token;
 };
 

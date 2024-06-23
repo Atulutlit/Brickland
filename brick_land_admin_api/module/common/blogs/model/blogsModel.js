@@ -1,5 +1,18 @@
-// Import mongoose
+// models/blogsModel.js
 const mongoose = require('mongoose');
+
+// Define the feature schema
+const featureSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  paragraph: {
+    type: String,
+    required: true
+  }
+});
 
 // Define the schema
 const blogSchema = new mongoose.Schema({
@@ -49,7 +62,7 @@ const blogSchema = new mongoose.Schema({
     required: false
   },
   features: {
-    type: [String], // Array of strings
+    type: [featureSchema], // Array of strings
     required: false
   }
 }, {
@@ -57,7 +70,7 @@ const blogSchema = new mongoose.Schema({
 });
 
 // Create the model
-const Blog = mongoose.model('blogs', blogSchema);
+const blogsModel = mongoose.model('blogs', blogSchema);
 
 // Export the model
-module.exports = Blog;
+module.exports = blogsModel;

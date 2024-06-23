@@ -30,14 +30,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Callback = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false)
-  const [editData, setEditData] = useState({
-    name: '',
-    email:'',
-    mobile: '',
-    city: '',
-    message: '',
-    pending:''
-  })
+  const [editData, setEditData] = useState({ name: '', email:'', mobile: '', city: '', message: '',pending:''})
   const [callback,setCallback]=useState([])
   const [selectedCallback,setSelectedCallback] = useState(null)
   const fetchCallback = async () => {
@@ -55,13 +48,18 @@ const Callback = () => {
         toast.error(response.data.meta.msg);
       }
     } catch (error) {
-      console.error('Error fetching testimonials:', error)
-      toast.error('Failed to fetch Callback');
+      if(error?.response?.status===401)
+      {
+        navigate("/");
+      }else{
+        console.error('Error fetching testimonials:', error)
+        toast.error('Failed to fetch Callback');
+      }
+      
     }
   }
 
   useEffect(() => {
-    
     fetchCallback()
   }, [])
 

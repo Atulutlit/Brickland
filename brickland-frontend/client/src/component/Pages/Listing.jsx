@@ -6,16 +6,12 @@ import axios from 'axios';
 import '../contact/ContactUs.css'
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
-import {
-  FaBath,
-  FaBed,
-  FaChair,
-  FaMapMarkerAlt,
-  FaParking,
-  FaShare,
-} from "react-icons/fa";
+import { FaBath,FaBed,FaChair,FaMapMarkerAlt,FaParking,FaShare } from "react-icons/fa";
+import { PROPERTY_DETAIL } from "../../constant/Constant";
 
 export default function Listing() {
+  const {listingId}=useParams();
+
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,9 +28,8 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `https://brickland-backend-4.onrender.com/api/data/get/${params.listingId}`
-        );
+        const url=`${PROPERTY_DETAIL}/${listingId}`;
+        const res = await fetch(url);
         const data = await res.json();
         
         if (data.success === false) {
@@ -42,7 +37,8 @@ export default function Listing() {
           setLoading(false);
           return;
         }
-        setListing(data);
+        setListing(data.data);
+        console.log(data.data,'data');
         setLoading(false);
         setError(false);
       } catch (error) {
@@ -84,10 +80,10 @@ export default function Listing() {
             <div className="col-lg-7 col-md-12">
               <div className="left-content">
                 <div className="title">
-                  <h2>Luxury Apartments</h2>
+                  <h2>{listing?.propertyName}</h2>
                 </div>
                 <span className="address">
-                  194 Mercer Street, NY 10012, USA
+                  {listing?.address}
                 </span>
                 <ul className="info-list">
                   <li>
@@ -97,7 +93,7 @@ export default function Listing() {
                         alt="bed"
                       />
                     </div>
-                    <span>6 Bedroom</span>
+                    <span>{listing?.bedrooms} Bedroom</span>
                   </li>
                   <li>
                     <div className="icon">
@@ -106,7 +102,7 @@ export default function Listing() {
                         alt="bathroom"
                       />
                     </div>
-                    <span>4 Bathroom</span>
+                    <span>{listing?.bathrooms} Bathroom</span>
                   </li>
                   <li>
                     <div className="icon">
@@ -115,7 +111,7 @@ export default function Listing() {
                         alt="parking"
                       />
                     </div>
-                    <span>1 Parking</span>
+                    <span>{listing?.parking} Parking</span>
                   </li>
                   <li>
                     <div className="icon">
@@ -124,14 +120,14 @@ export default function Listing() {
                         alt="area"
                       />
                     </div>
-                    <span>3250 Area</span>
+                    <span>{listing?.area} Area</span>
                   </li>
                 </ul>
               </div>
             </div>
             <div className="col-lg-5 col-md-12">
               <div className="right-content">
-                <div className="price">$95,000</div>
+                <div className="price">${listing.price}</div>
               </div>
             </div>
           </div>
@@ -190,20 +186,10 @@ export default function Listing() {
               <div className="description">
                 <h3>Property Description</h3>
                 <p>
-                  Proin gravida nibh vel velit auctor aliquet. Aenean
-                  sollicitudin quis bibendum auctor, nisilit consequat ipsum,
-                  nec sagittis sem nibh id elit. Duis sed odio sit amet nibh
-                  vulputate cursus a sit amet mauris. Morbi accumsan ipsum
-                  velit. Nam nec tellus a odio tincidunt auctor a ornare odio.
-                  Sed non mauris vitae erat consequat auctor eu in elit. Class
-                  aptent taciti sociosqu.
+                  {listing.description}
                 </p>
                 <p>
-                  Gravida nibh vel velit auctor aliquet. Aenean sollicitudin
-                  quis bibendum auctor, nisilit consequat ipsum, nec sagittis
-                  sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus
-                  a sit amet mauris. Morbi acnec tellus a odio tincidunt auctor
-                  a ornare odio.
+                  {listing.shortDescription}
                 </p>
               </div>
               <div className="overview">
@@ -215,7 +201,7 @@ export default function Listing() {
                       alt="bed2"
                     />
                     <h4>Bedrooms</h4>
-                    <span>4 Bedrooms / 1 Guestroom</span>
+                    <span>{listing?.bedrooms} Bedrooms / {listing?.bathrooms} Guestroom</span>
                   </li>
                   <li>
                     <img

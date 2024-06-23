@@ -1,11 +1,6 @@
 const contactInfoRoutes = require("express").Router();
 const { jwtAdminVerify } = require("../../../../helper/authHandler");
-// const { accessControl } = require("../../../../helper/aclHandler");
-const { modelName } = require("../model/contactInfoModel").contactInfoModel;
-const {
-    addContactInfo,
-    contactInfoDetail,
-} = require("../controller/contactInfoHandler");
+const { addContactInfo, contactInfoDetail } = require("../controller/contactInfoHandler");
 
 contactInfoRoutes.post("/add", jwtAdminVerify, addContactInfo);
 contactInfoRoutes.get("/details", jwtAdminVerify, contactInfoDetail);

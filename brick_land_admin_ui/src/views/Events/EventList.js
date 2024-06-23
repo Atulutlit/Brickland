@@ -6,12 +6,12 @@ import {
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const EventList = () => {
   const [categories, setCategories] = useState([]);
-  const [events,setEvents]=useState([]);
+  const [events, setEvents] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
@@ -26,15 +26,19 @@ const EventList = () => {
         const response = await axios.get(endpoint, {
           headers: { authkey: authKey }
         });
-        console.log(response,'events');
+        console.log(response, 'events');
         if (response.data.meta.status) {
           setEvents(response.data.data);
         } else {
           toast.error(response.data.meta.msg);
         }
       } catch (error) {
-        console.error('Error fetching categories:', error);
-        toast.error('Failed to fetch categories.');
+        if (error?.response?.status === 401) {
+          navigate("/");
+        } else {
+          console.error('Failed to fetch event:', error);
+          toast.error('Failed to fetch event.');
+        }
       }
     };
 
@@ -74,8 +78,12 @@ const EventList = () => {
       }
       setConfirmDeleteVisible(false);
     } catch (error) {
-      console.error('Error deleting category:', error);
-      toast.error('Failed to delete category.');
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to delete event:', error);
+        toast.error('Failed to delete event.');
+      }
     }
   };
 
@@ -103,11 +111,16 @@ const EventList = () => {
         status: editData.status
       }, { headers: { authkey: authKey } });
 
-      toast.success("Category updated successfully.");
+      toast.success("Event updated successfully.");
       setModalVisible(false);
     } catch (error) {
-      console.error('Error updating category:', error);
-      toast.error('Failed to update category.');
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to update event:', error);
+        toast.error('Failed to update event.');
+      }
+
     }
   };
 

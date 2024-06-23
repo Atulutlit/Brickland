@@ -29,13 +29,13 @@ export const EVENT_DELETE = BASE_URL + "/event/category/delete"
 
 
 // Blog Category
-export const BLOG_CATEGORY_CREATE = BASE_URL + "/blog/category/add"
-export const BLOG_CATEGORY_LIST = BASE_URL + "/blog/category/list"
-export const BLOG_CATEGORY_DETAILS = BASE_URL + "/blog/category/details"
-export const BLOG_CATEGORY_SUBCATEGORY_LIST = BASE_URL + "/blog/category/subcategory/list"
-export const BLOG_CATEGORY_UPDATE = BASE_URL + "/blog/category/update"
-export const BLOG_CATEGORY_STATUS = BASE_URL + "/blog/category/status"
-export const BLOG_CATEGORY_DELETE = BASE_URL + "/blog/category/delete"
+export const BLOG_CREATE = BASE_URL + "/blog/add"
+export const BLOG_LIST = BASE_URL + "/blog/list"
+export const BLOG_DETAILS = BASE_URL + "/blog/details"
+export const BLOG_SUBCATEGORY_LIST = BASE_URL + "/blog/subcategory/list"
+export const BLOG_UPDATE = BASE_URL + "/blog/update"
+export const BLOG_STATUS = BASE_URL + "/blog/status"
+export const BLOG_DELETE = BASE_URL + "/blog/delete"
 
 // FAQ
 export const FAQ_CREATE = BASE_URL + "/faq/add"

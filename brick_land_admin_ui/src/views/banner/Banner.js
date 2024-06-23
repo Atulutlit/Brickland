@@ -1,15 +1,7 @@
 import React, { useState } from 'react'
-import {
-  CButton,
-  CCol,
-  CForm,
-  CFormLabel,
-  CFormInput,
-  CFormTextarea,
-  CInputGroup,
-} from '@coreui/react'
+import { CButton, CCol, CForm, CFormLabel, CFormInput, CFormTextarea, CInputGroup } from '@coreui/react'
 import axios from 'axios'
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UPLOAD_IMAGE, } from '../../constant/Constant'
 
@@ -40,8 +32,12 @@ const Banner = () => {
       setImageUrl(response.data.data)
       toast(response.data.meta.msg) // toast message from the response
     } catch (error) {
-      console.error('Error uploading the image:', error)
-      toast('Failed to upload the image.')
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Error uploading the image:', error)
+        toast('Failed to upload the image.')
+      }
     }
   }
 
@@ -70,52 +66,59 @@ const Banner = () => {
       console.log(response.data)
       toast(response.data.meta.msg)
     } catch (error) {
-      console.error('Error submitting the banner:', error)
-      toast.error('Failed to submit the banner.')
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Error submitting the banner:', error)
+        toast.error('Failed to submit the banner.')
+      }
     }
   }
 
   return (
-    <CForm onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <CFormLabel htmlFor="titleInput">Title</CFormLabel>
-        <CFormInput
-          type="text"
-          id="titleInput"
-          placeholder="Title Name"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <CFormLabel htmlFor="titleInput">Headline</CFormLabel>
-        <CFormInput
-          type="text"
-          id="titleInput"
-          placeholder="Headline"
-          value={headline}
-          onChange={(e) => setHeadline(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <CFormLabel htmlFor="descriptionTextarea">Description</CFormLabel>
-        <CFormTextarea
-          id="descriptionTextarea"
-          rows={3}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></CFormTextarea>
-      </div>
-      <CFormLabel htmlFor="imageUpload">Upload Image</CFormLabel>
-      <CInputGroup className="mb-3">
-        <CFormInput type="file" id="imageUpload" onChange={handleImageUpload} />
-      </CInputGroup>
-      <CCol xs={12} className="mt-4">
-        <CButton color="primary" type="submit">
-          Submit
-        </CButton>
-      </CCol>
-    </CForm>
+    <>
+      <ToastContainer />
+      <CForm onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <CFormLabel htmlFor="titleInput">Title</CFormLabel>
+          <CFormInput
+            type="text"
+            id="titleInput"
+            placeholder="Title Name"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <CFormLabel htmlFor="titleInput">Headline</CFormLabel>
+          <CFormInput
+            type="text"
+            id="titleInput"
+            placeholder="Headline"
+            value={headline}
+            onChange={(e) => setHeadline(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <CFormLabel htmlFor="descriptionTextarea">Description</CFormLabel>
+          <CFormTextarea
+            id="descriptionTextarea"
+            rows={3}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></CFormTextarea>
+        </div>
+        <CFormLabel htmlFor="imageUpload">Upload Image</CFormLabel>
+        <CInputGroup className="mb-3">
+          <CFormInput type="file" id="imageUpload" onChange={handleImageUpload} />
+        </CInputGroup>
+        <CCol xs={12} className="mt-4">
+          <CButton color="primary" type="submit">
+            Submit
+          </CButton>
+        </CCol>
+      </CForm>
+    </>
   )
 }
 

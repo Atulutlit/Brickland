@@ -34,8 +34,12 @@ const Testimonial = () => {
       console.log(response.data);
       toast(response.data.meta.msg); // Alert message from the response
     } catch (error) {
-      console.error('Error submitting the testimonial:', error);
-      toast.error('Failed to submit the testimonial.');
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed create testimonial:', error);
+        toast.error('Failed to create testimonial.');
+      }
     }
   };
 
