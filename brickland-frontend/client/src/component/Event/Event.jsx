@@ -115,6 +115,8 @@ const Event = () => {
           ]
         }
       ];
+       const [data,setData]=useState([])
+      const [searchInput,setSearchInput]=useState("");
       const [eventList,setEventList]=useState([])
       const fetchEvent = async () => {
         try {
@@ -122,6 +124,7 @@ const Event = () => {
           const response=await axios.get(url);
           console.log(response,'response');
           setEventList(response.data.data);
+          setData(response.data.data);
           console.log(response.data.data)
         } catch (error) {
           console.error("Error fetch testimonial:", error);
@@ -131,6 +134,24 @@ const Event = () => {
       useEffect(()=>{
         fetchEvent();
       },[])
+
+     
+
+      const handleSearch = (e) => {
+        e.preventDefault();
+        console.log(searchInput,'search input')
+        if (!searchInput) {
+          eventList.length>0 && setData(eventList);
+        } else {
+          const lowerCaseQuery = searchInput.toLowerCase();
+          const filteredItems = eventList.filter(item =>
+            Object.keys(item).some(key =>
+              item[key] && item[key].toString().toLowerCase().includes(lowerCaseQuery)
+            )
+          );
+          setData(filteredItems);
+        }
+      };
       
   return (
     <div>
@@ -146,7 +167,7 @@ const Event = () => {
     </div>
     <div className="row">
       <div className="col-lg-8">
-      {eventList.map((post, index) => (
+      {data.map((post, index) => (
     <div className="blog-post mt-5" key={index}>
       <div className="blog-post-image">
         <iframe
@@ -229,10 +250,13 @@ const Event = () => {
            className="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
            placeholder="Search ..."
            required=""
+           value={searchInput}
+           onChange={(e)=>{setSearchInput(e.target.value);}}
          />
          <button
            type="submit"
            className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+           onClick={handleSearch}
          >
            Search
          </button>

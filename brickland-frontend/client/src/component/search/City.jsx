@@ -6,7 +6,6 @@ import {PROPERTY_LIST} from './../../constant/Constant'
 const City = () => {
   const [properties, setProperties] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredProperties, setFilteredProperties] = useState([]);
 
   // Pagination
   const [pageSize, setPageSize] = useState(25);
@@ -25,7 +24,8 @@ const City = () => {
       const data = await response.json();
       console.log(data,'data');
       setProperties(data.data);
-      setFilteredProperties(data.data);
+      setData(data.data);
+      
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -60,34 +60,25 @@ const City = () => {
   };
   
   // Search component
-  const [searchText,setSearchText]=useState("");
   const [data,setData]=useState("");
   
-    useEffect(() => {
-      const handleSearch = () => {
-        if (!searchText) {
-          properties.length>0 && setData(properties);
-        } else {
-          const lowerCaseQuery = searchText.toLowerCase();
-          const filteredItems = properties.filter(item =>
-            Object.keys(item).some(key =>
-              item[key] && item[key].toString().toLowerCase().includes(lowerCaseQuery)
-            )
-          );
-          setData(filteredItems);
-        }
-      };
+  const handleSearch = () => {
+    console.log(searchInput,'search input')
+    if (!searchInput) {
+      properties.length>0 && setData(properties);
+    } else {
+      const lowerCaseQuery = searchInput.toLowerCase();
+      const filteredItems = properties.filter(item =>
+        Object.keys(item).some(key =>
+          item[key] && item[key].toString().toLowerCase().includes(lowerCaseQuery)
+        )
+      );
+      setData(filteredItems);
+    }
+  };
   
-      const debouncedSearch = debounce(handleSearch, 300);
-      debouncedSearch();
-  
-      // Cleanup function to cancel the timeout if the component unmounts or query changes
-      return () => {
-        if (debouncedSearch.timeoutId) {
-          clearTimeout(debouncedSearch.timeoutId);
-        }
-      };
-    }, []);
+
+    
 
   return (
     <div>
@@ -135,6 +126,7 @@ const City = () => {
                 left: "98%",
                 borderLeftWidth: "0.125rem",
               }}
+              onClick={handleSearch}
             >
               <svg
                 className="w-4 h-4"
@@ -159,10 +151,10 @@ const City = () => {
      
 
       <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
-        {filteredProperties && filteredProperties.length > 0 && (
+        {data && data.length > 0 && (
           <div className="">
             <div className="flex flex-wrap gap-4">
-              {filteredProperties.map((property) => (
+              {data.map((property) => (
                 <Link key={property._id} to={`/listing/${property._id}`}>
                   <Card listing={property} key={property._id} />
                 </Link>
@@ -173,7 +165,7 @@ const City = () => {
       </div>
 
       {/* Pagination */}
-      <div className="container my-5" >
+      <div className="container my-5 mx-20" >
         <div className="row align-items-center">
           {/* Left part */}
           <div className="col-md-4 d-flex flex-row align-items-center">
