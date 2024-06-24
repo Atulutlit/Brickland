@@ -66,19 +66,20 @@ const blogsList = async (req, res) => {
   }
 };
 
-// Get details of a single blog
+// blog detail
 const blogsDetail = async (req, res) => {
   try {
-    const { blogsId } = req.params;
+    const { id } = req.params;
+    console.log(id, 'id');
 
     // Validate ObjectId
-    if (!Types.ObjectId.isValid(blogsId)) {
+    if (!Types.ObjectId.isValid(id)) {
       return res.json({
         meta: { msg: "Invalid blog ID format.", status: false },
       });
     }
 
-    const detailData = await blogsModel.findById(blogsId);
+    const detailData = await blogsModel.findById(id);
 
     if (detailData) {
       return res.json({
@@ -96,6 +97,7 @@ const blogsDetail = async (req, res) => {
     });
   }
 };
+
 
 // Update a blog
 const blogsUpdate = async (req, res) => {

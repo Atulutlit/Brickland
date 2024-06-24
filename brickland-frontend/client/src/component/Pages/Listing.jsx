@@ -19,11 +19,12 @@ export default function Listing() {
   const [copied, setCopied] = useState(false);
   const params = useParams();
  
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [city, setCity] = useState('');
-    const [mobile, setMobile] = useState();
-    const [message, setMessage] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [mobile, setMobile] = useState();
+  const [message, setMessage] = useState('');
+
   useEffect(() => {
     const fetchListing = async () => {
       try {

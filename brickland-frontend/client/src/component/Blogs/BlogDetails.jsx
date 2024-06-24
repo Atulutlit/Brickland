@@ -1,15 +1,47 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { blogItem } from '../../assets/items';
 import { Link } from 'react-router-dom';
+import { BLOG_DETAIL,BLOG_LIST } from '../../constant/Constant';
 
 const BlogDetails = () => {
   const { id } = useParams(); // Extract the ID from the URL
-  const post = blogItem.find(item => item.id.toString() === id); // Find the blog post by ID
-  
-  if (!post) {
-    return <div>Blog post not found!</div>; // Return error message if no post found
+  const [post,setPost]=useState(null);
+
+  const [blog,setBlog]=useState([])
+  const fetchBlog = async () => {
+    try {
+      const url = BLOG_LIST;
+      // const url = 'https://brickland-backend-4.onrender.com/api/data/'
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data,'data')
+      setBlog(data.data);
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+    }
+  };
+
+  useEffect(()=>{
+   fetchBlog();
+  },[])
+  const fetchBlogDetail=async()=>{
+    try {
+      const url = `${BLOG_DETAIL}/${id}`;
+      // const url = 'https://brickland-backend-4.onrender.com/api/data/'
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data,'data')
+      setPost(data.data);
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+    }
   }
+
+  useEffect(()=>{
+    fetchBlogDetail();
+  },[])
+
 
   return (
     <div>
@@ -18,41 +50,47 @@ const BlogDetails = () => {
           <div className="blog-details-desc" >
             <div className="article-content">
               <div className="image">
-                <img src={post.main_img} alt="Main" />
+                <img src={post?.mainImg} alt="Main" />
               </div>
               <div className="contentss">
                 <p className="tag-btn">
-                  {post.tag}
+                  {post?.tag.map((item,key)=>{
+                    return(
+                      <div className='' key={key}>
+                        {item}
+                      </div>
+                    )
+                  })}
                 </p>
                 <ul className="meta">
                   <li>
                     <div className="info">
-                      <img src={post.authorImageUrl} alt="Author" />
+                      <img src={post?.authorImg} alt="Author" />
                       <span>By <a>Admin</a></span>
                     </div>
                   </li>
                   <li>
                     <i className="ri-calendar-2-line" />
-                    {post.date}
+                    {post?.createdAt}
                   </li>
                   <li>
                     <i className="ri-message-2-line" />
-                    {post.comments} Comments
+                    {post?.comments} Comments
                   </li>
                 </ul>
                 <h2>
-                  {post.blog_title}
+                  {post?.blogTitle}
                 </h2>
                 <p>
-                  {post.long_para}
+                  {post?.content}
                 </p>
               </div>
             </div>
               <div className="article-inner-content">
-              {post.features.map((feature, index) => (
+              {post?.features.map((feature, index) => (
                 <div className="item" key={index}>
-                  <h4 className="fs-4 fw-bold my-3">{feature.title}</h4>
-                  <p>{feature.paragraph}</p>
+                  <h4 className="fs-4 fw-bold my-3">{feature?.title}</h4>
+                  <p>{feature?.paragraph}</p>
                 </div>
               ))}
               </div>
@@ -63,12 +101,12 @@ const BlogDetails = () => {
               <div className="row justify-content-center">
                 <div className="col-lg-6 col-md-6">
                   <div className="block-image">
-                    <img src={post.related_img_1} alt="image" />
+                    <img src={post?.relatedImg1} alt="image" />
                   </div>
                 </div>
                 <div className="col-lg-6 col-md-6">
                   <div className="block-image">
-                    <img src={post.related_img_2} alt="image" />
+                    <img src={post?.relatedImg2} alt="image" />
                   </div>
                 </div>
               </div>
@@ -77,9 +115,9 @@ const BlogDetails = () => {
               className="article-inner-content"
             >
               <div className="item">
-                <h4 className='fs-4 fw-bold'>{post.conclusion_title}</h4>
+                <h4 className='fs-4 fw-bold'>{post?.conclusionTitle}</h4>
                 <p>
-                 {post.conclusion_inner}
+                 {post?.conclusionInner}
                 </p>
               </div>
             </div>
@@ -95,7 +133,7 @@ const BlogDetails = () => {
                       <span>Tags:</span>
                     </li>
                     <li>
-                      <a>{post.tag}</a>
+                      <a>{post?.tag}</a>
                     </li>
                     
                   </ul>
@@ -127,7 +165,7 @@ const BlogDetails = () => {
             <div className="article-comment">
               <h3>Comment (2)</h3>
               <div className="comment-list">
-                <img src={post.authorImageUrl} alt="image" />
+                <img src={post?.authorImageUrl} alt="image" />
                 <h4>Jonathan Chancellor</h4>
                 <span>December 18, 2024</span>
                 <p>
@@ -138,7 +176,7 @@ const BlogDetails = () => {
                
               </div>
               <div className="comment-list">
-                <img src={post.authorImageUrl} alt="image" />
+                <img src={post?.authorImageUrl} alt="image" />
                 <h4>Christopher Baker</h4>
                 <span>December 18, 2024</span>
                 <p>
@@ -198,21 +236,21 @@ const BlogDetails = () => {
             <div className=''>Related Blog</div>
 
             <div className='grid grid-cols-3 row justify-center'>
-            {blogItem.map(post => (
-            <div className="col-xl-4 col-md-6" key={post.id}>
+            {blog.map(post => (
+            <div className="w-full" key={post._id}>
               <div className="blog-card">
                 <div className="blog-image">
-                  <Link to={`/blog/${post.id}`}>
-                    <img src={post.imageUrl} alt="Blog post" />
+                  <Link to={`/blog/${post?._id}`}>
+                    <img src={post.mainImg} alt="Blog post" />
                   </Link>
-                  <Link to={`/blog/${post.id}`} className="tag-btn">Real Estate</Link>
-                  <Link to={`/blog/${post.id}`} className="author-btn">
-                    <img src={post.authorImageUrl} alt="Author" />
+                  <Link to={`/blog/${post._id}`} className="tag-btn">Real Estate</Link>
+                  <Link to={`/blog/${post._id}`} className="author-btn">
+                    <img src={post.authorImg} alt="Author" />
                   </Link>
                 </div>
                 <div className="blog-content">
                   <ul className="meta">
-                    <li><i className="ri-calendar-2-line" />{post.date}</li>
+                    <li><i className="ri-calendar-2-line" />{post?.createdAt?.slice(0,12)}</li>
                   </ul>
                   <h3>
                     {/* <Link to={`/blog/${post.id}`}>{post.blog_title}</Link> */}

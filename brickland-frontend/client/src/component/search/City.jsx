@@ -47,17 +47,6 @@ const City = () => {
   const handleSearchInput = (event) => {
     setSearchInput(event.target.value);
   };
-
-  // Debounce function
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
   
   // Search component
   const [data,setData]=useState("");

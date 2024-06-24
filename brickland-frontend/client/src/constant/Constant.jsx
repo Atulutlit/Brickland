@@ -28,6 +28,6 @@ export const EVENT_LIST = BASE_URL + '/api/user/event/list'
 
 // Blog Page
 export const BLOG_LIST = BASE_URL + '/api/user/blog/list';
-
+export const BLOG_DETAIL = BASE_URL + '/api/user/blog/details'
 
 

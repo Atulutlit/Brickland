@@ -14,6 +14,7 @@ export default function Blog() {
       const response = await fetch(url);
       const data = await response.json();
       console.log(data,'data')
+      setBlog(data.data);
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -26,26 +27,26 @@ export default function Blog() {
     <div className="blog-area ptb-120">
       <div className="container">
         <div className="row justify-content-center">
-        {blogItem.map(post => (
+        {blog.map(post => (
             <div className="col-xl-4 col-md-6" key={post.id}>
               <div className="blog-card">
                 <div className="blog-image">
-                  <Link to={`/blog/${post.id}`}>
-                    <img src={post.imageUrl} alt="Blog post" />
+                  <Link to={`/blog/${post._id}`}>
+                    <img src={post.mainImg} alt="Blog post" />
                   </Link>
-                  <Link to={`/blog/${post.id}`} className="tag-btn">Real Estate</Link>
-                  <Link to={`/blog/${post.id}`} className="author-btn">
-                    <img src={post.authorImageUrl} alt="Author" />
+                  <Link to={`/blog/${post._id}`} className="tag-btn">Real Estate</Link>
+                  <Link to={`/blog/${post._id}`} className="author-btn">
+                    <img src={post.authorImg} alt="Author" />
                   </Link>
                 </div>
                 <div className="blog-content">
                   <ul className="meta">
-                    <li><i className="ri-calendar-2-line" />{post.date}</li>
+                    <li><i className="ri-calendar-2-line" />{post?.createdAt?.slice(0,12)}</li>
                   </ul>
                   <h3>
-                    <Link to={`/blog/${post.id}`}>{post.blog_title}</Link>
+                    <Link to={`/blog/${post?._id}`}>{post?.blogTitle}</Link>
                   </h3>
-                  <p>{post.short_para}</p>
+                  <p>{post?.conclusionInner}</p>
                 </div>
               </div>
             </div>
