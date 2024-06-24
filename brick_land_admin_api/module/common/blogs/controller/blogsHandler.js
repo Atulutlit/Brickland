@@ -100,33 +100,25 @@ const blogsDetail = async (req, res) => {
 // Update a blog
 const blogsUpdate = async (req, res) => {
   try {
-    const { id } = req.params;
     const data = req.body;
-
-    // Validate ObjectId
-    if (!Types.ObjectId.isValid(id)) {
+    const id = req.params;
+  
+    const updateStatus = await blogsModel.updateOne(
+      { _id: new Types.ObjectId(id) },
+      {
+        $set: data,
+      }
+    );
+    if (updateStatus.modifiedCount > 0) {
       return res.json({
-        meta: { msg: "Invalid blog ID format.", status: false },
-      });
-    }
-
-    const findBlogs = await blogsModel.findById(id);
-
-    if (!findBlogs) {
-      return res.json({
-        meta: { msg: "Blog not found.", status: false },
-      });
-    }
-
-    const updateData = await blogsModel.updateOne({ _id: id }, { $set: data });
-
-    if (updateData.modifiedCount > 0) {
-      return res.json({
-        meta: { msg: "Blog updated successfully.", status: true },
+        meta: {
+          msg: `banner updated successfully.`,
+          status: true,
+        },
       });
     } else {
       return res.json({
-        meta: { msg: "No changes made to the blog.", status: false },
+        meta: { msg: "something went wrong", status: false },
       });
     }
   } catch (error) {

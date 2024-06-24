@@ -90,10 +90,43 @@ const removeCareer = async (req, res) => {
   }
 };
 
+const careerUpdate = async (req, res) => {
+
+try {
+  const data = req.body;
+  const id = req.params;
+  console.log(data,'data')
+ 
+
+  const updateStatus = await careerModel.updateOne(
+    { _id: new Types.ObjectId(id) },
+    {
+      $set: data,
+    }
+  );
+  if (updateStatus.modifiedCount > 0) {
+    return res.json({
+      meta: {
+        msg: `career updated successfully.`,
+        status: true,
+      },
+    });
+  } else {
+    return res.json({
+      meta: { msg: "something went wrong", status: false },
+    });
+  }
+} catch (error) {
+  return res.json({
+    meta: { msg: error.message, status: false },
+  });
+}
+}
 
 module.exports = {
   careerList,
   careerDetail,
   careerAdd,
-  removeCareer
+  removeCareer,
+  careerUpdate,
 };

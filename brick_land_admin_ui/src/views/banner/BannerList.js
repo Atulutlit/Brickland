@@ -50,12 +50,7 @@ const BannerList = () => {
 
   const handleEditClick = (banner) => {
     setSelectedBanner(banner);
-    setEditData({
-      title: banner.title,
-      description: banner.description,
-      bannerImg: banner.bannerImg,
-      status: banner.status
-    });
+    setEditData(banner);
     setModalVisible(true);
   };
   const handleStatusChange = async (bannerId, currentStatus) => {
@@ -131,19 +126,15 @@ const BannerList = () => {
 
   const updateBanner = async () => {
     const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/banner/update/${selectedBanner._id}`;
-    const endpointStatus = `${import.meta.env.VITE_ADMIN_URL}/banner/status`;
     const authKey = localStorage.getItem('token');
 
     try {
       await axios.put(endpointDetails, {
         title: editData.title,
         description: editData.description,
-        bannerImg: editData.bannerImg
-      }, { headers: { authkey: authKey } });
+        bannerImg: editData.bannerImg,
+        status : editData.status
 
-      await axios.put(endpointStatus, {
-        _id: selectedBanner._id,
-        status: editData.status
       }, { headers: { authkey: authKey } });
 
       toast("Banner updated successfully.");
@@ -236,6 +227,7 @@ const BannerList = () => {
               </div>
               <div>
                 <label>Headline</label>
+
                 <CFormInput type="text" value={editData.headline} onChange={handleInputChange} name="headline" />
               </div>
               <div>

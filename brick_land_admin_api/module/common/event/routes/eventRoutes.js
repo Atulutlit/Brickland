@@ -6,7 +6,7 @@ const { eventJoiMiddleware,changeStatusJoiMiddleware,} = require("../service/faq
 eventRoutes.post("/add", jwtAdminVerify, addEvent);  // remove eventJoiMiddleware  
 eventRoutes.get("/list", jwtAdminVerify, eventList);
 eventRoutes.get("/details/:blogsId", jwtAdminVerify, eventDetails);
-eventRoutes.put("/update", jwtAdminVerify, eventJoiMiddleware, updateEvent);
+eventRoutes.put("/update/:id", jwtAdminVerify, updateEvent);
 eventRoutes.put("/status",jwtAdminVerify,changeStatusJoiMiddleware,changeStatus);
 eventRoutes.delete("/delete/:id", jwtAdminVerify, deleteEvent);
 

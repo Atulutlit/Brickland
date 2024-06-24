@@ -77,18 +77,33 @@ const bannerAdd = async (req,res)=>{
 
 const bannerUpdate = async (req,res)=>{
   try {
-    console.log(req.body,'request body')
-    const response=await bannerModel.create(req.body);
-    console.log(response,'response');
-    return res.json({
-      meta: { msg: "Banner Added Successfully.", status: true },
-      data: response,
-    });
+    const data = req.body;
+    const id = req.params;
+    console.log(data,'data')
+   
+
+    const updateStatus = await bannerModel.updateOne(
+      { _id: new Types.ObjectId(id) },
+      {
+        $set: data,
+      }
+    );
+    if (updateStatus.modifiedCount > 0) {
+      return res.json({
+        meta: {
+          msg: `banner updated successfully.`,
+          status: true,
+        },
+      });
+    } else {
+      return res.json({
+        meta: { msg: "something went wrong", status: false },
+      });
+    }
   } catch (error) {
     return res.json({
       meta: { msg: error.message, status: false },
-    })
-    
+    });
   }
 }
 const bannerDetail = async (req, res) => {

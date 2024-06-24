@@ -45,14 +45,9 @@ const EventList = () => {
     fetchCategories();
   }, []);
 
-  const handleEditClick = (category) => {
-    setSelectedCategory(category);
-    setEditData({
-      categoryName: category.categoryName,
-      description: category.description,
-      categoryImg: category.categoryImg,
-      status: category.status
-    });
+  const handleEditClick = (event) => {
+    setSelectedCategory(event);
+    setEditData(event);
     setModalVisible(true);
   };
 
@@ -95,22 +90,12 @@ const EventList = () => {
   };
 
   const updateCategory = async () => {
-    const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/category/update/${selectedCategory._id}`;
-    const endpointStatus = `${import.meta.env.VITE_ADMIN_URL}/category/status`;
+    const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/event/update/${selectedCategory._id}`;
     const authKey = localStorage.getItem('token');
 
     try {
-      await axios.put(endpointDetails, {
-        categoryName: editData.categoryName,
-        description: editData.description,
-        categoryImg: editData.categoryImg
-      }, { headers: { authkey: authKey } });
-
-      await axios.put(endpointStatus, {
-        _id: selectedCategory._id,
-        status: editData.status
-      }, { headers: { authkey: authKey } });
-
+      const response = await axios.put(endpointDetails,editData, { headers: { authkey: authKey } });
+      console.log(response,'response');
       toast.success("Event updated successfully.");
       setModalVisible(false);
     } catch (error) {
@@ -125,6 +110,8 @@ const EventList = () => {
   };
 
   return (
+    <>
+    <ToastContainer/>
     <CCard>
       <CCardHeader>Category List</CCardHeader>
       <CCardBody>
@@ -183,18 +170,22 @@ const EventList = () => {
           </CModalHeader>
           <CModalBody>
             <div>
-              <label>Category Name</label>
-              <CFormInput type="text" value={editData.categoryName} onChange={handleInputChange} name="categoryName" />
+              <label>Title</label>
+              <CFormInput type="text" value={editData.title} onChange={handleInputChange} name="title" />
             </div>
             <div>
               <label>Description</label>
               <CFormInput type="text" value={editData.description} onChange={handleInputChange} name="description" />
             </div>
             <div>
-              <label>Image URL</label>
-              <CFormInput type="text" value={editData.categoryImg} onChange={handleInputChange} name="categoryImg" />
+              <label>Location</label>
+              <CFormInput type="text" value={editData.location} onChange={handleInputChange} name="location" />
             </div>
             <div>
+              <label>Link</label>
+              <CFormInput type="text" value={editData.link} onChange={handleInputChange} name="link" />
+            </div>
+            {/* <div>
               <label>Status</label>
               <CFormCheck
                 type="radio"
@@ -212,7 +203,7 @@ const EventList = () => {
                 checked={editData.status === "DEACTIVE"}
                 onChange={handleInputChange}
               />
-            </div>
+            </div> */}
           </CModalBody>
           <CModalFooter>
             <CButton color="primary" onClick={updateCategory}>Save Changes</CButton>
@@ -221,6 +212,7 @@ const EventList = () => {
         </CModal>
       </CCardBody>
     </CCard>
+    </>
   );
 };
 

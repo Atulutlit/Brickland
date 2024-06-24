@@ -181,45 +181,26 @@ const eventDetailsPipeline = async function (findQuery) {
 
 const updateEvent = async (req, res) => {
   try {
-    const { _id, title, description, location, link, eventDate } =
-      req.body;
-  
-    if (title) {
-      const findEvent = await eventModel.findOne({
-        title,
-        _id: Types.ObjectId(_id),
-      });
-      if (!findEvent) {
-        const findEventAgain = await eventModel.findOne({ title });
-        if (findEventAgain) {
-          return res.json({
-            meta: {
-              msg: "Event already exist with this title.",
-              status: false,
-            },
-          });
-        }
+    const data = req.body;
+    const id = req.params;
+    console.log(data,'data')
+   
+    const updateStatus = await eventModel.updateOne(
+      { _id: new Types.ObjectId(id) },
+      {
+        $set: data,
       }
-    }
-    const findQuery = { _id: Types.ObjectId(_id) };
-    const updateQuery = {
-      categoryId,
-      title,
-      description,
-      location,
-      link,
-      eventDate,
-    };
-    const updateData = await eventModel.updateOne(findQuery, {
-      $set: updateQuery,
-    });
-    if (updateData.nModified > 0 && updateData.n > 0) {
+    );
+    if (updateStatus.modifiedCount > 0) {
       return res.json({
-        meta: { msg: "Events updated Successfully.", status: true },
+        meta: {
+          msg: `event updated successfully.`,
+          status: true,
+        },
       });
     } else {
       return res.json({
-        meta: { msg: "Something went wrong.", status: false },
+        meta: { msg: "something went wrong", status: false },
       });
     }
   } catch (error) {

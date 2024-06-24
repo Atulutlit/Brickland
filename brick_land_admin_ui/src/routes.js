@@ -59,12 +59,7 @@ const routes = [
   { path: '/addCareer', name: 'Dashboard', element: Career }, 
   { path: '/careerList', name: 'Dashboard', element: CareerList},
   { path: '/team', name: 'Dashboard', element: Team }, 
-  { path: '/video', name: 'Video', element: Video },
-
-
-
- 
-  
+  { path: '/video', name: 'Video', element: Video }, 
 ]
 
 export default routes

@@ -49,12 +49,7 @@ const BlogList = () => {
 
   const handleEditClick = (blogs) => {
     setSelectedBlog(blogs);
-    setEditData({
-      blogName: blogs.blogName,
-      description: blogs.description,
-      blogImg: blogs.blogImg,
-      status: blogs.status
-    });
+    setEditData(blogs);
     setModalVisible(true);
   };
 
@@ -102,21 +97,11 @@ const BlogList = () => {
 
   const updateBlog = async () => {
     const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/blog/update/${selectedBlog._id}`;
-    const endpointStatus = `${import.meta.env.VITE_ADMIN_URL}/blog/status`;
     const authKey = localStorage.getItem('token');
 
     try {
-      await axios.put(endpointDetails, {
-        blogName: editData.blogName,
-        description: editData.description,
-        blogImg: editData.blogImg
-      }, { headers: { authkey: authKey } });
-
-      await axios.put(endpointStatus, {
-        _id: selectedBlog._id,
-        status: editData.status
-      }, { headers: { authkey: authKey } });
-
+      const response = await axios.put(endpointDetails,editData,{ headers: { authkey: authKey } });
+      console.log(response,'response');
       toast("Blog updated successfully.");
       setModalVisible(false);
     } catch (error) {
@@ -138,7 +123,7 @@ const BlogList = () => {
               <CTableHeaderCell>Blog Name</CTableHeaderCell>
               <CTableHeaderCell>Description</CTableHeaderCell>
               <CTableHeaderCell>Image</CTableHeaderCell>
-              <CTableHeaderCell>Status</CTableHeaderCell>
+              <CTableHeaderCell>Author</CTableHeaderCell>
               <CTableHeaderCell>Actions</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
@@ -146,17 +131,12 @@ const BlogList = () => {
             {blogs.map((blogs, index) => (
               <CTableRow key={blogs._id}>
                 <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                <CTableDataCell>{blogs.blogName}</CTableDataCell>
-                <CTableDataCell>{blogs.description}</CTableDataCell>
-                {/* <CTableDataCell>{blogs._id}</CTableDataCell> */}
+                <CTableDataCell>{blogs.blogTitle}</CTableDataCell>
+                <CTableDataCell>{blogs.content}</CTableDataCell>
                 <CTableDataCell>
-                  <img
-                    src={blogs.blogImg}
-                    alt={blogs.blogName}
-                    style={{ width: '100px', height: 'auto' }}
-                  />
+                  <img src={blogs.mainImg} alt={blogs.mainImg} style={{ width: '100px', height: 'auto' }}/>
                 </CTableDataCell>
-                <CTableDataCell>{blogs.status}</CTableDataCell>
+                <CTableDataCell>{blogs.author}</CTableDataCell>
                 <CTableDataCell>
                   <CButton color="light" className='mx-3' onClick={() => handleEditClick(blogs)}>
                     <CIcon icon={cilPencil} />
@@ -191,35 +171,24 @@ const BlogList = () => {
           </CModalHeader>
           <CModalBody>
             <div>
-              <label>Blog Name</label>
-              <CFormInput type="text" value={editData.blogName} onChange={handleInputChange} name="blogName" />
+              <label>Blog Title</label>
+              <CFormInput type="text" value={editData.blogTitle} onChange={handleInputChange} name="blogTitle" />
             </div>
             <div>
-              <label>Description</label>
-              <CFormInput type="text" value={editData.description} onChange={handleInputChange} name="description" />
+              <label>Content</label>
+              <CFormInput type="text" value={editData.content} onChange={handleInputChange} name="content" />
             </div>
             <div>
-              <label>Image URL</label>
-              <CFormInput type="text" value={editData.blogImg} onChange={handleInputChange} name="blogImg" />
+              <label>conclusion Title</label>
+              <CFormInput type="text" value={editData.conclusionTitle} onChange={handleInputChange} name="conclusionTitle" />
             </div>
             <div>
-              <label>Status</label>
-              <CFormCheck
-                type="radio"
-                name="status"
-                label="Active"
-                value="ACTIVE"
-                checked={editData.status === "ACTIVE"}
-                onChange={handleInputChange}
-              />
-              <CFormCheck
-                type="radio"
-                name="status"
-                label="Deactive"
-                value="DEACTIVE"
-                checked={editData.status === "DEACTIVE"}
-                onChange={handleInputChange}
-              />
+              <label>conclusionInner</label>
+              <CFormInput type="text" value={editData.conclusionInner} onChange={handleInputChange} name="conclusionInner" />
+            </div>
+            <div>
+              <label>Author</label>
+              <CFormInput type="text" value={editData.author} onChange={handleInputChange} name="author" />
             </div>
           </CModalBody>
           <CModalFooter>
