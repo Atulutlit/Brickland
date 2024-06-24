@@ -72,7 +72,7 @@ const BlogList = () => {
       console.log(response,'response');
       if (response.data.meta.status) {
         toast("Blog deleted successfully.");
-        setBlogs(prevCategories => prevCategories.filter(c => c._id !== selectedBlog._id));
+        setBlogs(prevCategories => prevCategories.filter(c => c._id !== selectedBlog));
       } else {
         toast(response.data.meta.msg);
       }

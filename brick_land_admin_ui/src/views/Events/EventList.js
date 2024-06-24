@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import {
   CCard, CCardHeader, CCardBody, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell,
-  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck
+  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck, CFormSelect
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
@@ -179,31 +179,16 @@ const EventList = () => {
             </div>
             <div>
               <label>Location</label>
-              <CFormInput type="text" value={editData.location} onChange={handleInputChange} name="location" />
+              <CFormSelect type="text" value={editData.location} onChange={handleInputChange} name="location" >
+              <option value="DELHI_NCR">DELHI_NCR</option>
+              <option value="NOIDA">NOIDA</option>
+              <option value="GURGAON">GURGAON</option>
+              </CFormSelect>
             </div>
             <div>
               <label>Link</label>
               <CFormInput type="text" value={editData.link} onChange={handleInputChange} name="link" />
             </div>
-            {/* <div>
-              <label>Status</label>
-              <CFormCheck
-                type="radio"
-                name="status"
-                label="Active"
-                value="ACTIVE"
-                checked={editData.status === "ACTIVE"}
-                onChange={handleInputChange}
-              />
-              <CFormCheck
-                type="radio"
-                name="status"
-                label="Deactive"
-                value="DEACTIVE"
-                checked={editData.status === "DEACTIVE"}
-                onChange={handleInputChange}
-              />
-            </div> */}
           </CModalBody>
           <CModalFooter>
             <CButton color="primary" onClick={updateCategory}>Save Changes</CButton>

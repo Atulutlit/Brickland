@@ -163,8 +163,8 @@ const BlogDetails = () => {
             </div>
 
             <div className="article-comment">
-              <h3>Comment (2)</h3>
-              <div className="comment-list">
+              {/* <h3>Comment (2)</h3> */}
+              {/* <div className="comment-list">
                 <img src={post?.authorImageUrl} alt="image" />
                 <h4>Jonathan Chancellor</h4>
                 <span>December 18, 2024</span>
@@ -174,18 +174,8 @@ const BlogDetails = () => {
                   dictum.adipiscing elit.”
                 </p>
                
-              </div>
-              <div className="comment-list">
-                <img src={post?.authorImageUrl} alt="image" />
-                <h4>Christopher Baker</h4>
-                <span>December 18, 2024</span>
-                <p>
-                  “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam
-                  lectus purus ultricies neque. Aenean nunc nisi, vel
-                  dictum.adipiscing elit.”
-                </p>
-                
-              </div>
+              </div> */}
+              
             </div>
             <div className="article-reply">
               <h3>Leave A Comment</h3>

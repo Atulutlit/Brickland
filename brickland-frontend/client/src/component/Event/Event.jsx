@@ -202,6 +202,25 @@ const Event = () => {
           </div>
         </div>
       </div>
+      <div className='grid grid-cols-5 gap-4'>
+      {
+        post.link.map((item,key)=>{
+          return(
+            <div className="blog-post-image">
+        <iframe
+          width={"100%"}
+          height={49}
+          src={post?.link?.length>0 && post?.link[0]}
+          title={post.title}
+          frameBorder={0}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen=""
+        />
+      </div>
+          )
+        })
+      }
+      </div>
     </div>
   ))}
         <div className="row">

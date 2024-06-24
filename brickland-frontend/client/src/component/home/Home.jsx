@@ -17,6 +17,8 @@ import { PROPERTY_LIST } from "../../constant/Constant";
 const Home = () => {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
+  const [topSearch,setTopSearch]=useState([]);
+  const [exclusive,setExclusive]=useState([]);
 
   useEffect(() => {
     fetchProperties();
@@ -29,7 +31,8 @@ const Home = () => {
       const response = await fetch(url);
       const data = await response.json();
       console.log(data,'data');
-      setProperties(data.data);
+      setTopSearch(data.data.filter((item)=> {return item.propertyType=='TopSearch'}));
+      setExclusive(data.data.filter((item,key)=>{ return item.propertyType=='exclusive'}))
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -147,7 +150,7 @@ const Home = () => {
 
 
       {/* --------------Exclusive Project Section-------------------   */}
-      {properties && properties.length > 0 && (
+      {exclusive && exclusive.length > 0 && (
         <div className='row'>
           <div className='my-3 mx-3'>
             <h1 className="display-5 text-center font-bold">Exclusive Project</h1>
@@ -155,7 +158,7 @@ const Home = () => {
           </div>
           <div className="flex text-center justify-center">
             <div className='grid grid-cols-3 gap-4'>
-              {properties.map((property) => (
+              {exclusive.map((property) => (
                   <PropertyCard listing={property} />
               ))}
             </div>
@@ -163,7 +166,7 @@ const Home = () => {
         </div>)}
 
       {/* Top Search Properties */}
-      {properties && properties.length > 0 && (
+      {topSearch && topSearch.length > 0 && (
         <div className='row'>
           <div className='my-3 mx-3'>
             <h1 className="display-5 text-center font-bold">Top Search Properties</h1>
@@ -171,7 +174,7 @@ const Home = () => {
           </div>
           <div className="flex text-center justify-center">
             <div className='grid grid-cols-3 gap-4'>
-              {properties.map((property) => (
+              {topSearch.map((property) => (
                 <Link key={property.id} to={`/listing/${property._id}`}>
                   <PropertyCard listing={property} />
                 </Link>

@@ -46,7 +46,7 @@ export default function Blog() {
                   <h3>
                     <Link to={`/blog/${post?._id}`}>{post?.blogTitle}</Link>
                   </h3>
-                  <p>{post?.conclusionInner}</p>
+                  {/* <p>{post?.conclusionInner}</p> */}
                 </div>
               </div>
             </div>

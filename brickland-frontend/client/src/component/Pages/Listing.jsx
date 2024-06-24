@@ -7,7 +7,7 @@ import '../contact/ContactUs.css'
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { FaBath,FaBed,FaChair,FaMapMarkerAlt,FaParking,FaShare } from "react-icons/fa";
-import { PROPERTY_DETAIL } from "../../constant/Constant";
+import { PROPERTY_DETAIL,ADD_CALLBACK } from "../../constant/Constant";
 
 export default function Listing() {
   const {listingId}=useParams();
@@ -53,18 +53,14 @@ export default function Listing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`https://brickland-backend-4.onrender.com/send-email`, { name, email, city, mobile, message,property: listing.name});
-      alert('Message sent successfully!');
-      setName('');
-      setEmail('');
-      setCity('');
-      setMobile('');
-      setMessage('');
+      const url = ADD_CALLBACK;
+      await axios.post(url, { name,email,city,mobile,comment:message,});
+      alert("Message sent successfully!");
+      setName("");setEmail("");setCity("");setMobile("");setMessage("");
     } catch (error) {
-      console.error('Error sending message:', error);
-      alert('Failed to send message. Please try again later.');
+      console.error("Error sending message:", error);
+      alert("Failed to send message. Please try again later.");
     }
-    
   };
 
   
@@ -128,7 +124,7 @@ export default function Listing() {
             </div>
             <div className="col-lg-5 col-md-12">
               <div className="right-content">
-                <div className="price">${listing.price}</div>
+                <div className="price">${listing?.specialPrice}</div>
               </div>
             </div>
           </div>
@@ -187,52 +183,37 @@ export default function Listing() {
               <div className="description">
                 <h3>Property Description</h3>
                 <p>
-                  {listing.description}
+                  {listing?.description}
                 </p>
                 <p>
-                  {listing.shortDescription}
+                  {listing?.shortDescription}
                 </p>
               </div>
               <div className="overview">
                 <h3>Property Overview</h3>
                 <ul className="overview-list">
                   <li>
-                    <img
-                      src="../bed2.svg"
-                      alt="bed2"
-                    />
+                    <img src="../bed2.svg" alt="bed2"/>
                     <h4>Bedrooms</h4>
                     <span>{listing?.bedrooms} Bedrooms / {listing?.bathrooms} Guestroom</span>
                   </li>
                   <li>
-                    <img
-                      src="../bathroom2.svg"
-                      alt="bathroom2"
-                    />
+                    <img src="../bathroom2.svg" alt="bathroom2" />
                     <h4>Bedrooms</h4>
-                    <span>4 Bedrooms / 1 Guestroom</span>
+                    <span>{listing?.bedrooms} Bedrooms / 1 Guestroom</span>
                   </li>
                   <li>
-                    <img
-                      src="../parking2.svg"
-                      alt="parking2"
-                    />
+                    <img src="../parking2.svg" alt="parking2"/>
                     <h4>Parking</h4>
                     <span>Free Parking for 4 Cars</span>
                   </li>
                   <li>
-                    <img
-                      src="../area2.svg"
-                      alt="area2"
-                    />
+                    <img src="../area2.svg" alt="area2"/>
                     <h4>Accommodation</h4>
                     <span>6 Guest / 2980 Sq Ft</span>
                   </li>
                   <li>
-                    <img
-                      src="../home.svg"
-                      alt="home"
-                    />
+                    <img src="../home.svg" alt="home" />
                     <h4>Property Type</h4>
                     <span>Entire Place / Apartment</span>
                   </li>
@@ -319,13 +300,15 @@ export default function Listing() {
             <div className="col-xl-4 col-md-12">
               <div className="property-details-sidebar">
                 <div className="booking">
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <div className="form-group">
                       <label>Name</label>
                       <input
                         type="text"
                         placeholder="Your name"
                         className="form-control"
+                        value={name}
+                        onChange={(e)=>{setName(e.target.value);} }
                       />
                       <div className="icon">
                         <i className="ri-user-3-line" />
@@ -337,6 +320,8 @@ export default function Listing() {
                         type="text"
                         placeholder="Your email"
                         className="form-control"
+                        value={email}
+                        onChange={(e)=>{setEmail(e.target.value);}}
                       />
                       <div className="icon">
                         <i className="ri-mail-send-line" />
@@ -348,6 +333,8 @@ export default function Listing() {
                         type="text"
                         placeholder={+12345678}
                         className="form-control"
+                        value={mobile}
+                        onChange={(e)=>{setMobile(e.target.value);}}
                       />
                       <div className="icon">
                         <i className="ri-phone-line" />
@@ -359,6 +346,8 @@ export default function Listing() {
                         type="text"
                         placeholder={"Your City"}
                         className="form-control"
+                        value={city}
+                        onChange={(e)=>{setCity(e.target.value);}}
                       />
                       <div className="icon">
                         <i className="ri-building-line" />
@@ -371,6 +360,8 @@ export default function Listing() {
                         placeholder="I'm interested in this property......."
                         rows={5}
                         defaultValue={""}
+                        value={message}
+                        onChange={(e)=>{setMessage(e.target.value);}}
                       />
                       <div className="icon">
                         <i className="ri-pencil-line" />
