@@ -6,13 +6,15 @@ import axios from 'axios';
 import '../contact/ContactUs.css'
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
-import { FaBath,FaBed,FaChair,FaMapMarkerAlt,FaParking,FaShare } from "react-icons/fa";
-import { PROPERTY_DETAIL,ADD_CALLBACK,PROPERTY_LIST } from "../../constant/Constant";
+import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from "react-icons/fa";
+import { PROPERTY_DETAIL, ADD_CALLBACK, PROPERTY_LIST } from "../../constant/Constant";
 import { Link } from "react-router-dom";
 import Card from "../search/Card";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Listing() {
-  const {listingId}=useParams();
+  const { listingId } = useParams();
 
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
@@ -20,9 +22,9 @@ export default function Listing() {
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const params = useParams();
-  const [properties,setProperties]=useState([]);
-  const [data,setData]=useState([]);
- 
+  const [properties, setProperties] = useState([]);
+  const [data, setData] = useState([]);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
@@ -33,17 +35,17 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const url=`${PROPERTY_DETAIL}/${listingId}`;
+        const url = `${PROPERTY_DETAIL}/${listingId}`;
         const res = await fetch(url);
         const data = await res.json();
-        
+
         if (data.success === false) {
           setError(true);
           setLoading(false);
           return;
         }
         setListing(data.data);
-        console.log(data.data,'data');
+        console.log(data.data, 'data');
         setLoading(false);
         setError(false);
       } catch (error) {
@@ -53,14 +55,53 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
-  
+
+
+  function validateForm(name, email, city, mobile, comment) {
+    const errors = {};
+
+    // Name validation
+    if (!name || typeof name !== 'string' || name.trim() === '') {
+      return { "status": false, "errors": 'Name is required and must be a non-empty string.' }
+    }
+
+    // Email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailPattern.test(email)) {
+      return { "status": false, "errors": 'A valid email address is required.' }
+    }
+
+    // City validation
+    if (!city || typeof city !== 'string' || city.trim() === '') {
+      return { "status": false, "errors": 'City is required and must be a non-empty string.' }
+    }
+
+    // Mobile validation
+    const mobilePattern = /^\d{10}$/;
+    if (!mobile || !mobilePattern.test(mobile)) {
+      return { "status": false, "errors": 'A valid 10-digit mobile number is required.' }
+    }
+
+    // Comment validation
+    if (!comment || typeof comment !== 'string' || comment.trim() === '') {
+      return { "status": false, "errors": 'Comment is required and must be a non-empty string.' }
+    }
+
+    return { "status": true, "errors": "" }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const url = ADD_CALLBACK;
-      await axios.post(url, { name,email,city,mobile,comment:message,});
-      alert("Message sent successfully!");
-      setName("");setEmail("");setCity("");setMobile("");setMessage("");
+      const response = validateForm(name, email, city, mobile, message)
+      if (!response.status) {
+        toast.warn(response.errors);
+        return;
+      }
+      await axios.post(url, { name, email, city, mobile, comment: message, });
+      toast.success('Message Sent Successfully!!');
+      setName(""); setEmail(""); setCity(""); setMobile(""); setMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
       alert("Failed to send message. Please try again later.");
@@ -72,10 +113,10 @@ export default function Listing() {
       const url = PROPERTY_LIST;
       const response = await fetch(url);
       const data = await response.json();
-      console.log(data,'data');
+      console.log(data, 'data');
       setProperties(data.data);
-      setData(data.data.slice(0,3));
-      
+      setData(data.data.slice(0, 3));
+
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -84,353 +125,354 @@ export default function Listing() {
   useEffect(() => {
     fetchProperties();
   }, []);
-  
+
 
   return (
     // new code 
     <>
- <div className="property-details-area ptb-120">
-  <div className="container">
-    <div className="row justify-content-center">
-      <div className="property-details-desc">
-        <div className="property-details-content">
-          <div className="row justify-content-center align-items-center">
-            <div className="col-lg-7 col-md-12">
-              <div className="left-content">
-                <div className="title">
-                  <h2>{listing?.propertyName}</h2>
-                </div>
-                <span className="address">
-                  {listing?.address}
-                </span>
-                <ul className="info-list">
-                  <li>
-                    <div className="icon">
-                      <img
-                        src="../bed.svg"
-                        alt="bed"
-                      />
-                    </div>
-                    <span>{listing?.bedrooms} Bedroom</span>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <img
-                        src="../bathroom.svg"
-                        alt="bathroom"
-                      />
-                    </div>
-                    <span>{listing?.bathrooms} Bathroom</span>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <img
-                        src="../parking.svg"
-                        alt="parking"
-                      />
-                    </div>
-                    <span>{listing?.parking} Parking</span>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <img
-                        src="../area.svg"
-                        alt="area"
-                      />
-                    </div>
-                    <span>{listing?.area} Area</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-lg-5 col-md-12">
-              <div className="right-content">
-                <div className="price">${listing?.specialPrice}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="property-details-image">
-          <div className="row justify-content-center align-items-center">
-            <div className="col-lg-4 col-md-12">
-              <div className="row justify-content-center">
-                <div className="col-lg-6 col-sm-6">
-                  <div className="block-image">
-                    <img
-                      src="../property-details1.jpg"
-                      alt="image"
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-6 col-sm-6">
-                  <div className="block-image">
-                    <img
-                      src="../property-details2.jpg"
-                      alt="image"
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-6 col-sm-6">
-                  <div className="block-image">
-                    <img
-                      src="../property-details3.jpg"
-                      alt="image"
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-6 col-sm-6">
-                  <div className="block-image">
-                    <img
-                      src="../property-details4.jpg"
-                      alt="image"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-8 col-md-12">
-              <div className="block-image">
-                <img
-                  src="../property-details-large.jpg"
-                  alt="image"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="property-details-inner-content">
+      <ToastContainer />
+      <div className="property-details-area ptb-120">
+        <div className="container">
           <div className="row justify-content-center">
-            <div className="col-xl-8 col-md-12">
-              <div className="description">
-                <h3>Property Description</h3>
-                <p>
-                  {listing?.description}
-                </p>
-                <p>
-                  {listing?.shortDescription}
-                </p>
+            <div className="property-details-desc">
+              <div className="property-details-content">
+                <div className="row justify-content-center align-items-center">
+                  <div className="col-lg-7 col-md-12">
+                    <div className="left-content">
+                      <div className="title">
+                        <h2>{listing?.propertyName}</h2>
+                      </div>
+                      <span className="address">
+                        {listing?.address}
+                      </span>
+                      <ul className="info-list">
+                        <li>
+                          <div className="icon">
+                            <img
+                              src="../bed.svg"
+                              alt="bed"
+                            />
+                          </div>
+                          <span>{listing?.bedrooms} Bedroom</span>
+                        </li>
+                        <li>
+                          <div className="icon">
+                            <img
+                              src="../bathroom.svg"
+                              alt="bathroom"
+                            />
+                          </div>
+                          <span>{listing?.bathrooms} Bathroom</span>
+                        </li>
+                        <li>
+                          <div className="icon">
+                            <img
+                              src="../parking.svg"
+                              alt="parking"
+                            />
+                          </div>
+                          <span>{listing?.parking} Parking</span>
+                        </li>
+                        <li>
+                          <div className="icon">
+                            <img
+                              src="../area.svg"
+                              alt="area"
+                            />
+                          </div>
+                          <span>{listing?.area} Area</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="col-lg-5 col-md-12">
+                    <div className="right-content">
+                      <div className="price">${listing?.specialPrice}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="overview">
-                <h3>Property Overview</h3>
-                <ul className="overview-list">
-                  <li>
-                    <img src="../bed2.svg" alt="bed2"/>
-                    <h4>Bedrooms</h4>
-                    <span>{listing?.bedrooms} Bedrooms / {listing?.bathrooms} Guestroom</span>
-                  </li>
-                  <li>
-                    <img src="../bathroom2.svg" alt="bathroom2" />
-                    <h4>Bedrooms</h4>
-                    <span>{listing?.bedrooms} Bedrooms / 1 Guestroom</span>
-                  </li>
-                  <li>
-                    <img src="../parking2.svg" alt="parking2"/>
-                    <h4>Parking</h4>
-                    <span>Free Parking for 4 Cars</span>
-                  </li>
-                  <li>
-                    <img src="../area2.svg" alt="area2"/>
-                    <h4>Accommodation</h4>
-                    <span>6 Guest / 2980 Sq Ft</span>
-                  </li>
-                  <li>
-                    <img src="../home.svg" alt="home" />
-                    <h4>Property Type</h4>
-                    <span>Entire Place / Apartment</span>
-                  </li>
-                </ul>
+              <div className="property-details-image">
+                <div className="row justify-content-center align-items-center">
+                  <div className="col-lg-4 col-md-12">
+                    <div className="row justify-content-center">
+                      <div className="col-lg-6 col-sm-6">
+                        <div className="block-image">
+                          <img
+                            src="../property-details1.jpg"
+                            alt="image"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-sm-6">
+                        <div className="block-image">
+                          <img
+                            src="../property-details2.jpg"
+                            alt="image"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-sm-6">
+                        <div className="block-image">
+                          <img
+                            src="../property-details3.jpg"
+                            alt="image"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-sm-6">
+                        <div className="block-image">
+                          <img
+                            src="../property-details4.jpg"
+                            alt="image"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-8 col-md-12">
+                    <div className="block-image">
+                      <img
+                        src="../property-details-large.jpg"
+                        alt="image"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="features">
-                <h3>Facts And Features</h3>
+              <div className="property-details-inner-content">
                 <div className="row justify-content-center">
-                  <div className="col-lg-4 col-md-4">
-                    <ul className="list">
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Air Conditioning
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Dishwasher
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Internet
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Supermarket/Store
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Build-In Wardrobes
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="col-lg-4 col-md-4">
-                    <ul className="list">
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Fencing
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Park
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Swimming Pool
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Clinic
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Floor Coverings
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="col-lg-4 col-md-4">
-                    <ul className="list">
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        School
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Transportation Hub
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Gym Availability
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Lawn
-                      </li>
-                      <li>
-                        <i className="ri-check-double-fill" />
-                        Security Guard
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="text-xl font-semibold m-1">Related Property</div>
-              <div className="grid grid-cols-3 gap-2">
-                {
-                   data.map((property) => (
-                    <Link key={property._id} to={`/listing/${property._id}`}>
-                      <Card listing={property} key={property._id} />
-                    </Link>
-                  ))
-                }
+                  <div className="col-xl-8 col-md-12">
+                    <div className="description">
+                      <h3>Property Description</h3>
+                      <p>
+                        {listing?.description}
+                      </p>
+                      <p>
+                        {listing?.shortDescription}
+                      </p>
+                    </div>
+                    <div className="overview">
+                      <h3>Property Overview</h3>
+                      <ul className="overview-list">
+                        <li>
+                          <img src="../bed2.svg" alt="bed2" />
+                          <h4>Bedrooms</h4>
+                          <span>{listing?.bedrooms} Bedrooms / {listing?.bathrooms} Guestroom</span>
+                        </li>
+                        <li>
+                          <img src="../bathroom2.svg" alt="bathroom2" />
+                          <h4>Bedrooms</h4>
+                          <span>{listing?.bedrooms} Bedrooms / 1 Guestroom</span>
+                        </li>
+                        <li>
+                          <img src="../parking2.svg" alt="parking2" />
+                          <h4>Parking</h4>
+                          <span>Free Parking for 4 Cars</span>
+                        </li>
+                        <li>
+                          <img src="../area2.svg" alt="area2" />
+                          <h4>Accommodation</h4>
+                          <span>6 Guest / 2980 Sq Ft</span>
+                        </li>
+                        <li>
+                          <img src="../home.svg" alt="home" />
+                          <h4>Property Type</h4>
+                          <span>Entire Place / Apartment</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="features">
+                      <h3>Facts And Features</h3>
+                      <div className="row justify-content-center">
+                        <div className="col-lg-4 col-md-4">
+                          <ul className="list">
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Air Conditioning
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Dishwasher
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Internet
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Supermarket/Store
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Build-In Wardrobes
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="col-lg-4 col-md-4">
+                          <ul className="list">
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Fencing
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Park
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Swimming Pool
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Clinic
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Floor Coverings
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="col-lg-4 col-md-4">
+                          <ul className="list">
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              School
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Transportation Hub
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Gym Availability
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Lawn
+                            </li>
+                            <li>
+                              <i className="ri-check-double-fill" />
+                              Security Guard
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-xl font-semibold m-1">Related Property</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {
+                        data.map((property) => (
+                          <Link key={property._id} to={`/listing/${property._id}`}>
+                            <Card listing={property} key={property._id} />
+                          </Link>
+                        ))
+                      }
 
-              </div>
-            </div>
-            <div className="col-xl-4 col-md-12">
-              <div className="property-details-sidebar">
-                <div className="booking">
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                      <label>Name</label>
-                      <input
-                        type="text"
-                        placeholder="Your name"
-                        className="form-control"
-                        value={name}
-                        onChange={(e)=>{setName(e.target.value);} }
-                      />
-                      <div className="icon">
-                        <i className="ri-user-3-line" />
+                    </div>
+                  </div>
+                  <div className="col-xl-4 col-md-12">
+                    <div className="property-details-sidebar">
+                      <div className="booking">
+                        <form onSubmit={handleSubmit}>
+                          <div className="form-group">
+                            <label>Name</label>
+                            <input
+                              type="text"
+                              placeholder="Your name"
+                              className="form-control"
+                              value={name}
+                              onChange={(e) => { setName(e.target.value); }}
+                            />
+                            <div className="icon">
+                              <i className="ri-user-3-line" />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label>Email</label>
+                            <input
+                              type="text"
+                              placeholder="Your email"
+                              className="form-control"
+                              value={email}
+                              onChange={(e) => { setEmail(e.target.value); }}
+                            />
+                            <div className="icon">
+                              <i className="ri-mail-send-line" />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label>Phone No</label>
+                            <input
+                              type="text"
+                              placeholder={+12345678}
+                              className="form-control"
+                              value={mobile}
+                              onChange={(e) => { setMobile(e.target.value); }}
+                            />
+                            <div className="icon">
+                              <i className="ri-phone-line" />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label>City</label>
+                            <input
+                              type="text"
+                              placeholder={"Your City"}
+                              className="form-control"
+                              value={city}
+                              onChange={(e) => { setCity(e.target.value); }}
+                            />
+                            <div className="icon">
+                              <i className="ri-building-line" />
+                            </div>
+                          </div>
+                          <div className="form-group extra-top">
+                            <label>Description</label>
+                            <textarea
+                              className="form-control"
+                              placeholder="I'm interested in this property......."
+                              rows={5}
+                              defaultValue={""}
+                              value={message}
+                              onChange={(e) => { setMessage(e.target.value); }}
+                            />
+                            <div className="icon">
+                              <i className="ri-pencil-line" />
+                            </div>
+                          </div>
+                          <button type="submit" className="default-btn">
+                            Submit Request
+                          </button>
+                        </form>
+                      </div>
+                      <div className="contact-details">
+                        <h3>Contact Details</h3>
+                        <ul className="list">
+                          <li>
+                            <span>Email:</span>
+                            <a href="mailto:contact@hello.com">contact@hello.com</a>
+                          </li>
+                          <li>
+                            <span>Phone:</span>
+                            <a href="tel:01234567890">0123 456 7890</a>
+                          </li>
+                          <li>
+                            <span>Location:</span>
+                            New York, USA
+                          </li>
+                        </ul>
                       </div>
                     </div>
-                    <div className="form-group">
-                      <label>Email</label>
-                      <input
-                        type="text"
-                        placeholder="Your email"
-                        className="form-control"
-                        value={email}
-                        onChange={(e)=>{setEmail(e.target.value);}}
-                      />
-                      <div className="icon">
-                        <i className="ri-mail-send-line" />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Phone No</label>
-                      <input
-                        type="text"
-                        placeholder={+12345678}
-                        className="form-control"
-                        value={mobile}
-                        onChange={(e)=>{setMobile(e.target.value);}}
-                      />
-                      <div className="icon">
-                        <i className="ri-phone-line" />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>City</label>
-                      <input
-                        type="text"
-                        placeholder={"Your City"}
-                        className="form-control"
-                        value={city}
-                        onChange={(e)=>{setCity(e.target.value);}}
-                      />
-                      <div className="icon">
-                        <i className="ri-building-line" />
-                      </div>
-                    </div>
-                    <div className="form-group extra-top">
-                      <label>Description</label>
-                      <textarea
-                        className="form-control"
-                        placeholder="I'm interested in this property......."
-                        rows={5}
-                        defaultValue={""}
-                        value={message}
-                        onChange={(e)=>{setMessage(e.target.value);}}
-                      />
-                      <div className="icon">
-                        <i className="ri-pencil-line" />
-                      </div>
-                    </div>
-                    <button type="submit" className="default-btn">
-                      Submit Request
-                    </button>
-                  </form>
-                </div>
-                <div className="contact-details">
-                  <h3>Contact Details</h3>
-                  <ul className="list">
-                    <li>
-                      <span>Email:</span>
-                      <a href="mailto:contact@hello.com">contact@hello.com</a>
-                    </li>
-                    <li>
-                      <span>Phone:</span>
-                      <a href="tel:01234567890">0123 456 7890</a>
-                    </li>
-                    <li>
-                      <span>Location:</span>
-                      New York, USA
-                    </li>
-                  </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-{/* existing code  */}
-    {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4 sm:px-6 lg:px-8">
+      {/* existing code  */}
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4 sm:px-6 lg:px-8">
       <div className="mt-10">
         <div className="container mx-auto max-w-[700px]">
           <main className="container">
@@ -607,5 +649,5 @@ export default function Listing() {
     </div> */}
     </>
   );
-  
+
 }
