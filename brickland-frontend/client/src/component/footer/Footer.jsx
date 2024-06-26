@@ -150,6 +150,17 @@ export default function Footer() {
                 </IconButton>
                 <Typography color="white">+91 88 6900 3900</Typography>
               </Stack>
+
+
+            </Grid>
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+            <Stack direction={"row"} alignItems={"center"}>
+                <IconButton></IconButton>
+                <Typography variant="h5" color="white">
+                  {" "}
+                </Typography>
+              </Stack>
+              <br />
               <Stack direction={"row"} alignItems={"center"}>
                 <IconButton>
                   <EmailIcon style={{ color: "white" }} />
@@ -170,6 +181,7 @@ export default function Footer() {
                   </Link>{" "}
                 </Typography>
               </Stack>
+              
               <Stack
                 direction={"row"}
                 alignItems={"center"}
@@ -200,23 +212,6 @@ export default function Footer() {
                   <InstagramIcon fontSize="large" style={{ color: "white" }} />
                 </IconButton>
               </Stack>
-            </Grid>
-            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-              <Stack direction={"row"} alignItems={"center"}>
-                <Typography color="white" variant="h5">
-                  Market Insights
-                </Typography>
-              </Stack>
-              <br />
-              <Stack direction={"row"} alignItems={"center"}>
-                <input type="text" placeholder="Enter Email Address" className="p-2 rounded"/>
-              </Stack>
-              <br />
-              <Button variant="contained" color="success">
-                Subscribe
-              </Button>
-              <br />
-              <br />
               {/* <Stack color="white">We never spam you!</Stack> */}
             </Grid>
           </Grid>

@@ -18,6 +18,7 @@ import Testimonial from "./Testimonial/Testimonial";
 import Event from "./component/Event/Event";
 import Page_404 from "./component/Layout/Page_404";
 import Career from "./component/Career/Career";
+import ScrollToTop from "./ScrollToTop";
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop/>
         <Navbar />
         <Routes>
           

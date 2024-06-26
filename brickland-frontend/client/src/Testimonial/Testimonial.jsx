@@ -3,6 +3,7 @@ import team from './../assets/team.jpg'
 import axios from 'axios';
 import { FAQ, GET_TESTIMONIAL } from '../constant/Constant';
 import { Accordion, Card } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 
 
 const Testimonial = () => {

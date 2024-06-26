@@ -12,6 +12,7 @@ const City = () => {
   const [NumberBox, setNumberBox] = useState([1, 2]);
   const [indexNumber, setIndexNumber] = useState(0);
   const [activeColor, setActiveColor] = useState(0);
+  
 
   useEffect(() => {
     fetchProperties();
@@ -137,7 +138,8 @@ const City = () => {
           </div>
         </div>
       </form>
-     
+      
+
 
       <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
         {data && data.length > 0 && (

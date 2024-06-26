@@ -7,7 +7,9 @@ import '../contact/ContactUs.css'
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { FaBath,FaBed,FaChair,FaMapMarkerAlt,FaParking,FaShare } from "react-icons/fa";
-import { PROPERTY_DETAIL,ADD_CALLBACK } from "../../constant/Constant";
+import { PROPERTY_DETAIL,ADD_CALLBACK,PROPERTY_LIST } from "../../constant/Constant";
+import { Link } from "react-router-dom";
+import Card from "../search/Card";
 
 export default function Listing() {
   const {listingId}=useParams();
@@ -18,6 +20,8 @@ export default function Listing() {
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const params = useParams();
+  const [properties,setProperties]=useState([]);
+  const [data,setData]=useState([]);
  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -63,6 +67,23 @@ export default function Listing() {
     }
   };
 
+  const fetchProperties = async () => {
+    try {
+      const url = PROPERTY_LIST;
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data,'data');
+      setProperties(data.data);
+      setData(data.data.slice(0,3));
+      
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
   
 
   return (
@@ -295,6 +316,17 @@ export default function Listing() {
                     </ul>
                   </div>
                 </div>
+              </div>
+              <div className="text-xl font-semibold m-1">Related Property</div>
+              <div className="grid grid-cols-3 gap-2">
+                {
+                   data.map((property) => (
+                    <Link key={property._id} to={`/listing/${property._id}`}>
+                      <Card listing={property} key={property._id} />
+                    </Link>
+                  ))
+                }
+
               </div>
             </div>
             <div className="col-xl-4 col-md-12">

@@ -32,7 +32,7 @@ export default function Blog() {
               <div className="blog-card">
                 <div className="blog-image">
                   <Link to={`/blog/${post._id}`}>
-                    <img src={post.mainImg} alt="Blog post" />
+                    <img src={post.mainImg} alt="Blog post" className="h-60"/>
                   </Link>
                   <Link to={`/blog/${post._id}`} className="tag-btn">Real Estate</Link>
                   <Link to={`/blog/${post._id}`} className="author-btn">

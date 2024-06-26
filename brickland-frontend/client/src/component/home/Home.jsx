@@ -80,11 +80,9 @@ const Home = () => {
                         placeholder="Search by City, Location, Project, Type"
                         className="overflow-hidden rounded-full flex-1 font-normal  px-6 py-4 text-black-500 focus:outline-none"
                       />
-                      <Link to="/search">
-                        <button className=" text-black rounded-full place-items-center absolute right-2 top-1/2 -translate-x-1/2 -translate-y-1/2  font-semibold p-3  ">
+                        <a href="http://localhost:3001/search"><button className=" text-black rounded-full place-items-center absolute right-2 top-1/2 -translate-x-1/2 -translate-y-1/2  font-semibold p-3 ">
                           <i class="ri-search-line align-middle"></i>
-                        </button>
-                      </Link>
+                        </button></a>
                     </form>
                   </div>
                 </div>
@@ -277,7 +275,7 @@ const Home = () => {
               }}
             >
               <div className="why-choose-content">
-                <span className="sub">Bricks And Clicks</span>
+                <span className="sub">Brick And Click</span>
                 <h2>Why Choose Us?</h2>
               </div>
             </div>

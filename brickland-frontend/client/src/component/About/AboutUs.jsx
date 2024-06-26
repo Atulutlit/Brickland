@@ -118,7 +118,7 @@ const AboutUs = () => {
 
               >
                 <div className="why-choose-content">
-                  <span className="sub">Bricks And Clicks</span>
+                  <span className="sub">Brick And Click</span>
                   <h2>Why Choose Us?</h2>
                 </div>
               </div>
