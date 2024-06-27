@@ -165,10 +165,6 @@ const Event = () => {
     }
   };
 
-  useEffect(()=>{
-    handleSearch();
-  },[searchInput])
-
   // all logic of pagination
   useEffect(() => {
     setNumberBox(Array(parseInt(eventList.length / pageSize + 1)).fill(1))
