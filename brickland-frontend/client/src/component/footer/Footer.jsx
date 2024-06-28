@@ -55,7 +55,7 @@ export default function Footer() {
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-full">
                   <div className="flex lg:min-w-min lg:flex-1">
                     <img
-                      className="w-[250px] h-[60px] bg-slate-600"
+                      className="w-[250px] h-[60px] "
                       src="https://firebasestorage.googleapis.com/v0/b/brickland-76c23.appspot.com/o/Brickland-Consulting-Logo.png?alt=media&token=f56d0e29-d696-4727-8ef9-abe9a657fb92"
                       alt="Your Company"
                     />

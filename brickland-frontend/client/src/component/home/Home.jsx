@@ -8,7 +8,9 @@ import { ReactTyped } from "react-typed";
 import "./home.css";
 import { Link, useNavigate } from "react-router-dom";
 import PropertyCard from "../wishlist/PropertyCard";
-import mission from './../../assets/mission.jpg'
+import Values from './../../assets/values.png'
+import Vision from './../../assets/shared-vision.png'
+import Mission from './../../assets/target.png'
 import { IoLocation } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
@@ -119,7 +121,53 @@ const Home = () => {
       </Box>
     
       {/* Our Mission and Value */}
-      <div className="grid grid-cols-2">
+      <div className="container py-5">
+        <div className="row g-3">
+          <div className="col-lg-4">
+            <div className="card p-2">
+             <div className="img-card d-flex justify-content-center">
+              <img src={Mission} alt="" style={{height:"120px" , width:"120px"}}  />
+             </div>
+              <div className="card-body">
+                <h5 className="card-title text-center display-4 fw-bold">Our Mission</h5>
+                <p className="card-text">
+                  "To be the leading innovator in real estate, creating transformative spaces that inspire and shape future living and working environments."
+                  "To redefine real estate development with sustainable practices, cutting-edge technology, and a commitment to building thriving communities."
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <div className="card p-2">
+            <div className="img-card d-flex justify-content-center">
+              <img src={Vision} alt="" style={{height:"120px" , width:"120px"}} />
+             </div>
+              <div className="card-body">
+                <h5 className="card-title text-center display-4 fw-bold">Our Vision</h5>
+                <p className="card-text">
+                  "To be the leading innovator in real estate, creating transformative spaces that inspire and shape future living and working environments."
+                  "To redefine real estate development with sustainable practices, cutting-edge technology, and a commitment to building thriving communities."
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <div className="card p-2">
+            <div className="img-card d-flex justify-content-center">
+              <img src={Values} alt="" style={{height:"120px" , width:"120px"}} />
+             </div>
+              <div className="card-body">
+                <h5 className="card-title text-center display-4 fw-bold">Our Values</h5>
+                <p className="card-text">
+                  "To be the leading innovator in real estate, creating transformative spaces that inspire and shape future living and working environments."
+                  "To redefine real estate development with sustainable practices, cutting-edge technology, and a commitment to building thriving communities."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="grid grid-cols-2">
         <div className="flex flex-col">
         <div className="flex text-center justify-center"><img src={mission} className="flex text-center justify-center h-16 w-16"/></div>
           <div className="text-xl flex text-center justify-center font-bold">Vision</div>
@@ -144,7 +192,7 @@ const Home = () => {
           "To be the leading innovator in real estate, creating transformative spaces that inspire and shape future living and working environments."
           "To redefine real estate development with sustainable practices, cutting-edge technology, and a commitment to building thriving communities."
           </div>
-        </div>
+        </div> */}
 
 
       {/* --------------Exclusive Project Section-------------------   */}
