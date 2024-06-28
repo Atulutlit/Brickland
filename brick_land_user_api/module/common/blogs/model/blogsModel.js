@@ -1,6 +1,24 @@
 // models/blogsModel.js
 const mongoose = require('mongoose');
 
+const commentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+  active:{
+    type: Boolean,
+    default : false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 // Define the feature schema
 const featureSchema = new mongoose.Schema({
   title: {
@@ -64,6 +82,10 @@ const blogSchema = new mongoose.Schema({
   features: {
     type: [featureSchema], // Array of strings
     required: false
+  },
+  comment:{
+   type :[commentSchema],
+   required: false
   }
 }, {
   timestamps: true // Adds createdAt and updatedAt timestamps

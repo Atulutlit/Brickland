@@ -159,10 +159,12 @@ const blogsDelete = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   blogsList,
   blogsDetail,
   blogsAdd,
   blogsDelete,
-  blogsUpdate
+  blogsUpdate,
 };

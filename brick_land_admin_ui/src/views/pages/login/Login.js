@@ -17,6 +17,8 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { ADMIN_LOGIN } from '../../../constant/Constant'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -37,15 +39,17 @@ const Login = () => {
         localStorage.setItem('token', response.data.token) // Store the token
         navigate('/dashboard') // Navigate to dashboard
       } else {
-        alert('Login failed: ' + response.data.meta.msg)
+        toast.error(response.data.meta.msg)
       }
     } catch (error) {
       console.error('Login error:', error)
-      alert('Error logging in')
+      toast.error('Error logging in')
     }
   }
 
   return (
+    <>
+    <ToastContainer/>
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
@@ -102,6 +106,7 @@ const Login = () => {
         </CRow>
       </CContainer>
     </div>
+    </>
   )
 }
 

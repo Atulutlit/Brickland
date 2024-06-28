@@ -2,17 +2,44 @@ import React, { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { blogItem } from '../../assets/items';
 import { Link } from 'react-router-dom';
-import { BLOG_DETAIL,BLOG_LIST } from '../../constant/Constant';
+import { BLOG_DETAIL,BLOG_LIST,ADD_COMMENT } from '../../constant/Constant';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const BlogDetails = () => {
   const { id } = useParams(); // Extract the ID from the URL
   const [post,setPost]=useState(null);
+  const [blog,setBlog]=useState([]);
 
-  const [blog,setBlog]=useState([])
+  // comment
+  const [name,setName]=useState("");
+  const [message,setMessage]=useState("");
+  const handleSubmit= async(e) => {
+    e.preventDefault();
+    try {
+      const url = ADD_COMMENT;
+      if(name=="")
+      {
+        toast.warn("Enter the Name");
+        return;
+      }else if(message==""){
+        toast.warn("Enter the message");
+        return;
+      }
+      const data ={"name":name,"message":message};
+      const response = await axios.post(url,data);
+      console.log(response,'data comment added successfully')
+      toast.success("comment added successfully!!");
+    } catch (error) {
+      toast.error("Try Again Later");
+      console.error('Error fetching properties:', error);
+    }
+
+  }
   const fetchBlog = async () => {
     try {
       const url = BLOG_LIST;
-      // const url = 'https://brickland-backend-4.onrender.com/api/data/'
       const response = await fetch(url);
       const data = await response.json();
       console.log(data,'data')
@@ -23,12 +50,11 @@ const BlogDetails = () => {
   };
 
   useEffect(()=>{
-   fetchBlog();
   },[])
+
   const fetchBlogDetail=async()=>{
     try {
       const url = `${BLOG_DETAIL}/${id}`;
-      // const url = 'https://brickland-backend-4.onrender.com/api/data/'
       const response = await fetch(url);
       const data = await response.json();
       console.log(data,'data')
@@ -39,11 +65,14 @@ const BlogDetails = () => {
   }
 
   useEffect(()=>{
+    fetchBlog();
     fetchBlogDetail();
   },[])
 
 
   return (
+    <>
+    <ToastContainer/>
     <div>
       <div className="blog-details-area ptb-120">
         <div className="container">
@@ -163,29 +192,33 @@ const BlogDetails = () => {
             </div>
 
             <div className="article-comment">
-              {/* <h3>Comment (2)</h3> */}
-              {/* <div className="comment-list">
-                <img src={post?.authorImageUrl} alt="image" />
-                <h4>Jonathan Chancellor</h4>
-                <span>December 18, 2024</span>
+              <h3>Comment (2)</h3>
+              {post?.comment && post?.comment?.map((item,key)=>{
+                return(
+                <div className="comment-list">
+                <img class="avatar-img" src="./../assets/avatar.webp" alt="user@email.com"/>
+                <h4>{item?.name}</h4>
+                <span>{item?.createdAt}</span>
                 <p>
-                  “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam
-                  lectus purus ultricies neque. Aenean nunc nisi, vel
-                  dictum.adipiscing elit.”
+                 {item?.message}
                 </p>
-               
-              </div> */}
+              </div>
+                )
+              })}
+              
               
             </div>
             <div className="article-reply">
               <h3>Leave A Comment</h3>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>Your Name</label>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Enter your name"
+                    value={name}
+                    onChange={(e)=>{setName(e.target.value);}}
                   />
                   <div className="icon">
                     <i className="ri-user-3-line" />
@@ -197,7 +230,8 @@ const BlogDetails = () => {
                   <textarea
                     className="form-control"
                     placeholder="Your comment here"
-                    defaultValue={""}
+                    value={message}
+                    onChange={(e)=>{setMessage(e.target.value);}}
                   />
                   <div className="icon">
                     <i className="ri-message-2-line" />
@@ -217,7 +251,7 @@ const BlogDetails = () => {
                     </div>
                   </div>
                 </div>
-                <button type="submit" className="default-btn">
+                <button type="submit" className="default-btn cursor-pointer">
                   Post A Comment
                 </button>
               </form>
@@ -257,6 +291,7 @@ const BlogDetails = () => {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

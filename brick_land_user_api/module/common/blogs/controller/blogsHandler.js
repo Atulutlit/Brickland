@@ -2,34 +2,6 @@
 const { Types } = require("mongoose");
 const blogsModel = require("../model/blogsModel");
 
-const blogsAdd = async (req, res) => {
-  try {
-    const data = req.body;
-    const { blogTitle } = data;
-    console.log(data,'data')
-
-    // Check if a blog with the same title already exists
-    const findBlog = await blogsModel.findOne({ blogTitle });
-    if (findBlog) {
-      return res.status(400).json({
-        meta: { msg: "Blog already exists with this title", status: false },
-      });
-    }
-
-    // Create a new blog entry
-    const newBlog = await blogsModel.create(data);
-    return res.status(201).json({
-      meta: { msg: "Blog added successfully.", status: true },
-      data: newBlog,
-    });
-  } catch (error) {
-    console.log(error,'error')
-    return res.status(500).json({
-      meta: { msg: error.message, status: false },
-    });
-  }
-};
-
 // List blogs with pagination and search
 const blogsList = async (req, res) => {
   try {
@@ -99,36 +71,45 @@ const blogsDetail = async (req, res) => {
 };
 
 
-// Update a blog
-const blogsUpdate = async (req, res) => {
+const addComment = async (req, res) => {
   try {
+    const { name, message } = req.body;
     const { id } = req.params;
-    const data = req.body;
+    console.log(name,message,req.body,'add comment');
 
-    // Validate ObjectId
-    if (!Types.ObjectId.isValid(id)) {
+    // Ensure name and message are provided
+    if (!name || !message) {
       return res.json({
-        meta: { msg: "Invalid blog ID format.", status: false },
+        meta: { msg: "Name and message are required.", status: false },
       });
     }
 
-    const findBlogs = await blogsModel.findById(id);
+    // Construct the comment object
 
-    if (!findBlogs) {
+    const comment = { "name":name, "message":message,"active":false,"createdAt":new Date() };
+
+    console.log(comment,'comment');
+
+    // Update the blog post by pushing the new comment to the "comments" array
+    const updateStatus = await blogsModel.updateOne(
+      { _id: new Types.ObjectId(id) },
+      {
+        $push: { comment: comment },
+      }
+    );
+
+    console.log(updateStatus,'update Status');
+
+    if (updateStatus.modifiedCount > 0) {
       return res.json({
-        meta: { msg: "Blog not found.", status: false },
-      });
-    }
-
-    const updateData = await blogsModel.updateOne({ _id: id }, { $set: data });
-
-    if (updateData.modifiedCount > 0) {
-      return res.json({
-        meta: { msg: "Blog updated successfully.", status: true },
+        meta: {
+          msg: "Comment added successfully.",
+          status: true,
+        },
       });
     } else {
       return res.json({
-        meta: { msg: "No changes made to the blog.", status: false },
+        meta: { msg: "Something went wrong.", status: false },
       });
     }
   } catch (error) {
@@ -138,41 +119,8 @@ const blogsUpdate = async (req, res) => {
   }
 };
 
-// Delete a blog
-const blogsDelete = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // Validate ObjectId
-    if (!Types.ObjectId.isValid(id)) {
-      return res.json({
-        meta: { msg: "Invalid blog ID format.", status: false },
-      });
-    }
-
-    const result = await blogsModel.deleteOne({ _id: id });
-
-    if (result.deletedCount > 0) {
-      return res.json({
-        meta: { msg: "Successfully deleted.", status: true },
-      });
-    } else {
-      return res.json({
-        meta: { msg: "Blog not found.", status: false },
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.json({
-      meta: { msg: "Internal server error.", status: false },
-    });
-  }
-};
-
 module.exports = {
   blogsList,
   blogsDetail,
-  blogsAdd,
-  blogsDelete,
-  blogsUpdate
+  addComment
 };
