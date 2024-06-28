@@ -193,10 +193,10 @@ const PropertyList = () => {
                   <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                   <CTableDataCell>{item?.propertyId}</CTableDataCell>
                   <CTableDataCell>{item?.propertyName}</CTableDataCell>
-                  <CTableDataCell>{item?.Category}</CTableDataCell>
+                  <CTableDataCell>{item?.category}</CTableDataCell>
                   <CTableDataCell>{item?.propertyType}</CTableDataCell>
                   <CTableDataCell>{item?.status}</CTableDataCell>
-                  <CTableDataCell>{item?.accomdation}</CTableDataCell>
+                  <CTableDataCell>{item?.accommodation}</CTableDataCell>
                   <CTableDataCell>{item?.state}</CTableDataCell>
                   <CTableDataCell>{`${item.isFurnished}`}</CTableDataCell>
                   <CTableDataCell>{`${item.isBestSeller}`}</CTableDataCell>

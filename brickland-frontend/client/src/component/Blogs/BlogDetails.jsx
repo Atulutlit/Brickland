@@ -6,6 +6,7 @@ import { BLOG_DETAIL,BLOG_LIST,ADD_COMMENT } from '../../constant/Constant';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import avatar from './../../assets/avatar.webp'
 
 const BlogDetails = () => {
   const { id } = useParams(); // Extract the ID from the URL
@@ -192,11 +193,11 @@ const BlogDetails = () => {
             </div>
 
             <div className="article-comment">
-              <h3>Comment (2)</h3>
+              <h3>Comment ({post?.comment?.length})</h3>
               {post?.comment && post?.comment?.map((item,key)=>{
                 return(
                 <div className="comment-list">
-                <img class="avatar-img" src="./../assets/avatar.webp" alt="user@email.com"/>
+                <img class="avatar-img" src={avatar} alt="avatar"/>
                 <h4>{item?.name}</h4>
                 <span>{item?.createdAt}</span>
                 <p>

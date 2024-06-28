@@ -24,9 +24,9 @@ const City = () => {
       const response = await fetch(url);
       const data = await response.json();
       console.log(data,'data');
-      setProperties(data.data);
-      setData(data.data);
-      
+      setProperties(data?.data);
+      setData(data?.data?.slice(0,pageSize))
+          
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
