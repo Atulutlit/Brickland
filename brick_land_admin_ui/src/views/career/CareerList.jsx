@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const CareerList = () => {
   const [Career, setCareer] = useState([])
-  const [selectedCareer, setSelectedCareer] = useState(null);
+  const [selectedCareer, setSelectedCareer] = useState(-1);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [editData, setEditData] = useState(null)
@@ -86,8 +86,23 @@ const CareerList = () => {
     setEditData(inputData);
   }
 
-  const AddCareer = () => {
+  const EditCareer = async() => {
+    console.log(editData,'data')
+    const endpointDetails = `${import.meta.env.VITE_ADMIN_URL}/career/update/${editData._id}`
+    const authKey = localStorage.getItem('token')
 
+    try {
+      await axios.put( endpointDetails,editData,
+        { headers: { authkey: authKey } },
+      )
+
+      toast.success('Career Detail updated successfully.')
+      setModalVisible(false)
+      fetchCareer();
+    } catch (error) {
+      console.error('Error updating Career:', error)
+      toast.error('Failed to update Career.')
+    }
   }
 
   return (
@@ -102,9 +117,10 @@ const CareerList = () => {
                 <CTableHeaderCell>#</CTableHeaderCell>
                 <CTableHeaderCell>Role</CTableHeaderCell>
                 <CTableHeaderCell>Salary</CTableHeaderCell>
-                <CTableHeaderCell>Description</CTableHeaderCell>
                 <CTableHeaderCell>WorkType</CTableHeaderCell>
                 <CTableHeaderCell>Location</CTableHeaderCell>
+                <CTableHeaderCell>Description</CTableHeaderCell>
+                <CTableHeaderCell>Link</CTableHeaderCell>
                 <CTableHeaderCell>Status</CTableHeaderCell>
                 <CTableHeaderCell>Action</CTableHeaderCell>
               </CTableRow>
@@ -118,6 +134,7 @@ const CareerList = () => {
                   <CTableDataCell>{item.type}</CTableDataCell>
                   <CTableDataCell>{item.location}</CTableDataCell>
                   <CTableDataCell>{item.description}</CTableDataCell>
+                  <CTableDataCell><a href={item.link} target="_blank">Link</a></CTableDataCell>
                   <CTableDataCell>{item.status ? 'Active' : 'DEACTIVATE'}</CTableDataCell>
                   <CTableDataCell>
                     <div className='container'>
@@ -191,7 +208,7 @@ const CareerList = () => {
               </div>
             </CModalBody>
             <CModalFooter>
-              <CButton color="primary" onClick={AddCareer}>Add</CButton>
+              <CButton color="primary" onClick={EditCareer}>Edit</CButton>
               <CButton color="secondary" onClick={() => setModalVisible(false)}>Close</CButton>
             </CModalFooter>
           </CModal>

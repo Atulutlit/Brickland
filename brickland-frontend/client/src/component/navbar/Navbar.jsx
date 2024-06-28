@@ -37,19 +37,19 @@ export default function Navbar() {
           <ul className="top-header-info-with-social">
             <li>
               <div className="social">
-                <a href="https://www.facebook.com/bricklandconsulting" >
+                <a href="https://www.facebook.com/bricklandconsulting" target="_blank">
                   <i className="ri-facebook-fill" />
                 </a>
-                <a href="https://twitter.com/BricklandIndia" >
+                <a href="https://twitter.com/BricklandIndia" target="_blank" >
                   <i className="ri-twitter-x-line" />
                 </a>
-                <a href="https://www.instagram.com/bricklandconsulting/" >
+                <a href="https://www.instagram.com/bricklandconsulting/" target="_blank">
                   <i className="ri-instagram-fill" />
                 </a>
-                <a href="https://www.linkedin.com/company/80780708/admin/" >
+                <a href="https://www.linkedin.com/company/80780708/admin/" target="_blank" >
                   <i className="ri-linkedin-fill" />
                 </a>
-                <a href="https://www.youtube.com/channel/UCHDGE1hxAPk6MIvgTMZE-HA" >
+                <a href="https://www.youtube.com/channel/UCHDGE1hxAPk6MIvgTMZE-HA"  target="_blank">
                   <i className="ri-youtube-line" />
                 </a>
                 {/* <a href="https://twitter.com/BricklandIndia" >

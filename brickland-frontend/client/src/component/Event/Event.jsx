@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { EVENT_LIST } from '../../constant/Constant';
+import { EVENT_LIST,GET_CONTACT_INFO } from '../../constant/Constant';
 import axios from 'axios';
 
 const Event = () => {
+
+  const [contactInfo, setContactInfo] = useState(null);
+
   const blogPosts = [
     {
       videoSrc: "https://www.youtube.com/embed/sJox3eID3fU",
@@ -34,11 +37,12 @@ const Event = () => {
     },
 
   ];
+
   const sidebarWidgets = [
     {
       title: "Search",
       type: "search",
-      action: "https://investorsclinic.in/events/search",
+      // action: "https://investorsclinic.in/events/search",
       token: "3eHVJ8VaY709cmOGHbuhyer5HqXsTffu9kJd77kV"
     },
     {
@@ -48,20 +52,20 @@ const Event = () => {
         {
           className: "instagram",
           label: "Delhi NCR",
-          href: "https://investorsclinic.in/events/search/Delhi NCR",
+          // href: "https://investorsclinic.in/events/search/Delhi NCR",
           iconClass: ""
         },
         {
           className: "instagram",
           label: "Gurugram",
-          href: "https://investorsclinic.in/events/search/Gurugram",
+          // href: "https://investorsclinic.in/events/search/Gurugram",
           iconClass: "",
           style: { marginLeft: 15 }
         },
         {
           className: "instagram",
           label: "Noida",
-          href: "https://investorsclinic.in/events/search/Noida",
+          // href: "https://investorsclinic.in/events/search/Noida",
           iconClass: "",
           style: { marginLeft: 15 }
         }
@@ -74,7 +78,7 @@ const Event = () => {
         {
           className: "facebook",
           label: "Facebook",
-          href: "facebook link ",
+          href: "https://www.facebook.com/bricklandconsultig",
           iconClass: "ri-facebook-fill me-3",
           followHref: "facebook link ",
           followLabel: "Like"
@@ -83,7 +87,7 @@ const Event = () => {
         {
           className: "twitter",
           label: "Twitter",
-          href: "twitter link here",
+          href: "https://x.com/BricklandIndia",
           iconClass: "ri-twitter-x-line me-3",
           followHref: "twitter link here",
           followLabel: "Follow"
@@ -91,7 +95,7 @@ const Event = () => {
         {
           className: "youtube",
           label: "YouTube",
-          href: "youtube link here ",
+          href: "https://www.youtube.com/channel/UCHDGE1hxAPk6MIvgTMZE-HA",
           iconClass: "ri-youtube-line me-3",
           followHref: "youtube link here ",
           followLabel: "Subscribe"
@@ -99,7 +103,7 @@ const Event = () => {
         {
           className: "instagram",
           label: "Instagram",
-          href: "instagram here",
+          href: "https://www.instagram.com/bricklandconsulting/",
           iconClass: "ri-instagram-fill me-3",
           followHref: "instagram here",
           followLabel: "Follow"
@@ -107,7 +111,7 @@ const Event = () => {
         {
           className: "linkedIn",
           label: "LinkedIn",
-          href: "linked in link here",
+          href: "https://www.linkedin.com/company/80780708/admin/",
           iconClass: "ri-linkedin-fill me-3",
           followHref: "linked in link here",
           followLabel: "Follow"
@@ -148,6 +152,24 @@ const Event = () => {
     else return b;
   }
 
+  
+
+  const fetchContactInfo = async (e) => {
+    try {
+      const url = GET_CONTACT_INFO;
+      const response = await axios.get(url);
+      console.log(response, 'response');
+      setContactInfo(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch contactInformation:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchContactInfo();
+  }, [])
+
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -176,7 +198,7 @@ const Event = () => {
     <div>
       <section className="">
         <h1 style={{ display: "none" }}>
-          Find the best property by Investors Clinic
+          Find the best property by Brickland
         </h1>
         <div className="container">
           <div className="row">
@@ -305,12 +327,12 @@ const Event = () => {
                       <ul className="list-unstyled list-style mb-0 ">
                         {widget.items.map((item, idx) => (
                           <li key={idx} className={`${item.className} d-flex justify-between`} >
-                            <a className="text-uppercase" href={item.href} target="_blank">
+                            <a className="text-uppercase" href={item?.href} target="_blank">
                               <i className={item.iconClass} />
                               {item.label}
                             </a>
-                            <a className="text-uppercase" href={item.href} target="_blank" >
-                              {item.followLabel}
+                            <a className="text-uppercase cursor-pointer" href={item?.href} target="_blank" >
+                              {item?.followLabel}
                             </a>
                           </li>
                         ))}

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FAQ, GET_TESTIMONIAL } from '../constant/Constant';
 import { Accordion, Card } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
+import avatar from './../assets/avatar.webp'
 
 
 const Testimonial = () => {
@@ -165,7 +166,7 @@ const Testimonial = () => {
               <div key={index} className="flex flex-col items-center">
                 <img
                   className="w-24 h-24 object-cover rounded-full flex text-center justify-center ml-10"
-                  src={team}
+                  src={avatar}
                   alt="Client 1"
                 />
                 <div className="z-10 bg-white p-6 rounded-lg shadow-md mt-4 w-full">

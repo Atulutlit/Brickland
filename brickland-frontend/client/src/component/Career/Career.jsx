@@ -42,11 +42,11 @@ const Career = () => {
                                 <div className='text-l font-medium'>WorkType:{item.type}</div>
                                 <div className='text-l font-medium'>Description:{item.description}</div>
 
-                                {/* <div className="flex flex-row gap-4">
+                                <div className="flex flex-row gap-4">
                                     <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">English</div>
                                     <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">Hindi</div>
-                                </div> */}
-                                {/* <div className='font-light'>Please Fill this form <Link to={item.link} className='underline'>Link</Link></div> */}
+                                </div>
+                                <div className='font-light'>Please Fill this form <Link to={item.link} className='underline'>Link</Link></div>
                             </div>
                         )
                     })}

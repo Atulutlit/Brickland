@@ -275,7 +275,7 @@ const BlogDetails = () => {
                 </div>
                 <div className="blog-content">
                   <ul className="meta">
-                    <li><i className="ri-calendar-2-line" />{post?.createdAt?.slice(0,12)}</li>
+                    <li><i className="ri-calendar-2-line" />{post?.blogTitle}</li>
                   </ul>
                   <h3>
                     {/* <Link to={`/blog/${post.id}`}>{post.blog_title}</Link> */}

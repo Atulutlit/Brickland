@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import {
   CCard, CCardHeader, CCardBody, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell,
-  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck, CFormSwitch
+  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck, CFormSwitch,CInputGroup
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
@@ -16,42 +16,75 @@ const BannerList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [editData, setEditData] = useState({ title: '', description: '', bannerImg: '', status: '', headline: '' });
+  const [imageUrl,setImageUrl]=useState("");
+
+  const fetchBanners = async () => {
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/banner/list`;
+    console.log(endpoint, 'url')
+    const authKey = localStorage.getItem('token');
+    console.log(endpoint, authKey, 'auth key and fetch banners');
+    try {
+      const response = await axios.get(endpoint, {
+        headers: { authkey: authKey }
+      });
+      console.log(response, 'response fetch banners')
+
+      if (response.data.meta.status) {
+        setBanners(response.data.data);
+      } else {
+        toast(response.data.meta.msg);
+      }
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Error fetching banners:', error);
+        toast('Failed to fetch banners.');
+      }
+
+    }
+  };
 
   useEffect(() => {
-    const fetchBanners = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/banner/list`;
-      console.log(endpoint, 'url')
-      const authKey = localStorage.getItem('token');
-      console.log(endpoint, authKey, 'auth key and fetch banners');
-      try {
-        const response = await axios.get(endpoint, {
-          headers: { authkey: authKey }
-        });
-        console.log(response, 'response fetch banners')
-
-        if (response.data.meta.status) {
-          setBanners(response.data.data);
-        } else {
-          toast(response.data.meta.msg);
-        }
-      } catch (error) {
-        if (error?.response?.status === 401) {
-          navigate("/");
-        } else {
-          console.error('Error fetching banners:', error);
-          toast('Failed to fetch banners.');
-        }
-
-      }
-    };
-
+    
     fetchBanners();
   }, []);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/upload/image`
+    const authKey = localStorage.getItem('token')
+    const formData = new FormData()
+    formData.append('image', file)
+
+    try {
+      const response = await axios.post(endpoint, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authkey: authKey,
+        },
+      })
+
+      setImageUrl(response.data.data)
+      toast(response.data.meta.msg) // toast message from the response
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Error uploading the image:', error)
+        toast('Failed to upload the image.')
+      }
+    }
+  }
+
 
   const handleEditClick = (banner) => {
     setSelectedBanner(banner);
     setEditData(banner);
     setModalVisible(true);
+    setImageUrl(banner.bannerImg);
   };
   const handleStatusChange = async (bannerId, currentStatus) => {
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/banner/status`;
@@ -138,6 +171,7 @@ const BannerList = () => {
       }, { headers: { authkey: authKey } });
 
       toast("Banner updated successfully.");
+      fetchBanners();
       setModalVisible(false);
     } catch (error) {
       if (error?.response?.status === 401) {
@@ -192,9 +226,6 @@ const BannerList = () => {
                     <CButton color="light" className='mx-3' onClick={() => handleEditClick(banner)}>
                       <CIcon icon={cilPencil} />
                     </CButton>
-                    <CButton color="danger" onClick={() => handleDeleteClick(banner)}>
-                      <CIcon icon={cilTrash} className='text-white' />
-                    </CButton>
                   </CTableDataCell>
                 </CTableRow>
               ))}
@@ -236,7 +267,12 @@ const BannerList = () => {
               </div>
               <div>
                 <label>Image</label>
-                <CFormInput type="text" value={editData.bannerImg} onChange={handleInputChange} name="bannerImg" />
+                <div className=''>
+                <img src={imageUrl} style={{height:"100px",width:"100px"}}/>
+                <CInputGroup className="mb-3">
+                  <CFormInput type="file" id="imageUpload" onChange={handleImageUpload} />
+                </CInputGroup>
+                </div>
               </div>
               <div>
                 <label>Status</label>

@@ -180,7 +180,7 @@ const ContactForm = () => {
                   <div className="form-group">
                     <label>Your Phone</label>
                     <input
-                      type="phone"
+                      type="number"
                       className="form-control"
                       placeholder="Enter your phone"
                       name="IN"

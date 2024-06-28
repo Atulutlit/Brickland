@@ -7,10 +7,13 @@ import {
   CFormInput,
   CFormTextarea,
   CInputGroup,
+  CFormSelect
 } from '@coreui/react'
 import axios from 'axios'
 import { toast,ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const Career = () => {
   const [Career,setCareer]=useState([])
@@ -22,10 +25,12 @@ const Career = () => {
   const [description,setDescription]=useState("");
   const [salary,setSalary]=useState("");
   const [type,setType]=useState("");
-  const [status,setStatus]=useState("");
+  const [status,setStatus]=useState(-1);
   const [location,setLocation]=useState("");
   const [link,setLink]=useState("");
-  const [workType,setWorkType] = useState("");
+  const [workType,setWorkType] = useState(-1);
+
+  const navigate = useNavigate();
 
 
   const handleSubmit=async(event)=>{
@@ -35,12 +40,11 @@ const Career = () => {
     const data={"role":role,"description":description,"salary":salary,"type":workType,"status":true,"location":location,"link":link}
     console.log(data,'data')
     try {
-      const response = await axios.post(endpoint, {
+      const response = await axios.post(endpoint,data, {
         headers: { authkey: authKey },
-        data: data
       });
-
-      if (response.data.meta.status) {
+       console.log(response,'response');
+      if (response?.data?.meta?.status) {
         toast.success("Career Added Successfully.");
         setCareer(prevCareer => prevCareer.filter(b => b._id !== selectedCareer._id));
       } else {
@@ -95,23 +99,19 @@ const Career = () => {
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="titleInput">Work Type</CFormLabel>
-        <CFormInput
-          type="text"
-          id="titleInput"
-          placeholder="Type"
-          value={workType}
-          onChange={(e) => setWorkType(e.target.value)}
-        />
+        <CFormSelect type="text" value={workType} onChange={(e)=>{setWorkType(e.target.value);}} name="type" >
+        <option value={-1}>select work type</option>
+          <option value="WFH">WFH</option>
+          <option value="OFFICE">OFFICE</option>
+        </CFormSelect>
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="titleInput">Status</CFormLabel>
-        <CFormInput
-          type="text"
-          id="titleInput"
-          placeholder="Status"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-        />
+        <CFormSelect type="text" value={status} onChange={(e)=>{setStatus(e.target.value);}} name="type" >
+        <option value={-1}>select status</option>
+          <option value={true}>Active</option>
+          <option value={false}>Inactive</option>
+        </CFormSelect>
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="titleInput">Link</CFormLabel>

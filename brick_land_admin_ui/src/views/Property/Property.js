@@ -29,7 +29,7 @@ const Product = () => {
   const [propertyId, setPropertyId] = useState("");
   const [url, setUrl] = useState("");
   const [propertyName, setPropertyName] = useState('')
-  const [propertyImg, setPropertyImg] = useState("")
+  const [propertyImg, setPropertyImg] = useState([])
   const [property, setProperty] = useState("");
   const [type, setType] = useState('');
   const [categories, setCategories] = useState(['Residential', 'Commercial', 'Plot'])
@@ -89,6 +89,7 @@ const Product = () => {
         }
       }
     }
+    console.log(imageUrls,'image url')
     setPropertyImg(imageUrls)
   }
 

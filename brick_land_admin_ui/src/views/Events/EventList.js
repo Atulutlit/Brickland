@@ -105,7 +105,6 @@ const EventList = () => {
         console.error('Failed to update event:', error);
         toast.error('Failed to update event.');
       }
-
     }
   };
 
@@ -134,7 +133,11 @@ const EventList = () => {
                 <CTableDataCell>{item.title}</CTableDataCell>
                 <CTableDataCell>{item.description}</CTableDataCell>
                 <CTableDataCell>{item.location}</CTableDataCell>
-                <CTableDataCell>{item.link}</CTableDataCell>
+                <CTableDataCell>{item.link.map((temp,key)=>{
+                  return(
+                    <div style={{margin:"10px"}}><a href={temp} target="_blank">Link</a></div>
+                  )
+                })}</CTableDataCell>
                 <CTableDataCell>{item.eventDate}</CTableDataCell>
                 <CTableDataCell>
                   <CButton color="light" className='mx-3' onClick={() => handleEditClick(item)}>

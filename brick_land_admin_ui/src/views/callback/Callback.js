@@ -43,7 +43,7 @@ const Callback = () => {
       })
       console.log(response,'response');
       if (response.data.meta.status) {
-        setCallback(response.data.response)
+        setCallback(response.data.response.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
       } else {
         toast.error(response.data.meta.msg);
       }
@@ -153,6 +153,7 @@ const Callback = () => {
               <CTableHeaderCell>Email</CTableHeaderCell>
               <CTableHeaderCell>Mobil</CTableHeaderCell>
               <CTableHeaderCell>Message</CTableHeaderCell>
+              <CTableHeaderCell>City</CTableHeaderCell>
               <CTableHeaderCell>Status</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
@@ -163,7 +164,8 @@ const Callback = () => {
                 <CTableDataCell>{item?.name}</CTableDataCell>
                 <CTableDataCell>{item?.email}</CTableDataCell>
                 <CTableDataCell>{item?.mobile}</CTableDataCell>
-                <CTableDataCell>{item?.message}</CTableDataCell>
+                <CTableDataCell>{item?.comment}</CTableDataCell>
+                <CTableDataCell>{item?.city}</CTableDataCell>
                 <CTableDataCell>{item?.status}</CTableDataCell>
 
                 <CTableDataCell>
