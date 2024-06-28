@@ -193,8 +193,8 @@ const BlogDetails = () => {
             </div>
 
             <div className="article-comment">
-              <h3>Comment ({post?.comment?.length})</h3>
-              {post?.comment && post?.comment?.map((item,key)=>{
+              <h3>Comment ({post?.comments?.length})</h3>
+              {post?.comment && post?.comments?.map((item,key)=>{
                 return(
                 <div className="comment-list">
                 <img class="avatar-img" src={avatar} alt="avatar"/>

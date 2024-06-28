@@ -75,7 +75,7 @@ const addComment = async (req, res) => {
   try {
     const { name, message } = req.body;
     const { id } = req.params;
-    console.log(name,message,req.body,'add comment');
+    console.log(name, message, req.body, 'add comment');
 
     // Ensure name and message are provided
     if (!name || !message) {
@@ -85,20 +85,19 @@ const addComment = async (req, res) => {
     }
 
     // Construct the comment object
+    const comment = { name, message, active: false, createdAt: new Date() };
 
-    const comment = { "name":name, "message":message,"active":false,"createdAt":new Date() };
-
-    console.log(comment,'comment');
+    console.log(comment, 'comment');
 
     // Update the blog post by pushing the new comment to the "comments" array
     const updateStatus = await blogsModel.updateOne(
       { _id: new Types.ObjectId(id) },
       {
-        $push: { comment: comment },
+        $push: { comments: comment },
       }
     );
 
-    console.log(updateStatus,'update Status');
+    console.log(updateStatus, 'update Status');
 
     if (updateStatus.modifiedCount > 0) {
       return res.json({
@@ -118,6 +117,7 @@ const addComment = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   blogsList,

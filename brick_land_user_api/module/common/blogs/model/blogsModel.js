@@ -83,7 +83,7 @@ const blogSchema = new mongoose.Schema({
     type: [featureSchema], // Array of strings
     required: false
   },
-  comment:{
+  comments:{
    type :[commentSchema],
    required: false
   }
