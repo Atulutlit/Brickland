@@ -118,6 +118,13 @@ const Event = () => {
   const [data, setData] = useState([])
   const [searchInput, setSearchInput] = useState("");
   const [eventList, setEventList] = useState([])
+
+  // pagination
+  const [pageSize, setPageSize] = useState(5);
+  const [NumberBox, setNumberBox] = useState([]);
+  const [indexNumber, setIndexNumber] = useState(0);
+  const [activeColor, setActiveColor] = useState(0);
+
   const fetchEvent = async () => {
     try {
       const url = EVENT_LIST;
@@ -135,12 +142,17 @@ const Event = () => {
     fetchEvent();
   }, [])
 
+  // minimum function
+  const min = (a, b) => {
+    if (a < b) return a;
+    else return b;
+  }
 
 
   const handleSearch = (e) => {
     e.preventDefault();
     console.log(searchInput, 'search input')
-    if (!searchInput) {
+    if (!searchInput || searchInput==="") {
       eventList.length > 0 && setData(eventList);
     } else {
       const lowerCaseQuery = searchInput.toLowerCase();
@@ -152,6 +164,17 @@ const Event = () => {
       setData(filteredItems);
     }
   };
+
+  useEffect(()=>{
+    handleSearch();
+  },[searchInput])
+
+  // all logic of pagination
+  useEffect(() => {
+    setNumberBox(Array(parseInt(eventList.length / pageSize + 1)).fill(1))
+    let data = eventList.slice(parseInt(indexNumber) * parseInt(pageSize), min(parseInt(eventList.length), (parseInt(indexNumber) + 1) * parseInt(pageSize)));
+    setData(data);
+  }, [JSON.stringify(eventList), indexNumber])
 
   return (
     <div>
@@ -223,28 +246,28 @@ const Event = () => {
                   </div>
                 </div>
               ))}
-              <div className="row">
-                <div className="col-lg-12 col-md-12 py-5">
-                  <div className="pagination-area">
-                    <div className="nav-links">
-                      <a href="#" className="prev page-numbers">
-                        <i className="ri-arrow-left-s-line" />
-                      </a>
-                      <span className="page-numbers current">1</span>
-                      <a href="#" className="page-numbers">
-                        2
-                      </a>
-                      <a href="#" className="page-numbers">
-                        3
-                      </a>
-                      <a href="#" className="next page-numbers">
-                        <i className="ri-arrow-right-s-line" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
+              
 
+              {/* Pagination */}
+          <div className="col-lg-12 col-md-12 mb-5">
+            <div className="pagination-area">
+              <div className="nav-links">
+              <div className="prev page-numbers cursor-pointer" onClick={() => { if (indexNumber - 1 >= 0) setIndexNumber(indexNumber - 1); }}>
+                  <i className="ri-arrow-left-s-line" />
+                </div>
+                <div className="flex flex-row gap-4">
+                {NumberBox.map((item,key)=>{
+                  return(
+                    <div className="rounded-full text-xl w-10 h-10 p-2 cursor-pointer border-[1px]" style={{backgroundColor:activeColor===key?'blue':'white'}} onClick={()=>{setIndexNumber(key);setActiveColor(key)}}>{key+1}</div>
+                  )
+                })}
+                </div>
+                <div className="next page-numbers cursor-pointer" onClick={()=>{(indexNumber+1)<NumberBox.length && setIndexNumber(indexNumber+1);}}>
+                  <i className="ri-arrow-right-s-line" />
+                </div>
               </div>
+            </div>
+          </div>
             </div>
             <div className="col-lg-4 mt-4 mt-lg-0 py-4">
               <div className="blog-sidebar property-details-sidebar">

@@ -40,21 +40,21 @@ export default function Navbar() {
                 <a href="https://www.facebook.com/bricklandconsulting" >
                   <i className="ri-facebook-fill" />
                 </a>
-                <a href="https://twitter.com/" >
+                <a href="https://twitter.com/BricklandIndia" >
                   <i className="ri-twitter-x-line" />
                 </a>
-                <a href="https://www.instagram.com/" >
+                <a href="https://www.instagram.com/bricklandconsulting/" >
                   <i className="ri-instagram-fill" />
                 </a>
-                <a href="https://bd.linkedin.com/" >
+                <a href="https://www.linkedin.com/company/80780708/admin/" >
                   <i className="ri-linkedin-fill" />
                 </a>
-                <a href="https://www.youtube.com/" >
+                <a href="https://www.youtube.com/channel/UCHDGE1hxAPk6MIvgTMZE-HA" >
                   <i className="ri-youtube-line" />
                 </a>
-                <a href="https://www.pinterest.com/" >
+                {/* <a href="https://twitter.com/BricklandIndia" >
                   <i className="ri-pinterest-line" />
-                </a>
+                </a> */}
               </div>
             </li>
             <li>

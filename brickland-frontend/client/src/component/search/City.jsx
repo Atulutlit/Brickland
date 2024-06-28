@@ -8,8 +8,8 @@ const City = () => {
   const [searchInput, setSearchInput] = useState("");
 
   // Pagination
-  const [pageSize, setPageSize] = useState(25);
-  const [NumberBox, setNumberBox] = useState([1, 2]);
+  const [pageSize, setPageSize] = useState(5);
+  const [NumberBox, setNumberBox] = useState([]);
   const [indexNumber, setIndexNumber] = useState(0);
   const [activeColor, setActiveColor] = useState(0);
   
@@ -37,6 +37,7 @@ const City = () => {
     if (a < b) return a;
     else return b;
   }
+  
 
   // all logic of pagination
   useEffect(() => {
@@ -54,7 +55,7 @@ const City = () => {
   
   const handleSearch = () => {
     console.log(searchInput,'search input')
-    if (!searchInput) {
+    if (!searchInput || searchInput=="") {
       properties.length>0 && setData(properties);
     } else {
       const lowerCaseQuery = searchInput.toLowerCase();
@@ -156,44 +157,25 @@ const City = () => {
       </div>
 
       {/* Pagination */}
-      <div className="container my-5 mx-20" >
-        <div className="row align-items-center">
-          {/* Left part */}
-          <div className="col-md-6 d-flex flex-row align-items-center">
-            <div className="fw-bold ms-3" style={{ fontSize: '16px', padding: "10px" }}>Page&nbsp;Size</div>
-            <select className="form-select ms-3" value={pageSize} onChange={(e) => { setPageSize(e.target.value); }} style={{ height: '2rem', width: 'auto' }}>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={75}>75</option>
-              <option value={100}>100</option>
-            </select>
-          </div>
-
-
-          {/* Bottom part */}
-          <div className="col-md-6 d-flex justify-content-end align-items-center mt-3 mt-md-0">
-            <div className="d-flex flex-row gap-2">
-              <div className="rounded-circle border border-2 bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
-                <i className="fas fa-arrow-left"></i>
-              </div>
-              {NumberBox.map((item, key) => (
-                <div
-                  key={key}
-                  className={`rounded-circle border text-center d-flex align-items-center justify-content-center ${activeColor === key ? 'bg-white border-primary' : 'bg-light border-light'} cursor-pointer`}
-                  style={{ width: '32px', height: '32px', fontFamily: 'Ubuntu', fontWeight: 700, fontSize: '16px', color: '#2D5BFF' }}
-                  onClick={() => { setIndexNumber(key); setActiveColor(key); }}
-                >
-                  {key + 1}
+      <div className="col-lg-12 col-md-12 mb-5">
+            <div className="pagination-area">
+              <div className="nav-links">
+              <div className="prev page-numbers cursor-pointer" onClick={() => { if (indexNumber - 1 >= 0) setIndexNumber(indexNumber - 1); }}>
+                  <i className="ri-arrow-left-s-line" />
                 </div>
-              ))}
-              <div className="rounded-circle border border-2 bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
-                <i className="fas fa-arrow-right"></i>
+                <div className="flex flex-row gap-4">
+                {NumberBox.map((item,key)=>{
+                  return(
+                    <div className="rounded-full text-xl w-10 h-10 p-2 cursor-pointer border-[1px]" style={{backgroundColor:activeColor===key?'blue':'white'}} onClick={()=>{setIndexNumber(key);setActiveColor(key)}}>{key+1}</div>
+                  )
+                })}
+                </div>
+                <div className="next page-numbers cursor-pointer" onClick={()=>{(indexNumber+1)<NumberBox.length && setIndexNumber(indexNumber+1);}}>
+                  <i className="ri-arrow-right-s-line" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
     </div>
   );
 };
