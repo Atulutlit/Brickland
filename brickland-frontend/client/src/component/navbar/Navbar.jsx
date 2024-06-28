@@ -37,7 +37,7 @@ export default function Navbar() {
           <ul className="top-header-info-with-social">
             <li>
               <div className="social">
-                <a href="https://www.facebook.com/" >
+                <a href="https://www.facebook.com/bricklandconsulting" >
                   <i className="ri-facebook-fill" />
                 </a>
                 <a href="https://twitter.com/" >

@@ -25,8 +25,8 @@ const Career = () => {
     <div>
       <div className='flex flex-col m-10 gap-5'>
         <div className='rounded-md border-1 border-black p-1 w-40 flex text-center justify-center'>We are hiring</div>
-        <div className='text-2xl font-semibold'>Be part of our mission</div>
-        <div className='text-l font-semibold'>We're looking for passionate people to join us on our mission.We value flat hierarchies,clear communication and full ownership and responsibility.</div>
+        <div className='text-2xl font-light'>Be part of our mission</div>
+        <div className='text-l font-light'>We're looking for passionate people to join us on our mission.We value flat hierarchies,clear communication and full ownership and responsibility.</div>
       </div>
     {career.length==0 && <div className='flex text-center justify-center'>
         <div className='text-4xl h-[300px] mt-10'>There is no current opening!!</div>
@@ -42,11 +42,11 @@ const Career = () => {
                                 <div className='text-l font-medium'>WorkType:{item.type}</div>
                                 <div className='text-l font-medium'>Description:{item.description}</div>
 
-                                <div className="flex flex-row gap-4">
+                                {/* <div className="flex flex-row gap-4">
                                     <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">English</div>
                                     <div className="text-white rounded-lg bg-green-600 w-28 text-sm text-center justify-center p-1 font-medium">Hindi</div>
-                                </div>
-                                <div className='font-semibold'>Please Fill this form <Link to={item.link} className='underline'>Link</Link></div>
+                                </div> */}
+                                {/* <div className='font-light'>Please Fill this form <Link to={item.link} className='underline'>Link</Link></div> */}
                             </div>
                         )
                     })}

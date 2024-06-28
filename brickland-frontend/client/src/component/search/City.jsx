@@ -159,7 +159,7 @@ const City = () => {
       <div className="container my-5 mx-20" >
         <div className="row align-items-center">
           {/* Left part */}
-          <div className="col-md-4 d-flex flex-row align-items-center">
+          <div className="col-md-6 d-flex flex-row align-items-center">
             <div className="fw-bold ms-3" style={{ fontSize: '16px', padding: "10px" }}>Page&nbsp;Size</div>
             <select className="form-select ms-3" value={pageSize} onChange={(e) => { setPageSize(e.target.value); }} style={{ height: '2rem', width: 'auto' }}>
               <option value={25}>25</option>
@@ -171,7 +171,7 @@ const City = () => {
 
 
           {/* Bottom part */}
-          <div className="col-md-4 d-flex justify-content-end align-items-center mt-3 mt-md-0">
+          <div className="col-md-6 d-flex justify-content-end align-items-center mt-3 mt-md-0">
             <div className="d-flex flex-row gap-2">
               <div className="rounded-circle border border-2 bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
                 <i className="fas fa-arrow-left"></i>
