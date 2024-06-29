@@ -226,6 +226,9 @@ const BannerList = () => {
                     <CButton color="light" className='mx-3' onClick={() => handleEditClick(banner)}>
                       <CIcon icon={cilPencil} />
                     </CButton>
+                    <CButton color="danger" className='mx-3' onClick={() => handleDeleteClick(banner)}>
+                      <CIcon icon={cilTrash} />
+                    </CButton>
                   </CTableDataCell>
                 </CTableRow>
               ))}

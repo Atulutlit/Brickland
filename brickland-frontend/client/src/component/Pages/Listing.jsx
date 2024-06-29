@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import Card from "../search/Card";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaRupeeSign } from 'react-icons/fa';
+
 
 export default function Listing() {
   const { listingId } = useParams();
@@ -187,7 +189,7 @@ export default function Listing() {
                   </div>
                   <div className="col-lg-5 col-md-12">
                     <div className="right-content">
-                      <div className="price">${listing?.specialPrice}</div>
+                      <div className="price">{listing?.specialPrice} Rupee</div>
                     </div>
                   </div>
                 </div>

@@ -8,10 +8,7 @@ const Signin = ({ setIsLoggedIn }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`https://brickland-backend-4.onrender.com/verify`, {
-        email,
-        password,
-      });
+      const res = await axios.post(`https://brickland-backend-4.onrender.com/verify`, { email, password, });
       if (res.data.message === "User logged in successfully") {
         setIsLoggedIn(true);
         navigate("/listings");

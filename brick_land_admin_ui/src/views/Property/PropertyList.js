@@ -200,8 +200,7 @@ const PropertyList = () => {
                   <CTableDataCell>{item?.state}</CTableDataCell>
                   <CTableDataCell>{`${item.isFurnished}`}</CTableDataCell>
                   <CTableDataCell>{`${item.isBestSeller}`}</CTableDataCell>
-                  <CTableDataCell>{item?.description}</CTableDataCell>
-                  <CTableDataCell>{item?.shortDescription}</CTableDataCell>
+                  <CTableDataCell><div style={{overflow:"auto",height:"100px"}}>{item?.description}</div></CTableDataCell>
                   <CTableDataCell>{item?.address}</CTableDataCell>
                   <CTableDataCell>{item?.propertyImg}</CTableDataCell>
                   <CTableDataCell>{`₹${item.price}`}</CTableDataCell>

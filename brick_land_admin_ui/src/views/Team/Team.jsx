@@ -87,6 +87,11 @@ const Team = () => {
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/team/add`;
     const authKey = localStorage.getItem('token');
     const data = { name, position, img: imageUrl, message }
+    if(name=="" || position =="" || imageUrl=="" || message=="")
+    {
+      toast.warn("Please fill all the detail");
+      return;
+    }
     console.log(data, 'data', imageUrl, image);
     try {
       const response = await axios.post(endpoint, data, {

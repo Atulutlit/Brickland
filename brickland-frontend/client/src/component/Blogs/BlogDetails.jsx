@@ -16,10 +16,11 @@ const BlogDetails = () => {
   // comment
   const [name,setName]=useState("");
   const [message,setMessage]=useState("");
+
   const handleSubmit= async(e) => {
     e.preventDefault();
     try {
-      const url = ADD_COMMENT;
+      const url = `${ADD_COMMENT}/${id}`;
       if(name=="")
       {
         toast.warn("Enter the Name");
@@ -38,6 +39,7 @@ const BlogDetails = () => {
     }
 
   }
+  const [comments,setComments]=useState([])
   const fetchBlog = async () => {
     try {
       const url = BLOG_LIST;
@@ -45,6 +47,7 @@ const BlogDetails = () => {
       const data = await response.json();
       console.log(data,'data')
       setBlog(data.data);
+    
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -53,13 +56,17 @@ const BlogDetails = () => {
   useEffect(()=>{
   },[])
 
+  
   const fetchBlogDetail=async()=>{
     try {
       const url = `${BLOG_DETAIL}/${id}`;
       const response = await fetch(url);
       const data = await response.json();
       console.log(data,'data')
-      setPost(data.data);
+      setComments(data.data['comments']);
+      data.data['comments']=[]
+      setPost(data?.data);
+      console.log(data?.data,'blog detail')
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -193,13 +200,13 @@ const BlogDetails = () => {
             </div>
 
             <div className="article-comment">
-              <h3>Comment ({post?.comments?.length})</h3>
-              {post?.comment && post?.comments?.map((item,key)=>{
+              <h3>Comment ({comments?.length})</h3>
+              {comments && comments?.map((item,key)=>{
                 return(
                 <div className="comment-list">
                 <img class="avatar-img" src={avatar} alt="avatar"/>
                 <h4>{item?.name}</h4>
-                <span>{item?.createdAt}</span>
+                <span>{item?.createdAt.slice(0,10)}</span>
                 <p>
                  {item?.message}
                 </p>

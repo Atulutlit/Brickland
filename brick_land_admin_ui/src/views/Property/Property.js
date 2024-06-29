@@ -278,7 +278,8 @@ const Product = () => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        <div className="mb-3">
+
+        {/* <div className="mb-3">
           <CFormLabel htmlFor="descriptionTextarea">shortDescription</CFormLabel>
           <CFormTextarea
             id="descriptionTextarea"
@@ -287,7 +288,8 @@ const Product = () => {
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
           />
-        </div>
+          </div> */}
+
         <div className="mb-3">
           <CFormLabel htmlFor="addressInput">Address</CFormLabel>
           <CFormInput
@@ -378,7 +380,7 @@ const Product = () => {
                           <button
                             type="button"
                             className="btn btn-outline-danger btn-sm"
-                            onClick={() => handleDelete(key)}
+                            onClick={()=>{setFeatures((prev)=>{const inputdata=[...prev];inputdata.splice(key,1);return inputdata;})}}
                           >
                             <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
                           </button>
@@ -392,13 +394,13 @@ const Product = () => {
             <CFormInput
               type="text"
               id="bedroomInput"
-              placeholder="Enter the Features"
+              placeholder="Enter the Amenities"
               value={featureValue}
               onChange={(e) => setFeatureValue(e.target.value)}
             />
             {/* <div className='text-center rounded-md' onClick={()=>{setFeatures((prev)=>{return [...prev,featureValue]})}}>Add</div> */}
           </div>
-          <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white" }} onClick={() => { setFeatures((prev) => { return [...prev, featureValue] }) }} >Add New Feature</div>
+          <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white",cursor:"pointer" }} onClick={() => { setFeatures((prev) => { return [...prev, featureValue] });setFeatureValue(""); }} >Add New Amenities</div>
 
         </div>
         {/* location advantage */}
@@ -416,7 +418,7 @@ const Product = () => {
                           <button
                             type="button"
                             className="btn btn-outline-danger btn-sm"
-                            onClick={() => handleDelete(key)}
+                            onClick={()=>{setLocationAdvantage((prev)=>{const data=[...prev];data.splice(key,1);return data;})}}
                           >
                             <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
                           </button>

@@ -70,7 +70,6 @@ const blogsDetail = async (req, res) => {
   }
 };
 
-
 const addComment = async (req, res) => {
   try {
     const { name, message } = req.body;
@@ -79,45 +78,58 @@ const addComment = async (req, res) => {
 
     // Ensure name and message are provided
     if (!name || !message) {
-      return res.json({
+      return res.status(400).json({
         meta: { msg: "Name and message are required.", status: false },
+      });
+    }
+     
+    console.log(id,'id')
+    // Validate ID
+    if (!Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        meta: { msg: "Invalid blog ID.", status: false },
       });
     }
 
     // Construct the comment object
     const comment = { name, message, active: false, createdAt: new Date() };
 
-    console.log(comment, 'comment');
+    console.log(comment, 'comment',id);
+
+    // Find the blog post
+    const data = await blogsModel.findOne({ _id: new Types.ObjectId(id) });
+    console.log(data, 'data');
+
+    if (!data) {
+      return res.status(404).json({
+        meta: { msg: "Blog post not found.", status: false },
+      });
+    }
 
     // Update the blog post by pushing the new comment to the "comments" array
     const updateStatus = await blogsModel.updateOne(
       { _id: new Types.ObjectId(id) },
-      {
-        $push: { comments: comment },
-      }
+      { $push: { comments: comment } }
     );
 
     console.log(updateStatus, 'update Status');
 
     if (updateStatus.modifiedCount > 0) {
-      return res.json({
-        meta: {
-          msg: "Comment added successfully.",
-          status: true,
-        },
+      return res.status(200).json({
+        meta: { msg: "Comment added successfully.", status: true },
       });
     } else {
-      return res.json({
+      return res.status(500).json({
         meta: { msg: "Something went wrong.", status: false },
       });
     }
   } catch (error) {
-    return res.json({
+    console.error(error, 'error'); // Log the error for debugging
+    return res.status(500).json({
       meta: { msg: error.message, status: false },
     });
   }
 };
-
 
 module.exports = {
   blogsList,

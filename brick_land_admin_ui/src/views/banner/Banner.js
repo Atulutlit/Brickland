@@ -46,7 +46,11 @@ const Banner = () => {
 
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/banner/add`
     const authKey = localStorage.getItem('token')
-
+    if(title=="" || description==""||headline=="")
+    {
+      toast.warn("Please fill all the detail");
+      return;
+    }
     try {
       const response = await axios.post(
         endpoint,

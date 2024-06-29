@@ -4,7 +4,7 @@ import { MdLocationOn } from "react-icons/md";
 export default function Card({ listing }) {
   return (
     <div className='bg-white shadow-md hover:shadow-lg
-    transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]'>
+    transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px] h-[400px]'>
      <Link to={`https://brickland-backend-4.onrender.com/api/data/`}>
          <img src={listing.propertyImg[0] } 
          alt="listings"
@@ -24,19 +24,18 @@ export default function Card({ listing }) {
            {listing.description} </p>
            <p className='text-slate-500 mt-2 font-semibold'>
             ₹{' '}
-            {listing.offer ? listing?.specialPrice : 
-            listing?.specialPrice}
+            {listing?.specialPrice}
             {listing.type==='rent' && '/month'}
             </p> 
            <div className='text-slate-700 flex gap-4'>
-                <div className='font-bold text-xs'>
+                {listing?.bedrooms && <div className='font-bold text-xs'>
                     {listing?.bedrooms > 1 ? `${listing?.bedrooms} beds` 
                     : `${listing.bedrooms} bed` }
-                </div>
-                <div className='font-bold text-xs'>
+                </div>}
+                {listing?.bathrooms && <div className='font-bold text-xs'>
                     {listing?.bathrooms > 1 ? `${listing?.bathrooms} bathrooms` 
                     : `${listing?.bathrooms} bathroom` }
-                </div>
+                </div>}
            </div>
 
         </div>

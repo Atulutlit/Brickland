@@ -8,7 +8,7 @@ const City = () => {
   const [searchInput, setSearchInput] = useState("");
 
   // Pagination
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(9);
   const [NumberBox, setNumberBox] = useState([]);
   const [indexNumber, setIndexNumber] = useState(0);
   const [activeColor, setActiveColor] = useState(0);
@@ -25,8 +25,7 @@ const City = () => {
       const data = await response.json();
       console.log(data,'data');
       setProperties(data?.data);
-      setData(data?.data?.slice(0,pageSize))
-          
+      setData(data?.data?.slice(0,pageSize));
     } catch (error) {
       console.error('Error fetching properties:', error);
     }

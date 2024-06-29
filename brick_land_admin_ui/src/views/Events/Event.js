@@ -22,7 +22,10 @@ const Event = () => {
     e.preventDefault(); // Prevent default form submission behavior
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/add`;
     const authKey = localStorage.getItem('token'); // Retrieve token from local storage
-
+    if(title=="" || location =="" || link=="" || youTubeLink=="" || eventDate==""){
+      toast.warn("Please fill all the detail");
+      return;
+    }
     try {
       const response = await axios.post(endpoint, {
         title,description,location,link:youTubeLink,eventDate
@@ -100,7 +103,7 @@ const Event = () => {
 
         <CFormInput type="text" id="typeInput" placeholder="Enter Link"
           value={link} onChange={(e) => setLink(e.target.value)} />
-        <CButton color="primary" className='py-2 mt-2' onClick={()=>{setYouTubeLink([...youTubeLink,link]);setLink("");}}>Add</CButton>
+        <CButton color="primary" className='py-2 mt-2' onClick={()=>{link==""?toast.warn("Please add the link"):setYouTubeLink([...youTubeLink,link]);setLink("");}}>Add</CButton>
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="typeInput">Event Date</CFormLabel>
