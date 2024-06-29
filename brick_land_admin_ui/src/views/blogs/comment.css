@@ -1,0 +1,22 @@
+.comment-box {
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px; /* Added padding for better spacing inside the box */
+    background-color: #f9f9f9; /* Light background color for the comment box */
+  }
+  
+  .comment-box .comment-name,
+  .comment-box .comment-message {
+    margin: 5px 0; /* Added margin for spacing between the name and message */
+  }
+  
+  .comment-box .comment-name {
+    font-weight: bold; /* Bold font for the name */
+    color: #333; /* Darker color for the name */
+  }
+  
+  .comment-box .comment-message {
+    color: #555; /* Slightly lighter color for the message */
+  }
+  

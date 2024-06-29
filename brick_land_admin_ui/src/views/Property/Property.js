@@ -42,10 +42,10 @@ const Product = () => {
   const [features, setFeatures] = useState([])
   const [featureValue, setFeatureValue] = useState("")
   const [isBestSeller, setIsBestSeller] = useState(false)
-  const [bedroom, setBedroom] = useState('')
-  const [bathroom, setBathrooms] = useState('')
-  const [kitchen, setKitchen] = useState(0);
-  const [parking, setParking] = useState(0)
+  const [bedroom, setBedroom] = useState(null)
+  const [bathroom, setBathrooms] = useState(null)
+  const [kitchen, setKitchen] = useState(null);
+  const [parking, setParking] = useState(null)
   const [address, setAddress] = useState('')
   const [isFurnished, setIsFurnished] = useState(false);
   const [accomdation, setAccomadation] = useState(-1);

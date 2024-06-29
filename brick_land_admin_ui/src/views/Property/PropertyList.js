@@ -18,7 +18,8 @@ import {
   CFormInput,
   CFormCheck,
   CFormSelect,
-  CFormSwitch
+  CFormSwitch,
+  CFormLabel
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilTrash, cilPencil } from '@coreui/icons'
@@ -31,29 +32,31 @@ const PropertyList = () => {
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false)
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [selectedProperty, setSelectedProperty] = useState(null)
-  const [categories, setCategories] = useState([])
-
+  const [categories, setCategories] = useState([]);
+  const [featureValue,setFeatureValue]=useState("");
+  const [advantage,setAdvantage]=useState("");
   const [property, setProperty] = useState([]);
 
-  useEffect(() => {
-    const fetchProperty = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/property/list`
-      const authKey = localStorage.getItem('token')
+  const fetchProperty = async () => {
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/property/list`
+    const authKey = localStorage.getItem('token')
 
-      try {
-        const response = await axios.get(endpoint, { headers: { authkey: authKey } })
-        console.log(response, "response")
-        console.log(response.data.meta.status)
-        if (response.data.meta.status) {
-          setProperty(response.data.data)
-        } else {
-          toast.error(response.data.meta.msg)
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error)
-        toast.error('Failed to fetch products.')
+    try {
+      const response = await axios.get(endpoint, { headers: { authkey: authKey } })
+      console.log(response, "response")
+      console.log(response.data.meta.status)
+      if (response.data.meta.status) {
+        setProperty(response.data.data)
+      } else {
+        toast.error(response.data.meta.msg)
       }
+    } catch (error) {
+      console.error('Error fetching products:', error)
+      toast.error('Failed to fetch products.')
     }
+  }
+
+  useEffect(() => {
     fetchProperty()
   }, [])
 
@@ -113,7 +116,8 @@ const PropertyList = () => {
       parking: selectedProperty.parking,
       bathrooms: selectedProperty.bathrooms,
       bedrooms: selectedProperty.bedrooms,
-
+      locationbar : selectedProperty.locationAdvantage,
+      features : selectedProperty.features,
       status: selectedProperty.status, // Add status to the payload
       state: selectedProperty.state, // Add state to the payload
     }
@@ -131,6 +135,7 @@ const PropertyList = () => {
           )
         )
         setEditModalVisible(false)
+        fetchProperty();
       } else {
         toast.error(response.data.meta.msg)
       }
@@ -174,7 +179,6 @@ const PropertyList = () => {
                 <CTableHeaderCell>Furnished</CTableHeaderCell>
                 <CTableHeaderCell>isBestSeller</CTableHeaderCell>
                 <CTableHeaderCell>Description</CTableHeaderCell>
-                <CTableHeaderCell>Notes</CTableHeaderCell>
                 <CTableHeaderCell>Address</CTableHeaderCell>
                 <CTableHeaderCell>Images</CTableHeaderCell>
                 <CTableHeaderCell>Regular_Price</CTableHeaderCell>
@@ -245,7 +249,7 @@ const PropertyList = () => {
                     <label>Property Name</label>
                     <CFormInput
                       type="text"
-                      value={selectedProperty.productName}
+                      value={selectedProperty.propertyName}
                       onChange={handleInputChange}
                       name="productName"
                     />
@@ -284,8 +288,8 @@ const PropertyList = () => {
                         name="bedrooms"
                       />
                     </div>
-                    <div>
-                      <label>Property Images (comma separated)</label>
+                    {/* <div>
+                      <label>Property Images (comma separated)</label> */}
                       {/* <CFormInput
                     type="text"
                     value={selectedProperty.productImg.join(', ')}
@@ -297,7 +301,7 @@ const PropertyList = () => {
                     }
                     name="productImg"
                   /> */}
-                    </div>
+                    {/* </div> */}
                     <div>
                       <label>Price</label>
                       <CFormInput
@@ -339,6 +343,102 @@ const PropertyList = () => {
                 </>
               )}
             </CModalBody>
+            <div className="m-3">
+          <CFormLabel htmlFor="priceInput">Amenities</CFormLabel>
+          <div className='grid grid-cols-5'>
+            <div className="container my-4">
+              <div className="row g-5">
+                {selectedProperty?.features && selectedProperty?.features.map((item, key) => (
+                  <div key={key} className="col-md-4">
+                    <div className="card border-0 shadow-sm h-100">
+                      <div className="card-body">
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div className="text-body">{item}</div>
+                          <button
+                            type="button"
+                            className="btn btn-outline-danger btn-sm"
+                            // onClick={()=>{setFeatures((prev)=>{const inputdata=[...prev];inputdata.splice(key,1);return inputdata;})}}
+                            onClick={()=>{
+                              setSelectedProperty((prev) => {
+                                const inputdata = { ...prev };
+                                const features = [...inputdata.features];
+                                features.splice(key, 1); // Remove the element at the specified index
+                                inputdata.features = features;
+                                return inputdata;
+                              });
+                            }}
+                          >
+                            <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <CFormInput
+              type="text"
+              id="bedroomInput"
+              placeholder="Enter the Amenities"
+              value={featureValue}
+              onChange={(e) => setFeatureValue(e.target.value)}
+            />
+            {/* <div className='text-center rounded-md' onClick={()=>{setFeatures((prev)=>{return [...prev,featureValue]})}}>Add</div> */}
+          </div>
+          <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white",cursor:"pointer" }} onClick={() => { 
+            setSelectedProperty((prev) => { const input={...prev};let feature=[...input.features,featureValue]; input.features=feature; return input; });
+            setFeatureValue("");
+             }} >Add New Amenities</div>
+
+        </div>
+        {/* location advantage */}
+        <div className="m-3">
+          <CFormLabel htmlFor="priceInput">Location Advantage</CFormLabel>
+          <div className='grid grid-cols-5'>
+            <div className="container my-4">
+              <div className="row g-5">
+                {selectedProperty?.locationAdvantage && selectedProperty?.locationAdvantage.map((item, key) => (
+                  <div key={key} className="col-md-4">
+                    <div className="card border-0 shadow-sm h-100">
+                      <div className="card-body">
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div className="text-body">{item}</div>
+                          <button
+                            type="button"
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={()=>{
+                              setSelectedProperty((prev) => {
+                                const inputdata = { ...prev };
+                                const advantage = [...inputdata.locationAdvantage];
+                                advantage.splice(key, 1); // Remove the element at the specified index
+                                inputdata.locationAdvantage = advantage;
+                                return inputdata;
+                              });
+                            }}
+                          >
+                            <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <CFormInput
+              type="text"
+              id="locationAdvantage"
+              placeholder="Enter the LocationAdvantage"
+              value={advantage}
+              onChange={(e) => setAdvantage(e.target.value)}
+            />
+            {/* <div className='text-center rounded-md' onClick={()=>{setFeatures((prev)=>{return [...prev,featureValue]})}}>Add</div> */}
+          </div>
+          <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white" }} onClick={() => { 
+            setSelectedProperty((prev) => { const input={...prev};let advantage=[...input.locationAdvantage,advantage]; input.locationAdvantage=advantage; return input; });
+            setAdvantage(""); }} >Add Location Advantage</div>
+        </div>
             <CModalFooter>
               <CButton color="primary" onClick={handleEditSubmit}>
                 Save Changes
