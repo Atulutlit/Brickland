@@ -155,6 +155,10 @@ const BannerList = () => {
       ...editData,
       [e.target.name]: e.target.value
     });
+    console.log({
+      ...editData,
+      [e.target.name]: e.target.value
+    },'edit data')
   };
 
   const updateBanner = async () => {
@@ -165,7 +169,8 @@ const BannerList = () => {
       await axios.put(endpointDetails, {
         title: editData.title,
         description: editData.description,
-        bannerImg: editData.bannerImg,
+        headline: editData.headline,
+        bannerImg: imageUrl,
         status : editData.status
 
       }, { headers: { authkey: authKey } });
@@ -198,7 +203,6 @@ const BannerList = () => {
                 <CTableHeaderCell>Description</CTableHeaderCell>
                 <CTableHeaderCell>Image</CTableHeaderCell>
                 <CTableHeaderCell>Status</CTableHeaderCell>
-                <CTableHeaderCell>Actions</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -211,7 +215,7 @@ const BannerList = () => {
                   <CTableDataCell>
                     <img src={banner?.bannerImg} alt={banner.title} style={{ width: '100px', height: 'auto' }} />
                   </CTableDataCell>
-                  <CTableDataCell className="text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  {/* <CTableDataCell className="text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <CFormSwitch
                       id={`statusSwitch-${banner._id}`}
                       color="info"
@@ -221,14 +225,14 @@ const BannerList = () => {
                       onChange={() => handleStatusChange(banner._id, banner.status)}
                     />
                     <span style={{ marginLeft: '10px' }}>{banner.status}</span>
-                  </CTableDataCell>
+                  </CTableDataCell> */}
                   <CTableDataCell>
                     <CButton color="light" className='mx-3' onClick={() => handleEditClick(banner)}>
                       <CIcon icon={cilPencil} />
                     </CButton>
-                    <CButton color="danger" className='mx-3' onClick={() => handleDeleteClick(banner)}>
+                    {/* <CButton color="danger" className='mx-3' onClick={() => handleDeleteClick(banner)}>
                       <CIcon icon={cilTrash} />
-                    </CButton>
+                    </CButton> */}
                   </CTableDataCell>
                 </CTableRow>
               ))}
@@ -277,7 +281,7 @@ const BannerList = () => {
                 </CInputGroup>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <label>Status</label>
                 <CFormCheck
                   type="radio"
@@ -295,7 +299,7 @@ const BannerList = () => {
                   checked={editData.status === "DEACTIVE"}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
             </CModalBody>
             <CModalFooter>
               <CButton color="primary" onClick={updateBanner}>Save Changes</CButton>

@@ -2,11 +2,12 @@ import React, { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { blogItem } from '../../assets/items';
 import { Link } from 'react-router-dom';
-import { BLOG_DETAIL,BLOG_LIST,ADD_COMMENT } from '../../constant/Constant';
+import { BLOG_DETAIL,BLOG_LIST,ADD_COMMENT,GET_CONTACT_INFO } from '../../constant/Constant';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import avatar from './../../assets/avatar.webp'
+
 
 const BlogDetails = () => {
   const { id } = useParams(); // Extract the ID from the URL
@@ -33,6 +34,7 @@ const BlogDetails = () => {
       const response = await axios.post(url,data);
       console.log(response,'data comment added successfully')
       toast.success("comment added successfully!!");
+      fetchBlog();
     } catch (error) {
       toast.error("Try Again Later");
       console.error('Error fetching properties:', error);
@@ -77,6 +79,24 @@ const BlogDetails = () => {
     fetchBlogDetail();
   },[])
 
+  const [contactInfo, setContactInfo] = useState(null);
+
+  const fetchContactInfo = async (e) => {
+    try {
+      const url = GET_CONTACT_INFO;
+      const response = await axios.get(url);
+      console.log(response, 'response');
+      setContactInfo(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch contactInformation:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchContactInfo();
+  }, [])
+
 
   return (
     <>
@@ -113,6 +133,10 @@ const BlogDetails = () => {
                   <li>
                     <i className="ri-message-2-line" />
                     {post?.comments} Comments
+                  </li>
+                  <li>
+                    <i className="ri-message-2-line" />
+                    {post?.author} 
                   </li>
                 </ul>
                 <h2>
@@ -181,16 +205,16 @@ const BlogDetails = () => {
                       <span>Social Share:</span>
                     </li>
                     <li>
-                      <a href="https://www.facebook.com/" target="_blank">
+                      <a href={contactInfo?.facebookLink} target="_blank">
                         <i className="ri-facebook-fill" />
                       </a>
-                      <a href="https://twitter.com/" target="_blank">
+                      <a href={contactInfo?.twitterLink}  target="_blank">
                         <i className="ri-twitter-fill" />
                       </a>
-                      <a href="https://www.instagram.com/" target="_blank">
+                      <a href={contactInfo?.instagramLink}  target="_blank">
                         <i className="ri-instagram-line" />
                       </a>
-                      <a href="https://www.youtube.com/" target="_blank">
+                      <a href={contactInfo?.linkedInLink}  target="_blank">
                         <i className="ri-youtube-fill" />
                       </a>
                     </li>
@@ -243,20 +267,6 @@ const BlogDetails = () => {
                   />
                   <div className="icon">
                     <i className="ri-message-2-line" />
-                  </div>
-                </div>
-                <div className="col-lg-12 col-md-12">
-                  <div className="form-group">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="check1"
-                      />
-                      <label className="form-check-label" htmlFor="check1">
-                        Save My Name or Next Time
-                      </label>
-                    </div>
                   </div>
                 </div>
                 <button type="submit" className="default-btn cursor-pointer">

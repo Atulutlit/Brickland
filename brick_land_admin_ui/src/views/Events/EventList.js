@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CIcon from '@coreui/icons-react';
 import {
   CCard, CCardHeader, CCardBody, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell,
-  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck, CFormSelect
+  CButton, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CFormCheck, CFormSelect,CFormLabel
 } from '@coreui/react';
 import axios from 'axios';
 import { cilPencil, cilTrash } from '@coreui/icons';
@@ -17,32 +17,32 @@ const EventList = () => {
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [editData, setEditData] = useState({ categoryName: '', description: '', categoryImg: '', status: '' });
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/list`;
-      const authKey = localStorage.getItem('token');
+  const [link,setLink]=useState("");
+  const fetchEvents = async () => {
+    const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/list`;
+    const authKey = localStorage.getItem('token');
 
-      try {
-        const response = await axios.get(endpoint, {
-          headers: { authkey: authKey }
-        });
-        console.log(response, 'events');
-        if (response.data.meta.status) {
-          setEvents(response.data.data);
-        } else {
-          toast.error(response.data.meta.msg);
-        }
-      } catch (error) {
-        if (error?.response?.status === 401) {
-          navigate("/");
-        } else {
-          console.error('Failed to fetch event:', error);
-          toast.error('Failed to fetch event.');
-        }
+    try {
+      const response = await axios.get(endpoint, {
+        headers: { authkey: authKey }
+      });
+      console.log(response, 'events');
+      if (response.data.meta.status) {
+        setEvents(response.data.data);
+      } else {
+        toast.error(response.data.meta.msg);
       }
-    };
-
-    fetchCategories();
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        navigate("/");
+      } else {
+        console.error('Failed to fetch event:', error);
+        toast.error('Failed to fetch event.');
+      }
+    }
+  };
+  useEffect(() => {
+    fetchEvents();
   }, []);
 
   const handleEditClick = (event) => {
@@ -98,6 +98,7 @@ const EventList = () => {
       console.log(response,'response');
       toast.success("Event updated successfully.");
       setModalVisible(false);
+      
     } catch (error) {
       if (error?.response?.status === 401) {
         navigate("/");
@@ -112,7 +113,7 @@ const EventList = () => {
     <>
     <ToastContainer/>
     <CCard>
-      <CCardHeader>Category List</CCardHeader>
+      <CCardHeader>Event List</CCardHeader>
       <CCardBody>
         <CTable bordered>
           <CTableHead>
@@ -169,7 +170,7 @@ const EventList = () => {
         {/* Edit Category Modal */}
         <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
           <CModalHeader onClose={() => setModalVisible(false)}>
-            Edit Category
+            Edit Events
           </CModalHeader>
           <CModalBody>
             <div>
@@ -188,9 +189,39 @@ const EventList = () => {
               <option value="GURGAON">GURGAON</option>
               </CFormSelect>
             </div>
-            <div>
-              <label>Link</label>
-              <CFormInput type="text" value={editData.link} onChange={handleInputChange} name="link" />
+            <div className="mb-3">
+        <CFormLabel htmlFor="typeInput">Event Date</CFormLabel>
+        <CFormInput type="date" id="typeInput" placeholder="Enter Event Date"
+          value={editData.eventDate} onChange={(e) => setEditData((prev)=>{
+            const data={...prev};
+            data.eventDate = e.target.value;
+            return data;            
+          })} />
+      </div>
+      <div>
+         <label>You Tube Link</label>
+         <CFormInput type="text" value={link} onChange={(e)=>{setLink(e.target.value);}} name="title" />
+         <div className='' onClick={()=>{setEditData((prev)=>{
+           const inputData={...prev};const youTubeLink=inputData.link;inputData.link=[...youTubeLink,link];
+           return inputData;
+         })}}>Add</div>
+             {editData?.link?.map((item,key)=>{
+              return( <div className='bg-blue-300 p-1'>
+                <a href={item} target="_blank">Link</a>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={()=>{setEditData((prev)=>{
+                    const data={...editData};
+                    const link=data.link;
+                    link.splice(key,1);
+                    data.link=link;
+                    return data;
+                  })}}
+                >
+                  <i class="cis-delete"></i> Delete {/* Bootstrap Icon */}
+                </button>
+              </div>); })}
             </div>
           </CModalBody>
           <CModalFooter>

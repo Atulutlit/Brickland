@@ -114,7 +114,7 @@ const Career = () => {
         </CFormSelect>
       </div>
       <div className="mb-3">
-        <CFormLabel htmlFor="titleInput">Link</CFormLabel>
+        <CFormLabel htmlFor="titleInput">Google Form Link</CFormLabel>
         <CFormInput
           type="text"
           id="titleInput"

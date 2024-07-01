@@ -76,11 +76,11 @@ const _nav = [
     to: '',
     icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
     items: [
-      {
-        component: CNavItem,
-        name: 'Add Banner',
-        to: '/banner',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Add Banner',
+      //   to: '/banner',
+      // },
       {
         component: CNavItem,
         name: 'Banner List',

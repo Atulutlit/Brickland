@@ -17,7 +17,7 @@ const BlogList = () => {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
-  const [editData, setEditData] = useState({ blogName: '', description: '', blogImg: '', status: '',comments:[] });
+  const [editData, setEditData] = useState({ blogName: '', description: '', blogImg: '', status: '', comments: [] });
   const [selectedCategory, setSelectedCategory] = useState(false)
   const navigate = useNavigate();
 
@@ -200,6 +200,7 @@ const BlogList = () => {
                 <label>Author</label>
                 <CFormInput type="text" value={editData.author} onChange={handleInputChange} name="author" />
               </div>
+
               <div>
                 <label>Comment</label>
                 {editData.comments && editData.comments.map((item, key) => (
@@ -219,7 +220,6 @@ const BlogList = () => {
                     /></div>
                 ))}
               </div>
-
             </CModalBody>
             <CModalFooter>
               <CButton color="primary" onClick={updateBlog}>Save Changes</CButton>

@@ -18,6 +18,7 @@ const Blog = () => {
   const [conclusionTitle, setConclusionTitle] = useState('');
   const [conclusionInner, setConclusionInner] = useState('');
   const [features, setFeatures] = useState([{ title: '', paragraph: '' }]);
+  const [tagList, setTagList] = useState([])
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -101,7 +102,8 @@ const Blog = () => {
         <div className="mb-3">
           <CFormLabel htmlFor="contentTextarea">Content</CFormLabel>
           <CFormTextarea id="contentTextarea" rows={3}
-            value={content} onChange={(e) => setContent(e.target.value)}></CFormTextarea>
+            value={content} onChange={(e) => setContent(e.target.value)}>
+          </CFormTextarea>
         </div>
         <div className="mb-3">
           <CFormLabel htmlFor="authorInput">Author</CFormLabel>
@@ -112,6 +114,17 @@ const Blog = () => {
           <CFormLabel htmlFor="tagInput">Tag</CFormLabel>
           <CFormInput type="text" id="tagInput" placeholder="Enter tag"
             value={tag} onChange={(e) => setTag(e.target.value)} />
+          <div className='' onClick={(e) => {
+            tag == "" ? toast.warn("Fill Tag!!") : setTagList([...tagList, tag]);
+            tag !== "" && setTag("");
+          }}>Add</div>
+          {
+            tagList && tagList.map((item, key) => {
+              return (
+                <div className='' key={key}>{item}</div>
+              )
+            })
+          }
         </div>
         <div className="mb-3">
           <CFormLabel htmlFor="mainImgInput">Main Image</CFormLabel>

@@ -22,7 +22,7 @@ const Event = () => {
     e.preventDefault(); // Prevent default form submission behavior
     const endpoint = `${import.meta.env.VITE_ADMIN_URL}/event/add`;
     const authKey = localStorage.getItem('token'); // Retrieve token from local storage
-    if(title=="" || location =="" || link=="" || youTubeLink=="" || eventDate==""){
+    if(title=="" || location =="" || youTubeLink.length==0 ||  eventDate==""){
       toast.warn("Please fill all the detail");
       return;
     }
@@ -81,29 +81,34 @@ const Event = () => {
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="typeInput">Link</CFormLabel>
+        <CFormInput type="text" id="typeInput" placeholder="Enter Link"
+          value={link} onChange={(e) => setLink(e.target.value)} />
+        <CButton color="primary" className='py-2 mt-2' onClick={()=>{link==""?toast.warn("Please add the link"):setYouTubeLink([...youTubeLink,link]);setLink("");}}>Add</CButton>
         <div className="container my-5">
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
         {youTubeLink.map((item, key) => (
           <div key={key} className="col">
-            <a
+           
+              <div className="card h-10 border-0 shadow-sm p-1 d-flex flex-column align-items-center justify-content-center bg-primary text-white">
+              <a
               href={item}
               target="_blank"
               rel="noopener noreferrer"
               className="text-decoration-none"
-            >
-              <div className="card h-100 border-0 shadow-sm p-3 d-flex flex-column align-items-center justify-content-center bg-primary text-white">
-                <h4 className="mb-2">Video {key + 1}</h4>
-                <p className="card-text">Click to watch</p>
-              </div>
-            </a>
+            ><h4 className="mb-2 text-white">Link {key + 1}</h4></a>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={()=>{setYouTubeLink((prev)=>{const data=[...prev];data.splice(key,1);return data;})}}
+                >
+                  <i class="cis-delete"></i> Delete {/* Bootstrap Icon */}
+                </button></div>
           </div>
         ))}
       </div>
     </div>
 
-        <CFormInput type="text" id="typeInput" placeholder="Enter Link"
-          value={link} onChange={(e) => setLink(e.target.value)} />
-        <CButton color="primary" className='py-2 mt-2' onClick={()=>{link==""?toast.warn("Please add the link"):setYouTubeLink([...youTubeLink,link]);setLink("");}}>Add</CButton>
+        
       </div>
       <div className="mb-3">
         <CFormLabel htmlFor="typeInput">Event Date</CFormLabel>

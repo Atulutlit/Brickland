@@ -17,6 +17,8 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LanguageIcon from "@mui/icons-material/Language";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import axios from "axios";
+import { GET_CONTACT_INFO } from "../../constant/Constant";
 import { Link } from "react-router-dom";
 export default function Footer() {
   const [showWhatsAppIcon, setShowWhatsAppIcon] = useState(false);
@@ -38,6 +40,25 @@ export default function Footer() {
     const whatsappNumber = "+918869003900";
     window.open(`https://wa.me/${whatsappNumber}`, "_blank");
   };
+
+  const [contactInfo, setContactInfo] = useState(null);
+
+  const fetchContactInfo = async (e) => {
+    try {
+      const url = GET_CONTACT_INFO;
+      const response = await axios.get(url);
+      console.log(response, 'response');
+      setContactInfo(response.data.data);
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetch contactInformation:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchContactInfo();
+  }, [])
+
   return (
     <>
       <Box
@@ -141,7 +162,7 @@ export default function Footer() {
                   <PlaceIcon style={{ color: "white" }} />
                 </IconButton>
                 <Typography color="white">
-                  511, Floor P5, Urbtech NPX Tower, Sector 153, Noida 201310
+                  {contactInfo?.address?contactInfo?.address:"511, Floor P5, Urbtech NPX Tower, Sector 153, Noida 201310"}
                 </Typography>
               </Stack>
               <Stack direction={"row"} alignItems={"center"}>
@@ -190,7 +211,7 @@ export default function Footer() {
               >
                 <IconButton
                   component={Link}
-                  to="https://www.facebook.com/bricklandconsulting"
+                  to={contactInfo?.facebookLink}
                   target="_blank"
                 >
                   <FacebookIcon fontSize="large" style={{ color: "white" }} />
@@ -198,7 +219,7 @@ export default function Footer() {
                 <IconButton
                   sx={{ color: "#0a66c2" }}
                   component={Link}
-                  to="https://www.linkedin.com/company/80780708/admin/"
+                  to={contactInfo?.linkedInLink}
                   target="_blank"
                 >
                   <LinkedInIcon fontSize="large" style={{ color: "white" }} />
@@ -206,7 +227,7 @@ export default function Footer() {
                 <IconButton
                   sx={{ color: "#c13584" }}
                   component={Link}
-                  to="https://www.instagram.com/bricklandconsulting/"
+                  to={contactInfo?.instagramLink}
                   target="_blank"
                 >
                   <InstagramIcon fontSize="large" style={{ color: "white" }} />

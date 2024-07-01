@@ -33,6 +33,21 @@ export default function Listing() {
   const [mobile, setMobile] = useState();
   const [message, setMessage] = useState('');
 
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
+  const getDisplayText = () => {
+    if (!listing?.description) {
+      return '';
+    }
+
+    return showFullDescription ? listing.description : listing.description.slice(0, 1000);
+  };
+
+
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -124,6 +139,7 @@ export default function Listing() {
     }
   };
 
+
   useEffect(() => {
     fetchProperties();
   }, []);
@@ -189,7 +205,7 @@ export default function Listing() {
                   </div>
                   <div className="col-lg-5 col-md-12">
                     <div className="right-content">
-                      <div className="price">{listing?.specialPrice} Rupee</div>
+                      <div className="price">{listing?.price} Rupee</div>
                     </div>
                   </div>
                 </div>
@@ -201,32 +217,36 @@ export default function Listing() {
                       <div className="col-lg-6 col-sm-6">
                         <div className="block-image">
                           <img
-                            src="../property-details1.jpg"
+                            src={listing?.propertyImg[0]}
                             alt="image"
+                            className="w-full h-full"
                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-sm-6">
                         <div className="block-image">
                           <img
-                            src="../property-details2.jpg"
+                            src={listing?.propertyImg[0]}
                             alt="image"
+                            className="w-full h-full"
                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-sm-6">
                         <div className="block-image">
                           <img
-                            src="../property-details3.jpg"
+                            src={listing?.propertyImg[0]}
                             alt="image"
+                            className="w-full h-full"
                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-sm-6">
                         <div className="block-image">
                           <img
-                            src="../property-details4.jpg"
+                            src={listing?.propertyImg[0]}
                             alt="image"
+                            className="w-full h-full"
                           />
                         </div>
                       </div>
@@ -235,8 +255,9 @@ export default function Listing() {
                   <div className="col-lg-8 col-md-12">
                     <div className="block-image">
                       <img
-                        src="../property-details-large.jpg"
+                        src={listing?.propertyImg[0]}
                         alt="image"
+                        className="w-full h-full"
                       />
                     </div>
                   </div>
@@ -248,11 +269,17 @@ export default function Listing() {
                     <div className="description">
                       <h3>Property Description</h3>
                       <p>
-                        {listing?.description}
+                        {getDisplayText()}
+                        {listing?.description && listing.description.length > 1000 && (
+                          <span>...</span>
+                        )}
                       </p>
-                      <p>
-                        {listing?.shortDescription}
-                      </p>
+                      {listing?.description && listing.description.length > 1000 && (
+                        <button onClick={toggleDescription}>
+                          {showFullDescription ? 'Show Less' : 'Show More'}
+                        </button>
+                      )}
+
                     </div>
                     <div className="overview">
                       <h3>Property Overview</h3>
@@ -287,77 +314,16 @@ export default function Listing() {
                     <div className="features">
                       <h3>Facts And Features</h3>
                       <div className="row justify-content-center">
-                        <div className="col-lg-4 col-md-4">
-                          <ul className="list">
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Air Conditioning
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Dishwasher
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Internet
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Supermarket/Store
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Build-In Wardrobes
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="col-lg-4 col-md-4">
-                          <ul className="list">
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Fencing
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Park
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Swimming Pool
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Clinic
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Floor Coverings
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="col-lg-4 col-md-4">
-                          <ul className="list">
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              School
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Transportation Hub
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Gym Availability
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Lawn
-                            </li>
-                            <li>
-                              <i className="ri-check-double-fill" />
-                              Security Guard
-                            </li>
-                          </ul>
+                        <div className="row">
+                          {listing?.features.map((item, key) => {
+                            return (
+                              <li>
+                                <i className="ri-check-double-fill" />
+                                {item}
+                              </li>
+                            )
+                          })}
+
                         </div>
                       </div>
                     </div>

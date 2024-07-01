@@ -167,12 +167,12 @@ const Team = () => {
               {team.map((item, index) => (
                 <CTableRow key={item._id}>
                   <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                  <CTableDataCell>{item.name}</CTableDataCell>
-                  <CTableDataCell>{item.position}</CTableDataCell>
+                  <CTableDataCell>{item?.name}</CTableDataCell>
+                  <CTableDataCell>{item?.position}</CTableDataCell>
                   <CTableDataCell>
-                    <img src={item.image} alt={item.name} style={{ width: '100px', height: 'auto' }} />
+                    <img src={item?.img} alt={item?.name} style={{ width: '100px', height: 'auto' }} />
                   </CTableDataCell>
-                  <CTableDataCell>{item.message}</CTableDataCell>
+                  <CTableDataCell>{item?.message}</CTableDataCell>
 
                   <CTableDataCell>
                     <CButton color="danger" onClick={() => handleDeleteClick(item)}>

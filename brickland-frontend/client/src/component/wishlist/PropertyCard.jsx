@@ -138,11 +138,15 @@ export default function PropertyCard({ listing }) {
   return (
     <div className='bg-white shadow-md hover:shadow-lg
     transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px] h-[460px]'>
-        <img src={listing?.propertyImg[0]}
-          alt="listings"
-          className='h-[320px] sm:h-[220px] w-full
-         object-cover hover:scale-105 transition-scale duration-300'
-        />
+   <Link to={`/listing/${listing._id}`}>
+  <img 
+    src={listing?.propertyImg[0]}
+    alt="listings"
+    className='h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300'
+  />
+</Link>
+
+
 
         <div className='p-3 flex flex-col gap-2 w-full'>
           <div className="listss d-flex justify-between align-middle">

@@ -33,8 +33,8 @@ const PropertyList = () => {
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [selectedProperty, setSelectedProperty] = useState(null)
   const [categories, setCategories] = useState([]);
-  const [featureValue,setFeatureValue]=useState("");
-  const [advantage,setAdvantage]=useState("");
+  const [featureValue, setFeatureValue] = useState("");
+  const [advantage, setAdvantage] = useState("");
   const [property, setProperty] = useState([]);
 
   const fetchProperty = async () => {
@@ -116,8 +116,8 @@ const PropertyList = () => {
       parking: selectedProperty.parking,
       bathrooms: selectedProperty.bathrooms,
       bedrooms: selectedProperty.bedrooms,
-      locationbar : selectedProperty.locationAdvantage,
-      features : selectedProperty.features,
+      locationbar: selectedProperty.locationAdvantage,
+      features: selectedProperty.features,
       status: selectedProperty.status, // Add status to the payload
       state: selectedProperty.state, // Add state to the payload
     }
@@ -204,7 +204,7 @@ const PropertyList = () => {
                   <CTableDataCell>{item?.state}</CTableDataCell>
                   <CTableDataCell>{`${item.isFurnished}`}</CTableDataCell>
                   <CTableDataCell>{`${item.isBestSeller}`}</CTableDataCell>
-                  <CTableDataCell><div style={{overflow:"auto",height:"100px"}}>{item?.description}</div></CTableDataCell>
+                  <CTableDataCell><div style={{ overflow: "auto", height: "100px" }}>{item?.description}</div></CTableDataCell>
                   <CTableDataCell>{item?.address}</CTableDataCell>
                   <CTableDataCell>{item?.propertyImg}</CTableDataCell>
                   <CTableDataCell>{`₹${item.price}`}</CTableDataCell>
@@ -226,6 +226,8 @@ const PropertyList = () => {
               ))}
             </CTableBody>
           </CTable>
+
+          {/* Delete Box */}
           <CModal visible={confirmDeleteVisible} onClose={() => setConfirmDeleteVisible(false)}>
             <CModalHeader onClose={() => setConfirmDeleteVisible(false)}>
               Confirm Deletion
@@ -240,25 +242,239 @@ const PropertyList = () => {
               </CButton>
             </CModalFooter>
           </CModal>
-          <CModal visible={editModalVisible} onClose={() => setEditModalVisible(false)}>
+
+          {/* Edit Property Detail */}
+          <CModal visible={editModalVisible} onClose={() => setEditModalVisible(false)} className="custom-modal-width"  // Apply custom class
+          >
             <CModalHeader onClose={() => setEditModalVisible(false)}>Edit Product</CModalHeader>
             <CModalBody>
               {selectedProperty && (
                 <>
-                  <div>
-                    <label>Property Name</label>
-                    <CFormInput
-                      type="text"
-                      value={selectedProperty.propertyName}
-                      onChange={handleInputChange}
-                      name="productName"
-                    />
+
+                  {/* First Row */}
+                  <div className='container'>
+                    <div className='row'>
+                      <div className="col-md-4">
+                        <CFormLabel htmlFor="productIdInput">Property Id</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="productIdInput"
+                          placeholder="Enter property Id"
+                          value={selectedProperty.propertyId}
+                          name="propertyId"
+                        />
+                      </div>
+                      <div className="col-md-8">
+                        <CFormLabel htmlFor="productNameInput">Property Name</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="productNameInput"
+                          placeholder="Enter property name"
+                          value={selectedProperty?.propertyName}
+                          name="propertyName"
+                        />
+                      </div>
+                    </div>
                   </div>
+
+
+                  {/* Second Row */}
+                  <div className='container'>
+                    <div className='row p-2'>
+                      <div className="col-md-6">
+                        <CFormLabel htmlFor="categorySelect">Category</CFormLabel>
+                        <CFormSelect
+                          id="categorySelect"
+                          value={selectedProperty?.category}
+                        >
+                          {categories && categories.map((category, key) => (
+                            <option key={key} value={category}>
+                              {category}
+                            </option>
+                          ))}
+                        </CFormSelect>
+                      </div>
+                      <div className="col-md-6">
+                        <CFormLabel htmlFor="categorySelect">Property Type</CFormLabel>
+                        <CFormSelect
+                          id="categorySelect"
+                          value={selectedProperty?.propertyType}
+                        >
+                          <option value="TopSearch">Top Search</option>
+                          <option value="exclusive">Exclusive</option>
+                          <option value="Valuable">Valuable</option>
+                        </CFormSelect>
+                      </div>
+                      <div className="col-md-6">
+                        <CFormLabel htmlFor="categorySelect">Status</CFormLabel>
+                        <CFormSelect
+                          id="categorySelect"
+                          value={selectedProperty?.status}
+                        >
+                          <option value="UNDER_CONSTRUCTION">UNDER CONSTRUCTION</option>
+                          <option value="READY_TO_MOVE">READY TO MOVE</option>
+                          <option value="NEW_LAUNCH">NEW TO LAUNCH</option>
+                        </CFormSelect>
+                      </div>
+
+                      <div className="col-md-6">
+                        <CFormLabel htmlFor="categorySelect">Accomodation</CFormLabel>
+                        <CFormSelect
+                          id="categorySelect"
+                          value={selectedProperty?.accommodation}
+                        >
+                          <option value="SINGLE_FAMILY">Single Family</option>
+                          <option value="MULTI_FAMILY">Multi Family</option>
+                          <option value="APARTMENT">Apartment</option>
+                          <option value="TOWNHOUSE">TownHouse</option>
+                          <option value="COOPERATE">Co-operative</option>
+                          <option value="BUNGALOW">Bungalow</option>
+                          <option value="COTTAGE">Cottage</option>
+                          <option value="VILLA">Villa</option>
+                        </CFormSelect>
+                      </div>
+                    </div></div>
+
+                  {/* third Row */}
+                  <div className='container'>
+                    <div className='row p-2'>
+                      <div className="col-md-4">
+                        <CFormLabel htmlFor="categorySelect">State</CFormLabel>
+                        <CFormSelect
+                          id="categorySelect"
+                          value={selectedProperty?.state}
+                        >
+                          <option value={-1}>select state</option>
+                          <option value="APPROVED">APPROVED</option>
+                          <option value="PENDING">PENDING</option>
+                          <option value="REJECTED">REJECTED</option>
+                        </CFormSelect>
+                      </div>
+                      <div className="col-md-4">
+                        <CFormLabel htmlFor="addressInput">Area</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="area"
+                          placeholder="Enter area"
+                          value={selectedProperty?.area}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <CFormLabel htmlFor="addressInput">FloorPlan</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="addressInput"
+                          placeholder="Enter Floor PLan "
+                          value={selectedProperty?.floorPlan}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4th Row */}
+                  {/* 4th Row */}
+                  <div className='container'>
+                    <div className='row'>
+                      <div className="col-md-2">
+                        <CFormLabel htmlFor="furnishedSwitch">Furnished</CFormLabel>
+                        <CFormSwitch
+                          id="furnishedSwitch"
+                          color="info" // Change color as desired
+                          labelOn="Yes"
+                          labelOff="No"
+                          checked={selectedProperty?.isFurnished} // Use the state value directly
+                        />
+                      </div>
+                      <div className="col-md-2">
+                        <CFormLabel htmlFor="furnishedSwitch">isBestSeller</CFormLabel>
+                        <CFormSwitch
+                          id="bestSeller"
+                          color="info" // Change color as desired
+                          labelOn="Yes"
+                          labelOff="No"
+                          checked={selectedProperty?.isBestSeller} // Use the state value directly
+                        />
+                      </div>
+                      <div className="col-md-8">
+                        <CFormLabel htmlFor="addressInput">Property</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="propertyInput"
+                          placeholder="Enter property"
+                          value={selectedProperty?.property}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 5th Row */}
+
+                  {/* 5th Row */}
+                  <div className='container'>
+                    <div className='row'>
+                      <div className="mb-1 flex-item col-md-4">
+                        <CFormLabel htmlFor="priceInput">Price</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="priceInput"
+                          placeholder="Enter price"
+                          value={selectedProperty?.price}
+                        />
+                      </div>
+                      <div className="mb-1 flex-item col-md-4">
+                        <CFormLabel htmlFor="specialPriceInput">Discounted Price</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="specialPriceInput"
+                          placeholder="Discounted price"
+                          value={selectedProperty?.specialPrice}
+                        />
+                      </div>
+                      <div className="mb-1 flex-item col-md-4">
+                        <CFormLabel htmlFor="kitchenInput">Parking</CFormLabel>
+                        <CFormInput
+                          type="text"
+                          id="kitchenInput"
+                          placeholder="No. Of Parking"
+                          value={selectedProperty?.parking}
+                        />
+                      </div>
+                      <div className="mb-1 flex-item col-md-4">
+                        <CFormLabel htmlFor="kitchenInput">Kitchen</CFormLabel>
+                        <CFormInput
+                          type="number"
+                          id="kitchenInput"
+                          placeholder="No. Of kitchens"
+                          value={selectedProperty?.kitchen}
+                        />
+                      </div>
+                      <div className="mb-1 flex-item col-md-4">
+                        <CFormLabel htmlFor="bathroomInput">Bathrooms</CFormLabel>
+                        <CFormInput
+                          type="number"
+                          id="bathroomInput"
+                          placeholder="No. Of Bathrooms"
+                          value={selectedProperty?.bathrooms}
+                        />
+                      </div>
+                      <div className="mb-1 flex-item col-md-4">
+                        <CFormLabel htmlFor="bedroomInput">Bedrooms</CFormLabel>
+                        <CFormInput
+                          type="number"
+                          id="bedroomInput"
+                          placeholder="No. Of Bedrooms"
+                          value={selectedProperty?.bedrooms}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 6th Row */}
                   <div>
                     <label>Description</label>
                     <CFormInput
                       type="text"
-                      value={selectedProperty.description}
+                      value={selectedProperty?.description}
                       onChange={handleInputChange}
                       name="description"
                     />
@@ -267,30 +483,14 @@ const PropertyList = () => {
                     <label>Address</label>
                     <CFormInput
                       name="address"
-                      value={selectedProperty.address}
+                      value={selectedProperty?.address}
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div>
-                    <label>Bathrooms</label>
-                    <CFormInput
-                      type="text"
-                      value={selectedProperty.bathrooms}
-                      onChange={handleInputChange}
-                      name="bathrooms"
-                    />
-                    <div>
-                      <label>Bedrooms</label>
-                      <CFormInput
-                        type="text"
-                        value={selectedProperty.bedrooms}
-                        onChange={handleInputChange}
-                        name="bedrooms"
-                      />
-                    </div>
-                    {/* <div>
+
+                  {/* <div>
                       <label>Property Images (comma separated)</label> */}
-                      {/* <CFormInput
+                  {/* <CFormInput
                     type="text"
                     value={selectedProperty.productImg.join(', ')}
                     onChange={(e) =>
@@ -301,144 +501,106 @@ const PropertyList = () => {
                     }
                     name="productImg"
                   /> */}
-                    {/* </div> */}
-                    <div>
-                      <label>Price</label>
-                      <CFormInput
-                        type="number"
-                        value={selectedProperty.price}
-                        onChange={handleInputChange}
-                        name="price"
-                      />
-                    </div>
-                    <div>
-                      <label>Discounted Price</label>
-                      <CFormInput
-                        type="number"
-                        value={selectedProperty.specialPrice}
-                        onChange={handleInputChange}
-                        name="specialPrice"
-                      />
-                    </div>
-                  </div>
+                  {/* </div> */}
 
-                  <div>
-                    <CFormCheck
-                      id="isFurnished"
-                      label="Furnished"
-                      name="isFurnished"
-                      checked={selectedProperty.isFurnished}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div>
-                    <CFormCheck
-                      id="Parking"
-                      label="Parking"
-                      name="Parking"
-                      checked={selectedProperty.parking}
-                      onChange={handleInputChange}
-                    />
-                  </div>
                 </>
               )}
             </CModalBody>
-            <div className="m-3">
-          <CFormLabel htmlFor="priceInput">Amenities</CFormLabel>
-          <div className='grid grid-cols-5'>
-            <div className="container my-4">
-              <div className="row g-5">
-                {selectedProperty?.features && selectedProperty?.features.map((item, key) => (
-                  <div key={key} className="col-md-4">
-                    <div className="card border-0 shadow-sm h-100">
-                      <div className="card-body">
-                        <div className="d-flex justify-content-between align-items-center">
-                          <div className="text-body">{item}</div>
-                          <button
-                            type="button"
-                            className="btn btn-outline-danger btn-sm"
-                            // onClick={()=>{setFeatures((prev)=>{const inputdata=[...prev];inputdata.splice(key,1);return inputdata;})}}
-                            onClick={()=>{
-                              setSelectedProperty((prev) => {
-                                const inputdata = { ...prev };
-                                const features = [...inputdata.features];
-                                features.splice(key, 1); // Remove the element at the specified index
-                                inputdata.features = features;
-                                return inputdata;
-                              });
-                            }}
-                          >
-                            <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
-                          </button>
+            <div className="m-1">
+              <CFormLabel htmlFor="priceInput">Amenities</CFormLabel>
+              <div className='grid grid-cols-5'>
+                <div className="container">
+                  <div className="row g-5">
+                    {selectedProperty?.features && selectedProperty?.features.map((item, key) => (
+                      <div key={key} className="col-md-4">
+                        <div className="card border-0 shadow-sm h-100">
+                          <div className="card-body">
+                            <div className="d-flex justify-content-between align-items-center">
+                              <div className="text-body">{item}</div>
+                              <button
+                                type="button"
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={() => {
+                                  setSelectedProperty((prev) => {
+                                    const inputdata = { ...prev };
+                                    const features = [...inputdata.features];
+                                    features.splice(key, 1); // Remove the element at the specified index
+                                    inputdata.features = features;
+                                    return inputdata;
+                                  });
+                                }}
+                              >
+                                <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                <CFormInput
+                  type="text"
+                  id="bedroomInput"
+                  placeholder="Enter the Amenities"
+                  value={featureValue}
+                  onChange={(e) => setFeatureValue(e.target.value)}
+                />
+                {/* <div className='text-center rounded-md' onClick={()=>{setFeatures((prev)=>{return [...prev,featureValue]})}}>Add</div> */}
               </div>
+              <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white", cursor: "pointer" }} onClick={() => {
+                setSelectedProperty((prev) => { const input = { ...prev }; let feature = [...input.features, featureValue]; input.features = feature; return input; });
+                setFeatureValue("");
+              }} >Add New Amenities</div>
             </div>
-            <CFormInput
-              type="text"
-              id="bedroomInput"
-              placeholder="Enter the Amenities"
-              value={featureValue}
-              onChange={(e) => setFeatureValue(e.target.value)}
-            />
-            {/* <div className='text-center rounded-md' onClick={()=>{setFeatures((prev)=>{return [...prev,featureValue]})}}>Add</div> */}
-          </div>
-          <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white",cursor:"pointer" }} onClick={() => { 
-            setSelectedProperty((prev) => { const input={...prev};let feature=[...input.features,featureValue]; input.features=feature; return input; });
-            setFeatureValue("");
-             }} >Add New Amenities</div>
-
-        </div>
-        {/* location advantage */}
-        <div className="m-3">
-          <CFormLabel htmlFor="priceInput">Location Advantage</CFormLabel>
-          <div className='grid grid-cols-5'>
-            <div className="container my-4">
-              <div className="row g-5">
-                {selectedProperty?.locationAdvantage && selectedProperty?.locationAdvantage.map((item, key) => (
-                  <div key={key} className="col-md-4">
-                    <div className="card border-0 shadow-sm h-100">
-                      <div className="card-body">
-                        <div className="d-flex justify-content-between align-items-center">
-                          <div className="text-body">{item}</div>
-                          <button
-                            type="button"
-                            className="btn btn-outline-danger btn-sm"
-                            onClick={()=>{
-                              setSelectedProperty((prev) => {
-                                const inputdata = { ...prev };
-                                const advantage = [...inputdata.locationAdvantage];
-                                advantage.splice(key, 1); // Remove the element at the specified index
-                                inputdata.locationAdvantage = advantage;
-                                return inputdata;
-                              });
-                            }}
-                          >
-                            <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
-                          </button>
+            {/* location advantage */}
+            <div className="m-1">
+              <CFormLabel htmlFor="priceInput">Location Advantage</CFormLabel>
+              <div className='grid grid-cols-5'>
+                <div className="container my-4">
+                  <div className="row g-5">
+                    {selectedProperty?.locationAdvantage && selectedProperty?.locationAdvantage.map((item, key) => (
+                      <div key={key} className="col-md-4">
+                        <div className="card border-0 shadow-sm h-100">
+                          <div className="card-body">
+                            <div className="d-flex justify-content-between align-items-center">
+                              <div className="text-body">{item}</div>
+                              <button
+                                type="button"
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={() => {
+                                  setSelectedProperty((prev) => {
+                                    const inputdata = { ...prev };
+                                    const advantage = [...inputdata.locationAdvantage];
+                                    advantage.splice(key, 1); // Remove the element at the specified index
+                                    inputdata.locationAdvantage = advantage;
+                                    return inputdata;
+                                  });
+                                }}
+                              >
+                                <i className="bi bi-trash"></i> {/* Bootstrap Icon */}
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                <CFormInput
+                  type="text"
+                  id="locationAdvantage"
+                  placeholder="Enter the LocationAdvantage"
+                  value={advantage}
+                  onChange={(e) => setAdvantage(e.target.value)}
+                />
+                {/* <div className='text-center rounded-md' onClick={()=>{setFeatures((prev)=>{return [...prev,featureValue]})}}>Add</div> */}
               </div>
+              <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white" }} onClick={() => {
+                setSelectedProperty((prev) => { const input = { ...prev }; let advantage = [...input.locationAdvantage, advantage]; input.locationAdvantage = advantage; return input; });
+                setAdvantage("");
+              }} >Add Location Advantage</div>
             </div>
-            <CFormInput
-              type="text"
-              id="locationAdvantage"
-              placeholder="Enter the LocationAdvantage"
-              value={advantage}
-              onChange={(e) => setAdvantage(e.target.value)}
-            />
-            {/* <div className='text-center rounded-md' onClick={()=>{setFeatures((prev)=>{return [...prev,featureValue]})}}>Add</div> */}
-          </div>
-          <div className='text-center my-2 py-1' style={{ backgroundColor: "red", borderRadius: 6, color: "white" }} onClick={() => { 
-            setSelectedProperty((prev) => { const input={...prev};let advantage=[...input.locationAdvantage,advantage]; input.locationAdvantage=advantage; return input; });
-            setAdvantage(""); }} >Add Location Advantage</div>
-        </div>
             <CModalFooter>
               <CButton color="primary" onClick={handleEditSubmit}>
                 Save Changes

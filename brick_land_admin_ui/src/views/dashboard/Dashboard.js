@@ -9,9 +9,6 @@ const Dashboard = () => {
   return (
     <>
       <WidgetsDropdown className="mb-4" />
-
-      
-      
     </>
   )
 }
